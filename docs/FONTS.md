@@ -1,6 +1,6 @@
 # Self-hosted fonts
 
-The committed WOFF2 files cover Latin, Latin Extended and U+20A6 (₦). Fraunces is split into a small Latin/₦ file used by the main page and a Latin Extended file loaded only when needed. Inter uses one file. Fraunces retains the `wght`, `opsz` and `SOFT` axes; `WONK` is fixed at its default. Inter retains `wght` and `opsz`. The files are covered by the adjoining OFL licences.
+The committed WOFF2 files cover Latin, Latin Extended and U+20A6 (₦). Fraunces is split into a small Latin/₦ file used by the main page and a Latin Extended file loaded only when needed. The page uses Fraunces at weight 600 and SOFT 50, so those axes are fixed in the subsets; optical sizing remains variable. Inter uses one file and retains its `wght` and `opsz` axes. The files are covered by the adjoining OFL licences.
 
 Sources: [Fraunces](https://github.com/google/fonts/tree/main/ofl/fraunces) and [Inter](https://github.com/google/fonts/tree/main/ofl/inter), from the official Google Fonts repository. Download the normal variable TTFs as `.font-source/fraunces.ttf` and `.font-source/inter.ttf`, then run:
 

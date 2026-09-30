@@ -1,6 +1,16 @@
 # Phase reports
 
-Phases 1–6 are complete. Per the brief, work stops after each phase report. Phase 7 has not started.
+Phases 1–7 are complete. Per the brief, work stops after each phase report.
+
+## Phase 7 progress
+
+Hardened first paint by deferring rendering work for below-the-fold homepage sections and avoiding an unnecessary enquiry-basket DOM refresh on every page load. Reduced Fraunces font subsets from about 228 KB combined to 59 KB by fixing the weight and SOFT axes to the values used by the design while retaining optical sizing. WhatsApp fallback links remain available without JavaScript.
+
+Verified: `pnpm check` passed typecheck and lint with no diagnostics, 38 unit tests, the production build and sample-content guard, 27 production browser checks, and 6 axe scans across mobile, tablet and desktop. Production route checks found no horizontal overflow or dead internal links; reduced-motion behavior, keyboard skip-link focus, JavaScript-disabled WhatsApp paths, and the ₦ glyphs in both custom fonts all passed. `pnpm build` and `pnpm test:preview` passed all 21 preview checks across mobile, tablet and desktop. Reviewed full-page homepage captures at 360, 768 and 1,440 pixels wide after scrolling each optimized section into view.
+
+The three-run mobile Lighthouse median on the 4× CPU slowdown now passes the configured budgets: Performance 95, Accessibility 100, Best Practices 100, SEO 100; LCP 2,270 ms, CLS 0, TBT 133 ms; transfer 242,303 bytes, scripts 8,934 bytes, stylesheets 28,275 bytes. The production guard passed and production output includes no sample products, sample reviews, or sample-gallery routes. Lighthouse results are lab measurements, not field INP; browser automation and axe do not replace assistive-technology review.
+
+Client inputs still outstanding: approved founder story and portrait, customer reviews and permissions, real product/gallery photographs, confirmed lead-time/refund/cancellation terms, and an approved production domain. These remain absent or preview-only until supplied.
 
 ## Phase 6 progress
 
@@ -10,7 +20,7 @@ Added page-specific titles, descriptions, canonical URLs when `SITE_URL` is conf
 
 Verified: `pnpm check` passed: 54 Astro/TypeScript files with zero diagnostics, lint, 38 unit tests, production build and output guard, 21 production browser checks, and 6 axe scans across mobile/tablet/desktop. The production check used `https://example.test` as a reserved test origin to exercise canonical URLs and sitemap references; no real domain was supplied or added. `pnpm build` plus `pnpm test:preview` passed all 21 preview checks across mobile/tablet/desktop, including support-page accessibility and labeled empty states. Social image dimensions and manifest assets are checked in browser tests.
 
-Still needed: approved founder story/portrait, customer reviews and permissions, real gallery/product photographs, confirmed lead-time/refund/cancellation terms, and an approved production domain. Lighthouse tuning remains for Phase 7.
+Still needed: approved founder story/portrait, customer reviews and permissions, real gallery/product photographs, confirmed lead-time/refund/cancellation terms, and an approved production domain. Phase 7 performance results are recorded above.
 
 ## Phase 5 progress
 

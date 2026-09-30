@@ -27,6 +27,13 @@ test('@preview homepage is complete, accessible and within the viewport', async 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
+  for (const selector of ['.home-departments', '.home-ordering', '.home-facts', '.home-faq', '.home-last-call']) {
+    const section = page.locator(selector);
+    await section.scrollIntoViewIfNeeded();
+    await expect.poll(() => section.evaluate(element => element.checkVisibility({ contentVisibilityAuto: true }))).toBe(true);
+    await section.evaluate(element => { (element as HTMLElement).style.contentVisibility = 'visible'; });
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await page.screenshot({ path: `test-results/homepage-${testInfo.project.name}.png`, fullPage: true });
 });
 

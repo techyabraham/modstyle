@@ -27,9 +27,11 @@ def write_subset(name: str, suffix: str, codepoints: set[int]) -> None:
     if name == 'fraunces':
         font = instantiateVariableFont(font, {
             'WONK': 0,
-            'wght': (500, 600, 700),
+            # The design system maps Fraunces to weight 600 and SOFT 50.
+            # Retain optical sizing, which still varies with rendered text size.
+            'wght': 600,
             'opsz': (9, 72),
-            'SOFT': (30, 50, 70),
+            'SOFT': 50,
         }, inplace=False)
     else:
         font = instantiateVariableFont(font, {
@@ -38,7 +40,7 @@ def write_subset(name: str, suffix: str, codepoints: set[int]) -> None:
     if 0x20A6 in codepoints and 0x20A6 not in font.getBestCmap():
         raise RuntimeError(f'{name} is missing U+20A6 after subsetting')
     axes = {axis.axisTag for axis in font['fvar'].axes}
-    expected = {'wght', 'opsz', 'SOFT'} if name == 'fraunces' else {'wght', 'opsz'}
+    expected = {'opsz'} if name == 'fraunces' else {'wght', 'opsz'}
     if axes != expected:
         raise RuntimeError(f'{name} axes: {axes}, expected {expected}')
     font.flavor = 'woff2'

@@ -12,11 +12,14 @@ if (!lighthouseFolder) throw new Error('Install @lhci/cli first');
 const lighthousePath = resolve('node_modules/.pnpm', lighthouseFolder, 'node_modules/lighthouse/core/index.js');
 const { default: lighthouse } = await import(pathToFileURL(lighthousePath).href);
 
-const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.txt': 'text/plain', '.svg': 'image/svg+xml' };
+const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json; charset=utf-8', '.webmanifest': 'application/manifest+json; charset=utf-8', '.xml': 'application/xml; charset=utf-8', '.woff2': 'font/woff2' };
 const server = createServer(async (request, response) => {
-  const path = decodeURIComponent(new URL(request.url ?? '/', 'http://localhost').pathname);
-  const file = resolve(output, `.${path === '/' ? '/index.html' : path}`);
-  if (!file.startsWith(output)) { response.writeHead(403).end(); return; }
+  let path;
+  try { path = decodeURIComponent(new URL(request.url ?? '/', 'http://localhost').pathname); }
+  catch { response.writeHead(400).end(); return; }
+  const relative = path === '/' ? 'index.html' : path.endsWith('/') ? `${path.slice(1)}index.html` : path.slice(1);
+  const file = resolve(output, relative);
+  if (file !== output && !file.startsWith(`${output}/`) && !file.startsWith(`${output}\\`)) { response.writeHead(403).end(); return; }
   try { const body = await readFile(file); response.writeHead(200, { 'Content-Type': mime[extname(file)] ?? 'application/octet-stream' }).end(body); }
   catch { response.writeHead(404).end(); }
 });

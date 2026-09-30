@@ -1,5 +1,11 @@
 # Decisions
 
+## Phase 7 — hardening (2026-09-30)
+- Use `content-visibility: auto` with intrinsic block-size estimates for homepage sections below the hero, preserving scroll geometry while reducing work before they enter view.
+- Do not rebuild the empty enquiry basket on every page load. Keep the static zero-count shell and restore saved state when the customer opens the basket or adds an item; direct WhatsApp links still work with JavaScript disabled.
+- Fix Fraunces to weight 600 and SOFT 50 in the generated subsets because those are the design system's requested values. Preserve optical sizing and the Latin/Latin Extended split; retain Inter's variable axes.
+- Keep the four-times CPU Lighthouse check, transfer/style/script budgets, production sample-content guard, and viewport/accessibility browser tests as Phase 7 release evidence. Treat Lighthouse as a lab proxy; it does not establish field INP or replace screen-reader testing.
+
 ## Phase 6 — supporting pages and SEO (2026-09-30)
 - Publish a brand-only story page until founder name, role, portrait and biography are approved. Keep the reviews route and homepage review section absent in production until approved reviews exist; use only an explicitly labeled preview layout note and never add sample or inferred quotations or ratings.
 - Use only confirmed business facts for the public FAQ and ordering policy page. Show unconfirmed lead-time, refund and cancellation policy fields only as an explicit preview note; do not invent terms.

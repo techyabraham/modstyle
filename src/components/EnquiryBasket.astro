@@ -146,5 +146,6 @@ const fallback = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.na
     if (live) live.textContent = copied ? 'Enquiry text copied. Paste it into WhatsApp when you continue.' : 'Your enquiry is selected. Press Ctrl+C or Copy to copy it, then paste it into WhatsApp.';
     analytics('enquiry_copy');
   });
-  render();
+  // The static shell already shows an empty basket. Restore saved state only
+  // when the customer opens it or adds an item, avoiding startup DOM work.
 </script>

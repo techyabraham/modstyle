@@ -78,6 +78,25 @@ test('custom not-found page provides working recovery links', async ({ page }) =
   await expect(page.getByRole('link', { name: 'Explore peanuts' })).toHaveAttribute('href', '/peanuts/');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+test('every production route has no horizontal overflow or dead internal links', async ({ page, request }) => {
+  const routes = ['/', '/crochet/', '/peanuts/', '/our-story/', '/faq/', '/contact/', '/policies/'];
+  for (const route of routes) {
+    const response = await page.goto(route);
+    expect(response?.ok(), route).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);
+    const hrefs = await page.locator('a[href^="/"]').evaluateAll(anchors => anchors.map(anchor => (anchor as HTMLAnchorElement).href));
+    for (const href of new Set(hrefs)) {
+      const linkResponse = await request.get(href);
+      expect(linkResponse.status(), `${route} links to ${href}`).toBe(200);
+    }
+  }
+});
+test('reduced-motion preference disables continuous movement and page scrolling animation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  expect(await page.locator('.home-ribbon__track').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
+});
 test('@a11y foundation has no serious or critical violations', async ({ page }) => {
   await page.goto('/');
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
