@@ -1,5 +1,13 @@
 # Decisions
 
+## Phase 6 — supporting pages and SEO (2026-09-30)
+- Publish a brand-only story page until founder name, role, portrait and biography are approved. Keep the reviews route and homepage review section absent in production until approved reviews exist; use only an explicitly labeled preview layout note and never add sample or inferred quotations or ratings.
+- Use only confirmed business facts for the public FAQ and ordering policy page. Show unconfirmed lead-time, refund and cancellation policy fields only as an explicit preview note; do not invent terms.
+- Keep phone, email and Instagram display approval-gated. The contact CTA uses the already-approved WhatsApp enquiry path.
+- Generate sitemap URLs only for production pages and currently publishable products/gallery/reviews. Do not include preview, sample, draft or 404 routes. Leave the sitemap URL list empty until `SITE_URL` is configured, rather than inventing a domain.
+- Include only confirmed LocalBusiness fields in JSON-LD. Include Product offers only for published fixed-price non-sample products; include FAQPage markup from published FAQs; never emit rating/review markup without approved source content.
+- Use a hand-authored SVG favicon and branded share-card source, then rasterize a 1200×630 PNG with the local project browser. No product photography or unapproved logo is implied by the illustration.
+
 ## Phase 5 — enquiry (2026-09-30)
 - Keep basket contents in versioned browser localStorage with an in-memory fallback. Do not submit customer details or basket data to a site server; WhatsApp is the enquiry destination.
 - Treat the configured per-department minimum as advisory progress, calculated from fixed-price items only and excluding delivery. `from` and `quote` items stay out of fixed subtotals and are flagged for confirmation in WhatsApp.

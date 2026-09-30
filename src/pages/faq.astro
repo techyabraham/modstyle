@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { faqPageJsonLd } from '../lib/seo';
+import { visibleFaqs } from '../lib/catalogue';
+import { parseMode } from '../lib/visibility';
+
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const faqs = visibleFaqs(await getCollection('faqs'), mode);
+const faqData = faqPageJsonLd(faqs.map(({ data }) => ({ question: data.question, answer: data.answer })));
+const groups = [...new Set(faqs.map(({ data }) => data.group))];
+---
+<BaseLayout title={`Frequently asked questions | ${site.brand.name}`} description="Answers about minimum order, delivery, payment, custom crochet and bulk peanuts." jsonLd={faqData}>
+  <section class="support-page page-wrap faq-page" aria-labelledby="faq-title">
+    <p class="support-page__eyebrow">The useful details</p><h1 id="faq-title">Frequently asked questions</h1>
+    <p class="support-page__lead">Here are the confirmed basics. We’ll help with anything else on WhatsApp.</p>
+    {groups.map(group => <section class="faq-group" aria-labelledby={`faq-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>
+      <h2 id={`faq-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>{group}</h2>
+      {faqs.filter(entry => entry.data.group === group).map(({ data }) => <details class="faq-item"><summary>{data.question}</summary><p>{data.answer}</p></details>)}
+    </section>)}
+    <p class="support-page__contact">Have a different question? <a href="/contact/">Contact Modstyle</a>.</p>
+  </section>
+</BaseLayout>
+<style>
+  @layer reset, tokens, base, components, utilities;
+  @layer components {
+    .faq-page h1 { max-inline-size: 15ch; }
+    .faq-group { max-inline-size: 55rem; margin-block-start: 3rem; }
+    .faq-group h2 { margin-block-end: 1rem; font-size: clamp(1.5rem, 2.5vw, 2.1rem); }
+    .faq-item { border-block-start: 1px solid var(--sand); }
+    .faq-item:last-child { border-block-end: 1px solid var(--sand); }
+    .faq-item summary { display: flex; min-block-size: 3.5rem; align-items: center; justify-content: space-between; gap: 1rem; color: var(--forest-deep); font-weight: 750; cursor: pointer; list-style: none; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--magenta); font-size: 1.5rem; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { max-inline-size: 65ch; padding-block: 0 .9rem; }
+    .support-page__contact { margin-block-start: 2rem; }
+  }
+</style>

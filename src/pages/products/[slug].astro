@@ -9,6 +9,7 @@ import { visibleProducts, sampleArtVariant, type ProductEntry } from '../../lib/
 import { buildWhatsAppLink } from '../../lib/whatsapp';
 import { site } from '../../config/site';
 import { pricing } from '../../config/pricing';
+import { productJsonLd } from '../../lib/seo';
 import '../../styles/catalogue.css';
 
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
@@ -26,8 +27,9 @@ const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.nam
 const art = sampleArtVariant(item.slug, item.department);
 const primaryImage = item.images[0];
 const basketItem = JSON.stringify({ slug: item.slug, name: item.name, department: item.department, options: {}, quantity: 1, pricing: item.pricing });
+const productSchema = productJsonLd(item, import.meta.env.SITE);
 ---
-<BaseLayout title={`${item.name} | ${site.brand.name}`} description={item.summary}>
+<BaseLayout title={`${item.name} | ${site.brand.name}`} description={item.summary} jsonLd={productSchema}>
   <div class="page-wrap product-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href={item.department === 'crochet' ? '/crochet/' : '/peanuts/'}>{departmentLabel}</a><span aria-hidden="true">/</span><span aria-current="page">{item.name}</span></nav>
     <div class="product-detail">

@@ -75,6 +75,12 @@
   .home-facts__items span { color: #f1bd78; font-size: .67rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
   .home-facts__items strong { font-size: 1rem; line-height: 1.35; }
   .home-facts__items small { color: rgb(255 248 238 / .75); font-size: .73rem; line-height: 1.45; }
+  .home-reviews { padding-block: clamp(3rem, 7vw, 6rem); }
+  .home-reviews__heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-block-end: 1.5rem; }
+  .home-reviews__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; }
+  .home-review { display: grid; align-content: start; gap: 1rem; min-block-size: 12rem; padding: clamp(1.2rem, 3vw, 1.8rem); border: 1px solid var(--sand); border-radius: var(--radius-card); background: white; }
+  .home-review blockquote { color: var(--forest-deep); font-family: var(--font-display); font-size: 1.25rem; line-height: 1.35; }
+  .home-review > p { font-size: .88rem; }
   .home-faq { display: grid; grid-template-columns: minmax(15rem, .75fr) minmax(0, 1.25fr); gap: clamp(2.5rem, 7vw, 7rem); padding-block: 0 clamp(5rem, 9vw, 8rem); }
   .home-faq__heading { display: flex; flex-direction: column; align-items: start; gap: 1.5rem; }
   .home-faq__list { border-block-start: 1px solid var(--sand); }

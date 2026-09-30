@@ -37,6 +37,46 @@ test('production catalogue omits unapproved sample-only product and gallery rout
   expect((await request.get('/peanuts/')).ok()).toBe(true);
   expect((await request.get('/products/sample-crochet-featured/')).status()).toBe(404);
   expect((await request.get('/gallery/')).status()).toBe(404);
+  expect((await request.get('/reviews/')).status()).toBe(404);
+});
+test('supporting pages, sitemap and social metadata expose only confirmed production content', async ({ page, request }) => {
+  for (const route of ['/our-story/', '/faq/', '/contact/', '/policies/']) {
+    const response = await page.goto(route);
+    expect(response?.ok()).toBe(true);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /.+/);
+    if (process.env.SITE_URL) await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', new URL(route, process.env.SITE_URL).href);
+  }
+  await page.goto('/contact/');
+  await expect(page.locator('body')).not.toContainText(/oluwarewaa|R__pierre|2349151715923/);
+  await page.goto('/faq/');
+  const faq = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(node => JSON.parse(node.textContent ?? '{}')));
+  expect(faq.map((item: { '@type'?: string }) => item['@type'])).toContain('FAQPage');
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  expect(sitemap).toContain('/our-story/');
+  expect(sitemap).toContain('/faq/');
+  expect(sitemap).toContain('/policies/');
+  expect(sitemap).not.toMatch(/sample-|\/gallery\/|\/reviews\/|invalid\.example/);
+  const robots = await (await request.get('/robots.txt')).text();
+  if (process.env.SITE_URL) expect(robots).toContain(new URL('/sitemap.xml', process.env.SITE_URL).href);
+  const image = await request.get('/social-card.png');
+  expect(image.ok()).toBe(true);
+  const png = await image.body();
+  expect(png.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(png.readUInt32BE(16)).toBe(1200);
+  expect(png.readUInt32BE(20)).toBe(630);
+  expect((await request.get('/favicon.svg')).ok()).toBe(true);
+  const manifest = await (await request.get('/site.webmanifest')).json();
+  expect(manifest.name).toBe('Modstyle Crunch And Cream');
+  expect(manifest.icons[0].src).toBe('/favicon.svg');
+});
+test('custom not-found page provides working recovery links', async ({ page }) => {
+  const response = await page.goto('/this-route-does-not-exist/');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { name: 'This page isn’t here.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Explore crochet' })).toHaveAttribute('href', '/crochet/');
+  await expect(page.getByRole('link', { name: 'Explore peanuts' })).toHaveAttribute('href', '/peanuts/');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 test('@a11y foundation has no serious or critical violations', async ({ page }) => {
   await page.goto('/');
@@ -45,7 +85,7 @@ test('@a11y foundation has no serious or critical violations', async ({ page }) 
 });
 test('@a11y department enquiry forms and the open basket have no serious or critical violations', async ({ page }) => {
   const axe = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
-  for (const route of ['/crochet/', '/peanuts/']) {
+  for (const route of ['/crochet/', '/peanuts/', '/our-story/', '/faq/', '/contact/', '/policies/']) {
     await page.goto(route);
     const results = await axe();
     expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);

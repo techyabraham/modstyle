@@ -1,6 +1,9 @@
 ---
 import { site } from '../config/site';
 import { parseMode } from '../lib/visibility';
+import { localBusinessJsonLd, serializeJsonLd } from '../lib/seo';
+import { getCollection } from 'astro:content';
+import { visibleGallery } from '../lib/catalogue';
 import Wordmark from '../components/Wordmark.astro';
 import EnquiryBasket from '../components/EnquiryBasket.astro';
 import displayFontUrl from '../assets/fonts/fraunces-latin-ng.woff2?url';
@@ -10,11 +13,14 @@ import '../styles/components/buttons.css';
 import '../styles/components/cards.css';
 import '../styles/components/graphic.css';
 import '../styles/components/shell.css';
-interface Props { title: string; description: string }
-const { title, description } = Astro.props;
+interface Props { title: string; description: string; jsonLd?: unknown | unknown[] }
+const { title, description, jsonLd } = Astro.props;
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
 const analyticsId = import.meta.env.PUBLIC_ANALYTICS_ID?.trim();
 const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta.env.SITE) : null;
+const socialImage = import.meta.env.SITE ? new URL('/social-card.png', import.meta.env.SITE) : null;
+const structuredData = mode === 'production' ? [localBusinessJsonLd(import.meta.env.SITE), ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])] : [];
+const hasGallery = visibleGallery(await getCollection('gallery'), mode).length > 0;
 // Shared semantic shell; business content remains behind the visibility gate.
 ---
 <!doctype html>
@@ -22,17 +28,34 @@ const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#163d2b" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="preload" href={displayFontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     {mode === 'preview' && <meta name="robots" content="noindex,nofollow" />}
     {canonical && <link rel="canonical" href={canonical} />}
+    {mode === 'production' && <>
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={site.brand.name} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:locale" content="en_NG" />
+      {canonical && <meta property="og:url" content={canonical.href} />}
+      {socialImage && <><meta property="og:image" content={socialImage.href} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Modstyle Crunch And Cream — crochet and peanuts in Lagos" /></>}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      {socialImage && <meta name="twitter:image" content={socialImage.href} />}
+    </>}
+    {structuredData.map(data => <script type="application/ld+json" set:html={serializeJsonLd(data)} />)}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header"><div class="page-wrap site-header__inner"><Wordmark /><EnquiryBasket /><p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p></div></header>
     <main class="site-main" id="main"><slot /></main>
-    <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><p class="site-footer__location">{site.location}</p></div></footer>
+    <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><nav class="site-footer__nav" aria-label="Supporting pages"><a href="/our-story/">Our story</a>{hasGallery && <a href="/gallery/">Gallery</a>}<a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a href="/policies/">Policies</a></nav><p class="site-footer__location">{site.location}</p></div></footer>
     {analyticsId && <script is:inline defer data-domain={analyticsId} src="https://plausible.io/js/script.js"></script>}
     {analyticsId && <script is:inline>
       document.addEventListener('mcc:analytics', event => {

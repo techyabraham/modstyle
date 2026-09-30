@@ -4,6 +4,8 @@ import { isPublishable } from './visibility';
 
 export type ProductEntry = CollectionEntry<'products'>;
 export type GalleryEntry = CollectionEntry<'gallery'>;
+export type FaqEntry = CollectionEntry<'faqs'>;
+export type ReviewEntry = CollectionEntry<'reviews'>;
 
 export function visibleProducts(entries: ProductEntry[], mode: SiteMode, department?: 'crochet' | 'peanuts'): ProductEntry[] {
   return entries
@@ -19,6 +21,18 @@ export function visibleGallery(entries: GalleryEntry[], mode: SiteMode): Gallery
   return entries
     .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.image.alt] }, mode))
     .sort((left, right) => left.data.slug.localeCompare(right.data.slug));
+}
+
+export function visibleFaqs(entries: FaqEntry[], mode: SiteMode): FaqEntry[] {
+  return entries
+    .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.question, entry.data.answer] }, mode))
+    .sort((left, right) => left.data.order - right.data.order || left.data.question.localeCompare(right.data.question));
+}
+
+export function visibleReviews(entries: ReviewEntry[], mode: SiteMode): ReviewEntry[] {
+  return entries
+    .filter(entry => isPublishable({ ...entry.data, approved: entry.data.approved || (mode === 'preview' && entry.data.sample), required: [entry.data.slug, entry.data.name, entry.data.text] }, mode))
+    .sort((left, right) => left.data.name.localeCompare(right.data.name));
 }
 
 export function sampleArtVariant(slug: string, department: 'crochet' | 'peanuts'): 'yarn' | 'granny' | 'top' | 'tote' | 'beanie' | 'peanuts' | 'sack' {

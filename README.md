@@ -1,6 +1,6 @@
 # Modstyle Crunch And Cream
 
-Static Astro website. Phases 1–5 are implemented; Phase 6 (supporting pages, SEO and structured data) has not started.
+Static Astro website. Phases 1–6 are implemented; Phase 7 (accessibility, performance and production hardening) has not started.
 
 Use Node 24 LTS and pnpm 11.19.0.
 

@@ -1,0 +1,11 @@
+{
+  "name": "Modstyle Crunch And Cream",
+  "short_name": "Modstyle",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#fff8ee",
+  "theme_color": "#163d2b",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

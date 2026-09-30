@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { parseMode } from '../lib/visibility';
+
+const preview = parseMode(import.meta.env.PUBLIC_SITE_MODE) === 'preview';
+const story = site.brandStory;
+---
+<BaseLayout title={`Our story | ${site.brand.name}`} description="Meet Modstyle Crunch And Cream, a Lagos business bringing crochet and peanuts together under one name.">
+  <section class="support-page page-wrap" aria-labelledby="story-title">
+    <p class="support-page__eyebrow">One name, two departments · Lagos, Nigeria</p>
+    <h1 id="story-title">Our story</h1>
+    <p class="support-page__lead">{story ?? `${site.brand.name} brings together crochet and peanuts for bulk buying. Choose a department, share what you have in mind, and continue the conversation on WhatsApp.`}</p>
+    {!story && preview && <p class="support-sample">Sample content · Founder name, biography and portrait will appear here after they are supplied and approved.</p>}
+    {site.founder.name && <section class="story-founder" aria-labelledby="founder-title">
+      {site.founder.portrait && <img src={site.founder.portrait} alt={`${site.founder.name}`} width="640" height="800" loading="lazy" />}
+      <div><p class="support-page__eyebrow">{site.founder.title ?? 'Founder'}</p><h2 id="founder-title">{site.founder.name}</h2>{site.founder.story && <p>{site.founder.story}</p>}</div>
+    </section>}
+    <div class="support-actions"><a class="button button--crochet" href="/crochet/">Explore crochet</a><a class="button button--peanuts" href="/peanuts/">Explore peanuts</a></div>
+  </section>
+</BaseLayout>
+<style>
+  @layer reset, tokens, base, components, utilities;
+  @layer components {
+    .support-page { padding-block: clamp(3rem, 8vw, 7rem); }
+    .support-page h1 { margin-block: .35em .45em; font-size: clamp(3rem, 8vw, 6rem); }
+    .support-page__eyebrow { color: var(--forest); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .support-page__lead { max-inline-size: 56ch; font-size: clamp(1.2rem, 2vw, 1.6rem); }
+    .support-sample { max-inline-size: 56ch; margin-block-start: 1.5rem; padding: 1rem; border-inline-start: 4px solid var(--orange); background: var(--orange-soft); }
+    .support-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-block-start: 2rem; }
+    .story-founder { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); align-items: center; gap: clamp(1.5rem, 5vw, 4rem); margin-block-start: 4rem; }
+    .story-founder img { inline-size: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-card); }
+    .story-founder h2 { margin-block: .4em; }
+    @media (max-width: 42rem) { .story-founder { grid-template-columns: 1fr; } }
+  }
+</style>

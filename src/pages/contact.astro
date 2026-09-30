@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+
+const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to get in touch.`);
+const instagramUrl = site.instagram.verified ? `https://www.instagram.com/${site.instagram.handle}/` : null;
+---
+<BaseLayout title={`Contact | ${site.brand.name}`} description="Contact Modstyle Crunch And Cream in Lagos about crochet or peanuts for bulk buying.">
+  <section class="support-page page-wrap" aria-labelledby="contact-title">
+    <p class="support-page__eyebrow">Let’s talk · Lagos, Nigeria</p><h1 id="contact-title">Contact</h1>
+    <p class="support-page__lead">For crochet and bulk peanut enquiries, WhatsApp is the primary way to reach us.</p>
+    <a class="button contact-whatsapp" href={enquiry}>Start a WhatsApp enquiry <span aria-hidden="true">↗</span></a>
+    <dl class="contact-details">
+      <div><dt>Location</dt><dd>{site.location}</dd></div>
+      <div><dt>Phone</dt><dd>{site.contact.phoneApproved ? <a href={`tel:+${site.contact.whatsapp}`}>+{site.contact.whatsapp}</a> : 'WhatsApp is available through the enquiry link.'}</dd></div>
+      {site.contact.emailApproved && <div><dt>Email</dt><dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd></div>}
+      {instagramUrl && <div><dt>Instagram</dt><dd><a href={instagramUrl} rel="me">@{site.instagram.handle}</a></dd></div>}
+      {site.contact.hours && <div><dt>Hours</dt><dd>{site.contact.hours}</dd></div>}
+    </dl>
+  </section>
+</BaseLayout>
+<style>
+  @layer reset, tokens, base, components, utilities;
+  @layer components {
+    .contact-whatsapp { margin-block-start: 1.5rem; }
+    .contact-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; max-inline-size: 60rem; margin-block-start: 3rem; }
+    .contact-details > div { padding: 1.25rem; border: 1px solid var(--sand); border-radius: var(--radius-card); background: white; }
+    .contact-details dt { color: var(--forest); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .contact-details dd { margin-block-start: .45rem; }
+    .contact-details a { text-underline-offset: .2em; }
+  }
+</style>

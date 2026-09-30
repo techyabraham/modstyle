@@ -21,8 +21,8 @@
   .button:hover { transform: translateY(-2px); box-shadow: 0 .55rem 1rem rgb(14 42 29 / .18); }
   .button--outline { background: transparent; color: var(--forest); }
   .button--outline:hover { background: var(--forest); color: var(--cream); }
-  .button--crochet { border-color: var(--magenta); background: var(--magenta); }
-  .button--peanuts { border-color: var(--orange); background: var(--orange); }
+  .button--crochet { border-color: var(--magenta); background: var(--magenta); color: var(--cream); }
+  .button--peanuts { border-color: var(--orange); background: var(--orange); color: var(--cream); }
   .text-link { display: inline-flex; align-items: center; gap: .35rem; min-block-size: 44px; font-weight: 700; text-underline-offset: .2em; }
   .text-link:hover { text-decoration-thickness: .16em; }
 }

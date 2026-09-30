@@ -1,6 +1,16 @@
 # Phase reports
 
-Phases 1–5 are complete. Per the brief, work stops after each phase report. Phase 6 has not started.
+Phases 1–6 are complete. Per the brief, work stops after each phase report. Phase 7 has not started.
+
+## Phase 6 progress
+
+Built `/our-story/`, `/faq/`, `/contact/`, `/policies/`, an approved-content-only `/reviews/` route, the existing content-backed `/gallery/` route, and a custom 404 page. The story stays brand-only until founder details are approved; preview has a clearly labeled review-layout placeholder, while the production review page and homepage section appear only when approved reviews exist. Gallery and review routes stay out of production while their content is sample-only or empty. The FAQ page is populated only with supplied business facts. Unconfirmed lead-time, refund and cancellation terms remain absent in production and are visibly called out as awaiting confirmation in preview. Contact phone, email and Instagram remain approval-gated.
+
+Added page-specific titles, descriptions, canonical URLs when `SITE_URL` is configured, Open Graph and Twitter tags, a hand-drawn SVG favicon, a web manifest, and a locally generated 1200×630 PNG social card. Production JSON-LD includes only confirmed LocalBusiness details, FAQPage data from published FAQs, and Product offers only for published fixed-price non-sample items. It contains no fabricated ratings or reviews. `sitemap.xml` includes only production pages and published products, and is referenced from production `robots.txt` when the site URL is configured; preview remains noindex and disallowed from crawling.
+
+Verified: `pnpm check` passed: 54 Astro/TypeScript files with zero diagnostics, lint, 38 unit tests, production build and output guard, 21 production browser checks, and 6 axe scans across mobile/tablet/desktop. The production check used `https://example.test` as a reserved test origin to exercise canonical URLs and sitemap references; no real domain was supplied or added. `pnpm build` plus `pnpm test:preview` passed all 21 preview checks across mobile/tablet/desktop, including support-page accessibility and labeled empty states. Social image dimensions and manifest assets are checked in browser tests.
+
+Still needed: approved founder story/portrait, customer reviews and permissions, real gallery/product photographs, confirmed lead-time/refund/cancellation terms, and an approved production domain. Lighthouse tuning remains for Phase 7.
 
 ## Phase 5 progress
 
@@ -10,7 +20,7 @@ Added custom crochet and peanut bulk enquiry forms with validation, visible gene
 
 Verified: `pnpm check` passed: 44 Astro files with zero diagnostics, lint, 35 unit tests, production build and output guard, 15 production browser checks, and 6 axe accessibility scans across mobile/tablet/desktop. `pnpm build` plus `pnpm test:preview` passed all 18 preview checks across mobile/tablet/desktop, including basket persistence, quote/minimum handling, WhatsApp URL generation, form validation/message previews, long-message handling and accessibility. `PUBLIC_ANALYTICS_ID` is unset in this environment, so no analytics request is made during these checks.
 
-Still needed: Phase 6 supporting routes and SEO/structured data; approved product and business content, photos and domain; and a configured analytics ID if event collection is desired. The Phase 3 Lighthouse performance result remains open for Phase 7.
+At Phase 5 completion, supporting routes and SEO remained for Phase 6. Approved product and business content, photos, domain, and an analytics ID if event collection is desired remain outstanding. The Phase 3 Lighthouse performance result remains open for Phase 7.
 
 ## Phase 4 progress
 

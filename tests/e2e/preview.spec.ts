@@ -142,3 +142,28 @@ test('@preview custom crochet and peanut bulk forms show the generated WhatsApp 
   expect((await peanuts.locator('[data-form-whatsapp]').getAttribute('href'))!.length).toBeLessThanOrEqual(1800);
   await expect(peanuts.locator('[data-form-error]')).toContainText('shortened to fit');
 });
+
+test('@preview supporting pages show confirmed FAQs and labelled empty states', async ({ page }) => {
+  const pages: Array<[string, string]> = [
+    ['/our-story/', 'Our story'],
+    ['/faq/', 'Frequently asked questions'],
+    ['/contact/', 'Contact'],
+    ['/policies/', 'Ordering & policies'],
+    ['/reviews/', 'Reviews'],
+    ['/gallery/', 'Gallery'],
+  ];
+  for (const [route, heading] of pages) {
+    await page.goto(route);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(results.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
+  }
+  await page.goto('/faq/');
+  await expect(page.locator('.faq-item')).toHaveCount(5);
+  await page.goto('/reviews/');
+  await expect(page.locator('.review-card')).toHaveCount(1);
+  await expect(page.locator('.review-card')).toContainText('Sample content');
+  await expect(page.locator('.review-card')).toContainText('An approved customer review will appear here once one is supplied.');
+});

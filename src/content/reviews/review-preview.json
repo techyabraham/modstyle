@@ -1,0 +1,8 @@
+{
+  "slug": "review-preview",
+  "status": "published",
+  "sample": true,
+  "approved": false,
+  "name": "Preview layout",
+  "text": "An approved customer review will appear here once one is supplied."
+}

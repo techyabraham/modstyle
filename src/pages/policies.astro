@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { pricing } from '../config/pricing';
+import { formatNaira } from '../lib/money';
+import { parseMode } from '../lib/visibility';
+
+const preview = parseMode(import.meta.env.PUBLIC_SITE_MODE) === 'preview';
+const unknownPolicies = [
+  ['Lead time', site.policies.leadTime],
+  ['Refunds', site.policies.refund],
+  ['Cancellations', site.policies.cancellation],
+].filter((item): item is [string, string] => Boolean(item[1]));
+---
+<BaseLayout title={`Ordering & policies | ${site.brand.name}`} description="Minimum order, delivery and payment information for enquiries with Modstyle Crunch And Cream.">
+  <section class="support-page page-wrap policy-page" aria-labelledby="policies-title">
+    <p class="support-page__eyebrow">Before you enquire</p><h1 id="policies-title">Ordering &amp; policies</h1>
+    <p class="support-page__lead">Availability, total and delivery are confirmed with you on WhatsApp before you decide how to proceed.</p>
+    <div class="policy-grid">
+      <section><h2>Minimum order</h2><p>{formatNaira(pricing.minimumPerDepartment)} per department, based on the items subtotal. Delivery is separate.</p></section>
+      <section><h2>Delivery</h2><p>{pricing.deliveryText}</p></section>
+      <section><h2>Payment</h2><p>Payment is by bank transfer. Account details are shared inside WhatsApp.</p></section>
+      <section><h2>Custom and bulk requests</h2><p>Custom crochet and peanut bulk enquiries are quote-based. Details are confirmed in chat.</p></section>
+      {unknownPolicies.map(([name, copy]) => <section><h2>{name}</h2><p>{copy}</p></section>)}
+    </div>
+    {preview && unknownPolicies.length < 3 && <p class="support-sample">Sample content · Any unpublished lead-time, refund and cancellation terms will appear here only after they are confirmed.</p>}
+    <p class="policy-note">The minimum-order basis is the current configured assumption and should be confirmed by the business.</p>
+  </section>
+</BaseLayout>
+<style>
+  @layer reset, tokens, base, components, utilities;
+  @layer components {
+    .policy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-inline-size: 68rem; margin-block-start: 2rem; }
+    .policy-grid section { padding: clamp(1.15rem, 2.5vw, 1.8rem); border: 1px solid var(--sand); border-radius: var(--radius-card); background: white; }
+    .policy-grid h2 { margin-block-end: .6rem; font-size: 1.35rem; }
+    .policy-note { margin-block-start: 1.5rem; color: #55584f; font-size: .85rem; }
+    @media (max-width: 40rem) { .policy-grid { grid-template-columns: 1fr; } }
+  }
+</style>

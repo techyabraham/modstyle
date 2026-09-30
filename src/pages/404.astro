@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+
+const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I need help finding a page.`);
+---
+<BaseLayout title={`Page not found | ${site.brand.name}`} description="This page could not be found. Explore crochet, peanuts for bulk buying, or contact Modstyle on WhatsApp.">
+  <section class="support-page page-wrap not-found" aria-labelledby="not-found-title">
+    <p class="support-page__eyebrow">404 · Lost a stitch?</p><h1 id="not-found-title">This page isn’t here.</h1>
+    <p class="support-page__lead">The link may have moved. Choose a department or send us a message and we’ll help.</p>
+    <div class="support-actions"><a class="button button--crochet" href="/crochet/">Explore crochet</a><a class="button button--peanuts" href="/peanuts/">Explore peanuts</a><a class="button button--outline" href={enquiry}>Ask on WhatsApp</a></div>
+  </section>
+</BaseLayout>
+<style>
+  @layer reset, tokens, base, components, utilities;
+  @layer components {
+    .not-found h1 { max-inline-size: 12ch; }
+    .not-found .support-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-block-start: 2rem; }
+  }
+</style>
