@@ -19,6 +19,9 @@ test('WhatsApp remains available without JavaScript', async ({ browser }, testIn
   const page = await context.newPage();
   await page.goto(new URL('/', testInfo.project.use.baseURL as string).toString());
   await expect(page.getByRole('link', { name: 'Start an enquiry' })).toHaveAttribute('href', /^https:\/\/wa.me\//);
+  await page.goto(new URL('/crochet/', testInfo.project.use.baseURL as string).toString());
+  await expect(page.locator('[data-quick-enquiry="crochet"] [data-form-whatsapp]')).toHaveAttribute('href', /^https:\/\/wa.me\//);
+  await expect(page.locator('[data-basket-open]')).toHaveAttribute('href', /^https:\/\/wa.me\//);
   await context.close();
 });
 test('production indexing and canonical defaults', async ({ page, request }) => {
@@ -39,6 +42,18 @@ test('@a11y foundation has no serious or critical violations', async ({ page }) 
   await page.goto('/');
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
+});
+test('@a11y department enquiry forms and the open basket have no serious or critical violations', async ({ page }) => {
+  const axe = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  for (const route of ['/crochet/', '/peanuts/']) {
+    await page.goto(route);
+    const results = await axe();
+    expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
+  }
+  await page.goto('/');
+  await page.getByRole('link', { name: /Open enquiry basket/ }).click();
+  const basketResults = await axe();
+  expect(basketResults.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 });
 test('both web fonts render every glyph in ₦40,000 without fallback', async ({ page }) => {
   await page.goto('/');

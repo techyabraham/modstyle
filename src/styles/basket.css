@@ -1,0 +1,44 @@
+@layer reset, tokens, base, components, utilities;
+@layer components {
+  .basket-launch { display: inline-flex; min-block-size: 2.8rem; align-items: center; gap: .4rem; padding: .45rem .75rem; border: 1px solid var(--forest); border-radius: var(--radius-pill); color: var(--forest); font-size: .88rem; font-weight: 700; text-decoration: none; }
+  .basket-launch svg { inline-size: 1.25rem; block-size: 1.25rem; }
+  .basket-launch__count { display: grid; min-inline-size: 1.4rem; min-block-size: 1.4rem; place-items: center; border-radius: 50%; background: var(--forest); color: white; font-size: .72rem; }
+  .basket-dialog { position: fixed; inset: 0 0 0 auto; inline-size: min(100%, 34rem); max-inline-size: none; block-size: 100dvh; max-block-size: none; margin: 0; padding: clamp(1rem, 3vw, 1.6rem); overflow-y: auto; border: 0; border-inline-start: 1px solid var(--sand); background: var(--cream); color: var(--ink); box-shadow: -1rem 0 3rem rgb(14 42 29 / .18); }
+  .basket-dialog::backdrop { background: rgb(14 42 29 / .65); backdrop-filter: blur(2px); }
+  .basket-dialog__header { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-block-end: 1rem; }
+  .basket-dialog__header h2 { margin-block-start: .2rem; font-size: 2rem; }
+  .basket-close { display: grid; inline-size: 2.75rem; block-size: 2.75rem; place-items: center; border: 0; border-radius: 50%; background: var(--forest); color: white; font-size: 1.5rem; cursor: pointer; }
+  .basket-empty { display: grid; justify-items: start; gap: .75rem; padding: 1.25rem; border-radius: var(--radius-card); background: white; }
+  .basket-empty p:first-child { color: var(--forest); font: 600 1.3rem var(--font-display); }
+  .basket-items { display: grid; gap: .65rem; padding: 0; list-style: none; }
+  .basket-item { display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: center; padding: .85rem; border: 1px solid var(--sand); border-radius: .8rem; background: white; }
+  .basket-item h3 { font: 700 1rem var(--font-body); }
+  .basket-item p { margin-block-start: .2rem; color: var(--forest); font-size: .82rem; }
+  .basket-item__controls { display: flex; align-items: center; gap: .5rem; }
+  .basket-item__controls input { inline-size: 4.3rem; min-block-size: 2.75rem; padding: .35rem; border: 1px solid var(--sand); border-radius: .45rem; }
+  .basket-item__controls button, .basket-clear { min-block-size: 2.75rem; border: 0; background: transparent; color: var(--magenta); font-weight: 700; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+  .basket-progress { display: grid; gap: .7rem; margin-block: 1rem; }
+  .basket-progress section { padding: .9rem; border: 1px solid var(--sand); border-radius: .85rem; background: white; }
+  .basket-progress section > div { display: flex; justify-content: space-between; gap: .5rem; }
+  .basket-progress h3 { font: 700 .9rem var(--font-body); }
+  .basket-progress section > div span { color: var(--forest); font-size: .82rem; font-weight: 700; text-align: end; }
+  .basket-progress progress { display: block; inline-size: 100%; block-size: .65rem; margin-block: .7rem .4rem; accent-color: var(--forest); }
+  .basket-progress p { font-size: .8rem; }
+  .basket-progress [data-progress-state="reached"] { border-color: var(--forest); background: #edf5ee; }
+  .basket-progress [data-progress-state="quote"] { border-color: var(--orange); background: var(--orange-soft); }
+  .basket-delivery { padding: .8rem; border-radius: .75rem; background: var(--orange-soft); font-size: .83rem; }
+  .basket-fields { display: grid; gap: .7rem; margin-block: 1rem; }
+  .basket-fields label { display: grid; gap: .25rem; color: var(--forest-deep); font-size: .82rem; font-weight: 700; }
+  .basket-fields label span { display: inline; color: #565950; font-weight: 400; }
+  .basket-fields input, .basket-fields textarea, .basket-summary { inline-size: 100%; padding: .65rem .75rem; border: 1px solid var(--sand); border-radius: .55rem; background: white; color: var(--ink); }
+  .basket-fields input { min-block-size: 2.8rem; }
+  .basket-summary-label { display: block; margin-block-end: .3rem; color: var(--forest-deep); font-size: .85rem; font-weight: 800; }
+  .basket-summary { min-block-size: 10rem; font: .8rem/1.5 var(--font-body); resize: vertical; }
+  .basket-message-hint { min-block-size: 1.5em; margin-block: .4rem; color: #7a351d; font-size: .83rem; font-weight: 700; }
+  .basket-actions { display: flex; flex-wrap: wrap; gap: .6rem; padding-block-end: 1rem; }
+  .basket-actions .button { flex: 1 1 12rem; }
+  .basket-actions .basket-clear { flex: 1 1 100%; }
+  @media (prefers-reduced-motion: no-preference) { .basket-dialog[open] { animation: basket-enter 180ms ease-out; } }
+  @keyframes basket-enter { from { opacity: 0; transform: translateX(1rem); } to { opacity: 1; transform: translateX(0); } }
+  @media (max-width: 38rem) { .basket-item { grid-template-columns: 1fr; } .basket-item__controls { justify-content: space-between; } }
+}

@@ -1,5 +1,13 @@
 # Decisions
 
+## Phase 5 — enquiry (2026-09-30)
+- Keep basket contents in versioned browser localStorage with an in-memory fallback. Do not submit customer details or basket data to a site server; WhatsApp is the enquiry destination.
+- Treat the configured per-department minimum as advisory progress, calculated from fixed-price items only and excluding delivery. `from` and `quote` items stay out of fixed subtotals and are flagged for confirmation in WhatsApp.
+- Preserve direct WhatsApp links without JavaScript. Cap generated message URLs at 1,800 characters and visibly shorten long free-text notes so the customer can finish the enquiry in chat.
+- Ask for customer preferences in custom crochet and peanut bulk forms without implying unconfirmed stock options or food/product facts.
+- Load cookieless Plausible only when `PUBLIC_ANALYTICS_ID` is set. Track action names and department/product identifiers only; never include enquiry or message content.
+- Keep copy available when opening WhatsApp is impractical, with a manual selection fallback when clipboard permission is unavailable.
+
 ## Phase 4 — catalogue (2026-09-30)
 - Keep sample catalogue entries visible only in preview and visibly label their illustrations; exclude sample content from production output. Seed eight crochet listings and three peanut bulk-enquiry examples for layout and filter review.
 - Allow the sample ₦40,000 amount on exactly `sample-crochet-featured`; it remains a sample and cannot appear in production. Do not assign it to an actual product until the client confirms the product identity.

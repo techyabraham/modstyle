@@ -70,3 +70,75 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await expect(page.locator('[data-gallery-lightbox]')).not.toBeVisible();
   await expect(page.locator('[data-gallery-item]:visible')).toBeFocused();
 });
+
+test('@preview basket saves options, separates department minimums and creates a short WhatsApp message', async ({ page }) => {
+  await page.goto('/products/sample-crochet-top/');
+  const addButton = page.getByRole('button', { name: 'Add to enquiry' });
+  await addButton.focus();
+  await page.keyboard.press('Enter');
+  const dialog = page.getByRole('dialog', { name: 'Enquiry basket' });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(addButton).toBeFocused();
+  await page.getByLabel('Size').selectOption('Sample size B');
+  await page.getByLabel('Colour').selectOption('Sample colour');
+  await page.locator('[data-product-quantity]').fill('2');
+  await addButton.click();
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('Sample size B, Sample colour');
+  await expect(dialog.locator('[data-progress-department="crochet"]')).toContainText('Quote items included');
+  const basketA11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(basketA11y.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
+  await dialog.getByRole('button', { name: 'Clear basket' }).click();
+  await dialog.getByRole('button', { name: 'Close enquiry basket' }).click();
+
+  await page.goto('/products/sample-crochet-featured/');
+  await page.getByRole('button', { name: 'Add to enquiry' }).click();
+  await expect(dialog.locator('[data-progress-department="crochet"]')).toContainText('₦40,000 of ₦30,000 minimum reached.');
+  await dialog.getByLabel('Delivery area').fill('Ikeja & GRA');
+  await dialog.getByLabel('Notes').fill("It's for Mum\nPlease call first.");
+  const whatsApp = new URL((await dialog.locator('[data-basket-whatsapp]').getAttribute('href'))!);
+  expect(whatsApp.hostname).toBe('wa.me');
+  expect(whatsApp.href.length).toBeLessThanOrEqual(1800);
+  expect(whatsApp.searchParams.get('text')).toContain('Crochet Piece · Sample');
+  expect(whatsApp.searchParams.get('text')).toContain('Ikeja & GRA');
+  await dialog.getByRole('button', { name: 'Clear basket' }).click();
+  await expect(dialog.locator('[data-basket-items]')).toBeHidden();
+});
+
+test('@preview custom crochet and peanut bulk forms show the generated WhatsApp preview', async ({ page }) => {
+  await page.goto('/crochet/');
+  const crochet = page.locator('[data-quick-enquiry="crochet"]');
+  await crochet.getByLabel(/Item type/).fill('A custom piece');
+  await crochet.getByLabel('Size or measurements').fill('Medium');
+  await crochet.getByLabel('Colour(s)').fill('Forest green');
+  await crochet.getByRole('spinbutton', { name: 'Quantity' }).fill('2');
+  await crochet.getByLabel(/Needed by/).fill('2026-10-16');
+  await crochet.getByLabel(/Describe your idea/).fill('A warm, simple design.');
+  await expect(crochet.locator('[data-form-summary]')).toContainText('Needed by (requested): 2026-10-16');
+  const crochetA11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(crochetA11y.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
+  const crochetUrl = new URL((await crochet.locator('[data-form-whatsapp]').getAttribute('href'))!);
+  expect(crochetUrl.searchParams.get('text')).toContain('A custom piece');
+  expect(crochetUrl.searchParams.get('text')).toContain('Forest green');
+  await crochet.getByLabel(/Describe your idea/).fill('✨'.repeat(600));
+  expect((await crochet.locator('[data-form-whatsapp]').getAttribute('href'))!.length).toBeLessThanOrEqual(1800);
+  await expect(crochet.locator('[data-form-error]')).toContainText('shortened to fit');
+  await expect(crochet.getByLabel(/Describe your idea/)).toHaveValue(/… \(shortened to fit/);
+
+  await page.goto('/peanuts/');
+  const peanuts = page.locator('[data-quick-enquiry="peanuts"]');
+  await peanuts.getByLabel(/Quantity and unit/).fill('10 bags');
+  await peanuts.getByLabel('Delivery area').fill('Ikeja');
+  await peanuts.getByLabel(/Variety preference/).fill('To discuss');
+  await expect(peanuts.locator('[data-form-summary]')).toContainText('Quantity and unit: 10 bags');
+  const peanutsA11y = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(peanutsA11y.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
+  const peanutUrl = new URL((await peanuts.locator('[data-form-whatsapp]').getAttribute('href'))!);
+  expect(peanutUrl.searchParams.get('text')).toContain('Delivery area: Ikeja');
+  expect(peanutUrl.searchParams.get('text')).not.toContain('Ingredients:');
+  await peanuts.getByLabel('Notes').fill('🌰'.repeat(600));
+  expect((await peanuts.locator('[data-form-whatsapp]').getAttribute('href'))!.length).toBeLessThanOrEqual(1800);
+  await expect(peanuts.locator('[data-form-error]')).toContainText('shortened to fit');
+});

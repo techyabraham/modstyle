@@ -11,8 +11,8 @@
   "images": [],
   "leadTime": null,
   "intendedWearer": "Adults",
-  "sizes": [],
-  "colours": [],
+  "sizes": ["Sample size A", "Sample size B"],
+  "colours": [{ "name": "Sample colour", "hex": "#A51B60" }],
   "materials": null,
   "care": null
 }

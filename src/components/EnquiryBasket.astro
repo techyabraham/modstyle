@@ -1,0 +1,150 @@
+---
+import { site } from '../config/site';
+import { pricing } from '../config/pricing';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+import '../styles/basket.css';
+const fallback = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about crochet or bulk peanuts.`);
+---
+<a class="basket-launch" href={fallback} data-basket-open aria-haspopup="dialog" aria-label="Open enquiry basket, 0 items">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 5h2l2.1 10.1a2 2 0 0 0 2 1.6h6.7a2 2 0 0 0 1.9-1.4L20 9H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1" fill="currentColor"/><circle cx="17" cy="20" r="1" fill="currentColor"/></svg>
+  <span>Enquiry</span><span class="basket-launch__count" data-basket-count>0</span>
+</a>
+<dialog class="basket-dialog" data-basket-dialog data-minimum-per-department={pricing.minimumPerDepartment} data-whatsapp-number={site.contact.whatsapp} data-brand-name={site.brand.name} aria-labelledby="basket-title">
+  <div class="basket-dialog__header"><div><p class="catalogue-eyebrow">Your selections</p><h2 id="basket-title">Enquiry basket</h2></div><button class="basket-close" type="button" data-basket-close aria-label="Close enquiry basket">×</button></div>
+  <p class="basket-live visually-hidden" aria-live="polite" data-basket-live></p>
+  <div class="basket-empty" data-basket-empty><p>Your basket is empty for now.</p><p>Add a product, or message us to ask about a custom piece or bulk peanuts.</p><a class="button" href="/crochet/">Explore crochet</a></div>
+  <ol class="basket-items" data-basket-items></ol>
+  <div class="basket-progress" aria-label="Minimum order progress">
+    <section data-progress-department="crochet"><div><h3>Crochet minimum</h3><span data-progress-value>₦0 of ₦30,000</span></div><progress max={pricing.minimumPerDepartment} value="0" aria-label="Crochet minimum order progress"></progress><p data-progress-message></p></section>
+    <section data-progress-department="peanuts"><div><h3>Peanuts minimum</h3><span data-progress-value>₦0 of ₦30,000</span></div><progress max={pricing.minimumPerDepartment} value="0" aria-label="Peanuts minimum order progress"></progress><p data-progress-message></p></section>
+  </div>
+  <p class="basket-delivery">{pricing.deliveryText} Delivery is separate from the items total.</p>
+  <form class="basket-fields" data-basket-fields>
+    <label>Your name <span>(optional)</span><input name="name" autocomplete="name" maxlength="80" /></label>
+    <label>Delivery area <span>(optional)</span><input name="deliveryArea" autocomplete="off" maxlength="120" /></label>
+    <label>Notes <span>(optional)</span><textarea name="notes" rows="3" maxlength="2500"></textarea></label>
+  </form>
+  <label class="basket-summary-label" for="basket-summary">Enquiry summary</label><textarea class="basket-summary" id="basket-summary" data-basket-summary rows="8" readonly></textarea>
+  <p class="basket-message-hint" data-basket-hint aria-live="polite"></p>
+  <div class="basket-actions"><a class="button" data-basket-whatsapp href={fallback} target="_blank" rel="noopener noreferrer">Continue on WhatsApp <span aria-hidden="true">↗</span></a><button type="button" class="button button--outline" data-basket-copy>Copy enquiry text</button><button type="button" class="basket-clear" data-basket-clear>Clear basket</button></div>
+</dialog>
+<script>
+  import { addBasketItem, BASKET_STORAGE_KEY, basketTotals, buildEnquiryMessage, minimumProgress, parseBasket, updateBasketQuantity, type BasketItem } from '../lib/basket';
+  import { formatNaira } from '../lib/money';
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-basket-dialog]');
+  const list = dialog?.querySelector<HTMLOListElement>('[data-basket-items]');
+  const countBadge = document.querySelector<HTMLElement>('[data-basket-count]');
+  const live = dialog?.querySelector<HTMLElement>('[data-basket-live]');
+  const empty = dialog?.querySelector<HTMLElement>('[data-basket-empty]');
+  const fields = dialog?.querySelector<HTMLFormElement>('[data-basket-fields]');
+  const summary = dialog?.querySelector<HTMLTextAreaElement>('[data-basket-summary]');
+  const whatsapp = dialog?.querySelector<HTMLAnchorElement>('[data-basket-whatsapp]');
+  const hint = dialog?.querySelector<HTMLElement>('[data-basket-hint]');
+  const minimumPerDepartment = Number(dialog?.dataset.minimumPerDepartment);
+  let memoryItems: BasketItem[] = [];
+  let activeTrigger: HTMLElement | null = null;
+  try {
+    const saved = localStorage.getItem(BASKET_STORAGE_KEY);
+    memoryItems = parseBasket(saved);
+    if (saved && JSON.stringify(memoryItems) !== saved) localStorage.setItem(BASKET_STORAGE_KEY, JSON.stringify(memoryItems));
+  } catch { memoryItems = []; }
+
+  const analytics = (name: string, props: Record<string, string> = {}) => document.dispatchEvent(new CustomEvent('mcc:analytics', { detail: { name, props } }));
+  const save = () => { try { localStorage.setItem(BASKET_STORAGE_KEY, JSON.stringify(memoryItems)); } catch { /* Keep the in-memory basket available for this tab. */ } };
+  const fieldValues = () => fields ? Object.fromEntries(new FormData(fields).entries()) as { name?: string; deliveryArea?: string; notes?: string } : {};
+  const updateLink = () => {
+    const result = buildEnquiryMessage(memoryItems, fieldValues(), dialog?.dataset.whatsappNumber ?? '');
+    if (summary) summary.value = result.text;
+    if (whatsapp) {
+      if (result.linkTooLong) {
+        const fallback = new URL(`https://wa.me/${dialog?.dataset.whatsappNumber}`);
+        fallback.searchParams.set('text', `Hello ${dialog?.dataset.brandName}, I have an enquiry basket. I will paste the full details in chat.`);
+        whatsapp.href = fallback.toString();
+      } else whatsapp.href = result.url;
+    }
+    if (hint) hint.textContent = result.linkTooLong ? 'This enquiry is too long for one WhatsApp link. Copy the full summary, open WhatsApp, then paste it into chat.' : result.notesTruncated ? 'Your notes were shortened to fit the WhatsApp link. Send any extra detail in chat.' : '';
+  };
+  const render = () => {
+    if (!dialog || !list) return;
+    list.replaceChildren();
+    const itemCount = memoryItems.reduce((sum, item) => sum + item.quantity, 0);
+    if (countBadge) countBadge.textContent = String(itemCount);
+    document.querySelector('[data-basket-open]')?.setAttribute('aria-label', `Open enquiry basket, ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`);
+    if (empty) empty.hidden = memoryItems.length > 0;
+    list.hidden = memoryItems.length === 0;
+    for (const [index, item] of memoryItems.entries()) {
+      const row = document.createElement('li');
+      row.className = 'basket-item';
+      const info = document.createElement('div');
+      const title = document.createElement('h3');
+      title.textContent = item.name;
+      const details = document.createElement('p');
+      const optionText = [item.options.size, item.options.colour].filter(Boolean).join(', ');
+      details.textContent = `${item.department === 'crochet' ? 'Crochet' : 'Peanuts'}${optionText ? ` · ${optionText}` : ''} · ${item.pricing.type === 'fixed' ? `${formatNaira(item.pricing.amountNaira)} each` : 'Price to be confirmed'}`;
+      info.append(title, details);
+      const controls = document.createElement('div');
+      controls.className = 'basket-item__controls';
+      const quantity = document.createElement('input');
+      quantity.type = 'number'; quantity.min = '1'; quantity.max = '999'; quantity.step = '1'; quantity.value = String(item.quantity); quantity.inputMode = 'numeric'; quantity.setAttribute('aria-label', `Quantity for ${item.name}`);
+      quantity.addEventListener('change', () => {
+        const next = quantity.valueAsNumber;
+        if (!Number.isInteger(next) || next < 1 || next > 999) { quantity.value = String(item.quantity); if (live) live.textContent = 'Enter a whole number from 1 to 999.'; return; }
+        memoryItems = updateBasketQuantity(memoryItems, index, next); save(); render();
+      });
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.textContent = 'Remove'; remove.setAttribute('aria-label', `Remove ${item.name}`);
+      remove.addEventListener('click', () => { memoryItems = memoryItems.filter((_, itemIndex) => itemIndex !== index); save(); render(); if (live) live.textContent = `${item.name} removed from the basket.`; });
+      controls.append(quantity, remove); row.append(info, controls); list.append(row);
+    }
+    const totals = basketTotals(memoryItems);
+    for (const department of ['crochet', 'peanuts'] as const) {
+      const section = dialog.querySelector<HTMLElement>(`[data-progress-department="${department}"]`);
+      const progress = section?.querySelector<HTMLProgressElement>('progress');
+      const value = section?.querySelector<HTMLElement>('[data-progress-value]');
+      const message = section?.querySelector<HTMLElement>('[data-progress-message]');
+      const total = totals[department];
+      const state = minimumProgress(total, minimumPerDepartment);
+      if (value) value.textContent = `${formatNaira(total.amount)} of ${formatNaira(minimumPerDepartment)}`;
+      if (progress) { progress.value = Math.min(total.amount, minimumPerDepartment); progress.setAttribute('aria-valuetext', state.message); }
+      if (message) message.textContent = state.message;
+      section?.setAttribute('data-progress-state', state.status);
+    }
+    updateLink();
+  };
+  document.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const open = target.closest<HTMLElement>('[data-basket-open]');
+    if (open && dialog) { event.preventDefault(); activeTrigger = open; render(); dialog.showModal(); dialog.querySelector<HTMLElement>('[data-basket-close]')?.focus(); analytics('basket_open'); }
+    const add = target.closest<HTMLButtonElement>('[data-basket-add]');
+    if (add) {
+      try {
+        const item = JSON.parse(add.dataset.basketAdd ?? '') as BasketItem;
+        const size = document.querySelector<HTMLSelectElement>('[data-product-option="size"]')?.value;
+        const colour = document.querySelector<HTMLSelectElement>('[data-product-option="colour"]')?.value;
+        const quantity = Number(document.querySelector<HTMLInputElement>('[data-product-quantity]')?.value ?? 1);
+        if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) { const status = document.querySelector<HTMLElement>('[data-product-status]'); if (status) status.textContent = 'Enter a whole number from 1 to 999.'; return; }
+        item.options = { ...(size ? { size } : {}), ...(colour ? { colour } : {}) }; item.quantity = quantity;
+        memoryItems = addBasketItem(memoryItems, item); save(); render();
+        if (live) live.textContent = `${item.name} added to your enquiry basket.`;
+        analytics('basket_add', { department: item.department, product_slug: item.slug });
+        activeTrigger = add; dialog?.showModal(); dialog?.querySelector<HTMLElement>('[data-basket-close]')?.focus();
+      } catch { if (live) live.textContent = 'This item could not be added. Please use the WhatsApp enquiry link.'; }
+    }
+  });
+  dialog?.querySelector<HTMLElement>('[data-basket-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  dialog?.addEventListener('close', () => { activeTrigger?.focus(); activeTrigger = null; });
+  fields?.addEventListener('input', updateLink);
+  dialog?.querySelector('[data-basket-clear]')?.addEventListener('click', () => { memoryItems = []; save(); render(); if (live) live.textContent = 'Basket cleared.'; });
+  dialog?.querySelector('[data-basket-copy]')?.addEventListener('click', async () => {
+    if (!summary) return;
+    let copied = false;
+    try { await navigator.clipboard.writeText(summary.value); copied = true; }
+    catch { summary.focus(); summary.select(); }
+    if (live) live.textContent = copied ? 'Enquiry text copied. Paste it into WhatsApp when you continue.' : 'Your enquiry is selected. Press Ctrl+C or Copy to copy it, then paste it into WhatsApp.';
+    analytics('enquiry_copy');
+  });
+  render();
+</script>

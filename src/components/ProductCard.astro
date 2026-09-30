@@ -22,6 +22,6 @@ const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNai
     <div class="catalogue-card__meta"><span>{item.department === 'crochet' ? item.category : 'Bulk enquiry'}</span>{item.sample && <span class="catalogue-sample">Sample</span>}</div>
     <h3><a href={`/products/${item.slug}/`}>{item.name}</a></h3>
     <p>{item.summary}</p>
-    <div class="catalogue-card__footer"><strong>{price}</strong><a class="catalogue-card__arrow" href={enquiry} aria-label={`Enquire about ${item.name} on WhatsApp`}><span aria-hidden="true">↗</span></a></div>
+    <div class="catalogue-card__footer"><strong>{price}</strong><a class="catalogue-card__arrow" data-analytics-whatsapp data-analytics-department={item.department} data-analytics-product-slug={item.slug} href={enquiry} aria-label={`Enquire about ${item.name} on WhatsApp`}><span aria-hidden="true">↗</span></a></div>
   </div>
 </article>

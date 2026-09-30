@@ -2,6 +2,7 @@
 import { site } from '../config/site';
 import { parseMode } from '../lib/visibility';
 import Wordmark from '../components/Wordmark.astro';
+import EnquiryBasket from '../components/EnquiryBasket.astro';
 import displayFontUrl from '../assets/fonts/fraunces-latin-ng.woff2?url';
 import '../styles/base.css';
 import '../styles/tokens.css';
@@ -12,6 +13,7 @@ import '../styles/components/shell.css';
 interface Props { title: string; description: string }
 const { title, description } = Astro.props;
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const analyticsId = import.meta.env.PUBLIC_ANALYTICS_ID?.trim();
 const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta.env.SITE) : null;
 // Shared semantic shell; business content remains behind the visibility gate.
 ---
@@ -28,8 +30,25 @@ const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header"><div class="page-wrap site-header__inner"><Wordmark /><p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p></div></header>
+    <header class="site-header"><div class="page-wrap site-header__inner"><Wordmark /><EnquiryBasket /><p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p></div></header>
     <main class="site-main" id="main"><slot /></main>
     <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><p class="site-footer__location">{site.location}</p></div></footer>
+    {analyticsId && <script is:inline defer data-domain={analyticsId} src="https://plausible.io/js/script.js"></script>}
+    {analyticsId && <script is:inline>
+      document.addEventListener('mcc:analytics', event => {
+        const detail = event.detail;
+        if (detail && typeof detail.name === 'string') window.plausible?.(detail.name, { props: detail.props ?? {} });
+      });
+      document.addEventListener('click', event => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const link = target.closest('a[href^="https://wa.me/"]');
+        if (!link) return;
+        const props = {};
+        if (link.dataset.analyticsDepartment) props.department = link.dataset.analyticsDepartment;
+        if (link.dataset.analyticsProductSlug) props.product_slug = link.dataset.analyticsProductSlug;
+        window.plausible?.('whatsapp_click', { props });
+      });
+    </script>}
   </body>
 </html>

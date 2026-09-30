@@ -25,6 +25,7 @@ const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNai
 const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about ${item.name}. Please confirm availability, total and delivery.`);
 const art = sampleArtVariant(item.slug, item.department);
 const primaryImage = item.images[0];
+const basketItem = JSON.stringify({ slug: item.slug, name: item.name, department: item.department, options: {}, quantity: 1, pricing: item.pricing });
 ---
 <BaseLayout title={`${item.name} | ${site.brand.name}`} description={item.summary}>
   <div class="page-wrap product-page">
@@ -48,10 +49,12 @@ const primaryImage = item.images[0];
         <p class="product-detail__price">{price}</p>
         <div class="product-detail__facts"><span>Minimum</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></div>
         {item.department === 'crochet' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Options</h2>
-          {(item.sizes.length > 0 || item.colours.length > 0) ? <div>{item.sizes.length > 0 && <p><strong>Size:</strong> {item.sizes.join(', ')}</p>}{item.colours.length > 0 && <ul class="colour-options" aria-label="Colour options">{item.colours.map(colour => <li><span style={`--swatch: ${colour.hex}`} aria-hidden="true"></span><span>{colour.name}</span></li>)}</ul>}</div> : <p>{item.sample ? 'Sample content · sizes and colours are yet to be confirmed.' : 'Ask us about size and colour availability in chat.'}</p>}
+          {(item.sizes.length > 0 || item.colours.length > 0) ? <div class="product-option-controls">{item.sizes.length > 0 && <label>Size<select data-product-option="size"><option value="">Choose a size</option>{item.sizes.map(size => <option value={size}>{size}</option>)}</select></label>}{item.colours.length > 0 && <label>Colour<select data-product-option="colour"><option value="">Choose a colour</option>{item.colours.map(colour => <option value={colour.name}>{colour.name}</option>)}</select></label>}</div> : <p>{item.sample ? 'Sample content · sizes and colours are yet to be confirmed.' : 'Ask us about size and colour availability in chat.'}</p>}
         </section>}
         {item.department === 'peanuts' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Bulk details</h2><p>{item.sample ? 'Sample content · variety and pack size have not been supplied.' : 'Ask us about available varieties and pack sizes in chat.'}</p></section>}
-        <a class="button" href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a>
+        <label class="product-quantity">Quantity<input type="number" data-product-quantity min="1" max="999" step="1" value="1" inputmode="numeric" /></label>
+        <p class="visually-hidden" aria-live="polite" data-product-status></p>
+        <div class="product-detail__actions"><button class="button button--outline" type="button" data-basket-add={basketItem}>Add to enquiry</button><a class="button" data-analytics-whatsapp data-analytics-department={item.department} data-analytics-product-slug={item.slug} href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a></div>
         <p class="product-detail__fineprint">We’ll confirm availability, total and delivery in chat. Payment is by bank transfer; details are shared on WhatsApp.</p>
       </div>
     </div>

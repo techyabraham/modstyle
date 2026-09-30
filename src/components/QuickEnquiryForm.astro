@@ -1,0 +1,106 @@
+---
+import { site } from '../config/site';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+import '../styles/enquiry-form.css';
+interface Props { department: 'crochet' | 'peanuts' }
+const { department } = Astro.props;
+const crochet = department === 'crochet';
+const fallback = buildWhatsAppLink(site.contact.whatsapp, crochet ? `Hello ${site.brand.name}, I'd like to ask about a custom crochet piece.` : `Hello ${site.brand.name}, I'd like to enquire about buying peanuts in bulk.`);
+---
+<form class:list={['quick-enquiry', crochet ? 'quick-enquiry--crochet' : 'quick-enquiry--peanuts']} data-quick-enquiry={department} data-whatsapp-number={site.contact.whatsapp} data-brand-name={site.brand.name}>
+  <p class="catalogue-eyebrow">{crochet ? 'Custom crochet request' : 'Bulk peanuts enquiry'}</p>
+  <h3>{crochet ? 'Tell us what you have in mind.' : 'Tell us what you need.'}</h3>
+  {crochet ? <>
+    <label>Item type <span aria-hidden="true">*</span><input name="itemType" maxlength="100" autocomplete="off" required /></label>
+    <label>Size or measurements <span>(optional)</span><input name="size" maxlength="120" autocomplete="off" /></label>
+    <label>Colour(s) <span>(optional)</span><input name="colours" maxlength="120" autocomplete="off" /></label>
+    <label>Quantity <span aria-hidden="true">*</span><input name="quantity" type="number" min="1" max="999" step="1" inputmode="numeric" value="1" required /></label>
+    <label>Needed by <span>(requested date; optional)</span><input name="neededBy" type="date" /></label>
+    <label>Describe your idea <span>(optional)</span><textarea name="description" rows="3" maxlength="600"></textarea></label>
+  </> : <>
+    <label>Quantity and unit <span aria-hidden="true">*</span><input name="quantityUnit" maxlength="100" required /><small>For example, share an amount and unit.</small></label>
+    <label>Variety preference <span>(optional, if known)</span><input name="variety" maxlength="100" /></label>
+    <label>Preferred pack size <span>(optional, if known)</span><input name="packSize" maxlength="100" /></label>
+    <label>Delivery area <span aria-hidden="true">*</span><input name="deliveryArea" maxlength="120" autocomplete="off" required /></label>
+    <label>Packaging request <span>(optional)</span><input name="packaging" maxlength="160" /></label>
+    <label>Notes <span>(optional)</span><textarea name="notes" rows="3" maxlength="600"></textarea></label>
+  </>}
+  <p class="quick-enquiry__error" id={`quick-enquiry-error-${department}`} data-form-error aria-live="polite"></p>
+  <div class="quick-enquiry__summary-label"><span id={`quick-enquiry-summary-label-${department}`}>Message preview</span><output class="quick-enquiry__summary" data-form-summary aria-labelledby={`quick-enquiry-summary-label-${department}`} tabindex="0"></output></div>
+  <div class="quick-enquiry__actions"><button class:list={['button', crochet ? 'button--crochet' : 'button--peanuts']} type="submit">Continue on WhatsApp <span aria-hidden="true">↗</span></button><a class="text-link" data-form-whatsapp data-analytics-whatsapp data-analytics-department={department} href={fallback} target="_blank" rel="noopener noreferrer">Open a basic enquiry</a></div>
+</form>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-quick-enquiry]');
+  const preview = form?.querySelector<HTMLOutputElement>('[data-form-summary]');
+  const error = form?.querySelector<HTMLElement>('[data-form-error]');
+  const fallbackLink = form?.querySelector<HTMLAnchorElement>('[data-form-whatsapp]');
+  let truncationWarning = false;
+  let linkTooLong = false;
+  const linesFor = (overrides: Record<string, string> = {}) => {
+    if (!form) return [];
+    const values = Object.fromEntries(new FormData(form).entries());
+    Object.assign(values, overrides);
+    const department = form.dataset.quickEnquiry;
+    const lines = [`Hello ${form.dataset.brandName},`, department === 'crochet' ? 'I’d like to request a custom crochet piece:' : 'I’d like to enquire about a bulk peanuts request:', ''];
+    const labels: Record<string, string> = { itemType: 'Item type', size: 'Size / measurements', colours: 'Colour(s)', quantity: 'Quantity', neededBy: 'Needed by (requested)', description: 'Idea', quantityUnit: 'Quantity and unit', variety: 'Variety preference', packSize: 'Preferred pack size', deliveryArea: 'Delivery area', packaging: 'Packaging request', notes: 'Notes' };
+    for (const [key, raw] of Object.entries(values)) {
+      const value = String(raw).trim();
+      if (value) lines.push(`${labels[key] ?? key}: ${value}`);
+    }
+    lines.push('', 'Please confirm availability, total and delivery fee on WhatsApp.');
+    return lines;
+  };
+  const refresh = () => {
+    if (!form || !preview || !fallbackLink) return;
+    truncationWarning = false;
+    const noteKey = form.dataset.quickEnquiry === 'crochet' ? 'description' : 'notes';
+    const noteField = form.querySelector<HTMLTextAreaElement>(`textarea[name="${noteKey}"]`);
+    const linkFor = (text: string) => { const url = new URL(`https://wa.me/${form.dataset.whatsappNumber}`); url.searchParams.set('text', text); return url; };
+    let text = linesFor().join('\n');
+    let url = linkFor(text);
+    if (url.toString().length > 1800 && noteField?.value) {
+      const original = Array.from(noteField.value);
+      const suffix = '… (shortened to fit; please send extra detail in chat)';
+      let low = 0;
+      let high = original.length;
+      while (low < high) {
+        const mid = Math.ceil((low + high) / 2);
+        const candidate = linesFor({ [noteKey]: `${original.slice(0, mid).join('').trimEnd()}${suffix}` }).join('\n');
+        if (linkFor(candidate).toString().length <= 1800) low = mid;
+        else high = mid - 1;
+      }
+      if (low < original.length) {
+        noteField.value = `${original.slice(0, low).join('').trimEnd()}${suffix}`;
+        text = linesFor().join('\n');
+        url = linkFor(text);
+        truncationWarning = true;
+      }
+    }
+    preview.textContent = text;
+    linkTooLong = url.toString().length > 1800;
+    fallbackLink.href = !linkTooLong ? url.toString() : new URL(`https://wa.me/${form.dataset.whatsappNumber}?text=${encodeURIComponent(`Hello ${form.dataset.brandName}, I have an enquiry. Please ask me for the details in chat.`)}`).toString();
+    if (truncationWarning && error) error.textContent = 'Your extra detail was shortened to fit the WhatsApp link. Send the rest in chat.';
+    else if (error && url.toString().length > 1800) error.textContent = 'This message is too long for WhatsApp. Shorten the other fields, then try again.';
+  };
+  form?.addEventListener('input', () => {
+    refresh();
+    if (form.checkValidity() && !truncationWarning) { if (error) error.textContent = ''; form.querySelectorAll('[aria-describedby^="quick-enquiry-error-"]').forEach(input => input.removeAttribute('aria-describedby')); }
+  });
+  form?.addEventListener('submit', event => {
+    event.preventDefault();
+    const invalid = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input:invalid, textarea:invalid')];
+    if (invalid.length) {
+      if (error) error.textContent = 'Complete the required fields and use a whole number from 1 to 999 for crochet quantity.';
+      invalid.forEach(input => input.setAttribute('aria-describedby', `quick-enquiry-error-${form.dataset.quickEnquiry}`));
+      invalid[0]?.focus();
+      return;
+    }
+    const url = fallbackLink?.href;
+    if (!url) return;
+    if (linkTooLong || url.length > 1800) { if (error) error.textContent = 'This message is too long. Please shorten the other fields, then try again.'; return; }
+    if (error) error.textContent = '';
+    window.open(url, '_blank', 'noopener,noreferrer');
+    document.dispatchEvent(new CustomEvent('mcc:analytics', { detail: { name: 'whatsapp_click', props: { department: form.dataset.quickEnquiry } } }));
+  });
+  refresh();
+</script>

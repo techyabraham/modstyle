@@ -1,0 +1,20 @@
+@layer reset, tokens, base, components, utilities;
+
+@layer components {
+  .catalogue-form-wrap { padding-block: 1rem 3rem; }
+  .quick-enquiry { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem 1rem; padding: clamp(1.2rem, 4vw, 2.3rem); border: 1px solid var(--sand); border-radius: var(--radius-card); background: white; box-shadow: var(--shadow-card); }
+  .quick-enquiry > .catalogue-eyebrow, .quick-enquiry > h3, .quick-enquiry__error, .quick-enquiry__summary-label, .quick-enquiry__actions { grid-column: 1 / -1; }
+  .quick-enquiry > h3 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  .quick-enquiry label:not(.quick-enquiry__summary-label) { display: grid; align-content: start; gap: .3rem; color: var(--forest-deep); font-size: .86rem; font-weight: 700; }
+  .quick-enquiry label > span { color: #565950; font-size: .8rem; font-weight: 400; }
+  .quick-enquiry input, .quick-enquiry textarea { inline-size: 100%; min-block-size: 2.8rem; padding: .65rem .75rem; border: 1px solid var(--sand); border-radius: .55rem; background: var(--cream); color: var(--ink); }
+  .quick-enquiry label small { color: #50544b; font-size: .77rem; font-weight: 400; }
+  .quick-enquiry__error { min-block-size: 1.4em; color: #8a2119; font-size: .85rem; }
+  .quick-enquiry__summary-label { display: grid; gap: .35rem; color: var(--forest-deep); font-size: .86rem; font-weight: 800; }
+  .quick-enquiry__summary { display: block; min-block-size: 8rem; max-block-size: 15rem; padding: .8rem; overflow: auto; border: 1px solid var(--sand); border-radius: .55rem; background: var(--cream); color: var(--ink); font: 400 .82rem/1.5 var(--font-body); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .quick-enquiry__actions { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; }
+  .quick-enquiry--crochet { --form-accent: var(--magenta); }
+  .quick-enquiry--peanuts { --form-accent: var(--orange); }
+  .quick-enquiry > .catalogue-eyebrow { color: var(--form-accent); }
+  @media (max-width: 600px) { .quick-enquiry { grid-template-columns: 1fr; } .quick-enquiry__actions { align-items: stretch; flex-direction: column; } .quick-enquiry__actions > * { justify-content: center; } }
+}

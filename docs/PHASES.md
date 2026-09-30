@@ -1,6 +1,16 @@
 # Phase reports
 
-Phases 1, 2, 3 and 4 are complete. Per the brief, work stops after each phase report. Phase 5 has not started.
+Phases 1–5 are complete. Per the brief, work stops after each phase report. Phase 6 has not started.
+
+## Phase 5 progress
+
+Built: a versioned browser-local enquiry basket (`mcc-basket-v1`) with corrupt-storage validation and in-memory fallback; option-aware product merging; quantity controls from 1–999; per-department fixed-price subtotals and configurable minimum progress; quote/from-price items excluded from fixed totals; and delivery shown separately. The basket collects optional name, delivery area and notes, then builds an encoded WhatsApp message with a URL-length cap and visible note truncation. No-JavaScript WhatsApp links remain available in the header and product/enquiry flows.
+
+Added custom crochet and peanut bulk enquiry forms with validation, visible generated-message previews, safe length handling, and clipboard copy with a manual-copy fallback. The forms ask for customer preferences without inventing peanut varieties, pack sizes or food facts. Cookieless Plausible analytics loads only when `PUBLIC_ANALYTICS_ID` is configured. `whatsapp_click`, `basket_add`, `basket_open` and `enquiry_copy` events contain only department/product identifiers; message text is never sent to analytics.
+
+Verified: `pnpm check` passed: 44 Astro files with zero diagnostics, lint, 35 unit tests, production build and output guard, 15 production browser checks, and 6 axe accessibility scans across mobile/tablet/desktop. `pnpm build` plus `pnpm test:preview` passed all 18 preview checks across mobile/tablet/desktop, including basket persistence, quote/minimum handling, WhatsApp URL generation, form validation/message previews, long-message handling and accessibility. `PUBLIC_ANALYTICS_ID` is unset in this environment, so no analytics request is made during these checks.
+
+Still needed: Phase 6 supporting routes and SEO/structured data; approved product and business content, photos and domain; and a configured analytics ID if event collection is desired. The Phase 3 Lighthouse performance result remains open for Phase 7.
 
 ## Phase 4 progress
 
