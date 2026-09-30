@@ -1,0 +1,17 @@
+---
+import { site } from '../config/site';
+interface Props { href?: string }
+const { href = '/' } = Astro.props;
+// Fixed-height brand lockup; an approved logo replaces the drawn mark in the same slot.
+---
+<a class="wordmark" href={href} aria-label={`${site.brand.name} home`}>
+  {site.brand.logo ? <img class="wordmark__logo" src={site.brand.logo} alt="" width="208" height="56" /> : <>
+    <svg class="wordmark__icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="23" cy="28" r="17" fill="var(--magenta-soft)" stroke="currentColor" stroke-width="2.5" />
+      <path d="M8 27c8 0 17-6 21-14M10 35c9 0 22-6 27-14M18 43c10-2 18-7 21-15M22 11c-1 9 5 21 15 27M15 15c0 9 6 24 18 28M29 45c-2 6-2 9 5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M45 23c-5 0-9 4-9 9 0 4 2 6 6 8-2 4 1 9 6 9 7 0 12-7 12-14 0-7-6-12-15-12Z" fill="var(--orange-soft)" stroke="var(--orange)" stroke-width="2.5" />
+      <path d="M41 32c6-3 11 0 13 7M45 42c3-5 8-5 12-5" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" />
+    </svg>
+    <span class="wordmark__text" aria-hidden="true"><span class="wordmark__main">Modstyle</span><span class="wordmark__sub">Crunch And Cream</span></span>
+  </>}
+</a>

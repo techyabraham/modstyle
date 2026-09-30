@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderArt from '../components/PlaceholderArt.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SurfaceCard from '../components/SurfaceCard.astro';
+import Sticker from '../components/Sticker.astro';
+import StitchDivider from '../components/StitchDivider.astro';
+import { parseMode } from '../lib/visibility';
+export function getStaticPaths() {
+  return parseMode(process.env.PUBLIC_SITE_MODE) === 'preview' ? [{ params: { guide: '_styleguide' } }] : [];
+}
+// Preview-only specimen route; absent entirely from the production build.
+---
+<BaseLayout title="Design study | Modstyle Crunch And Cream" description="Preview design study for the Modstyle Crunch And Cream website.">
+  <div class="guide page-wrap">
+    <header class="guide__intro">
+      <p class="guide__label">Preview design study · Pending client approval</p>
+      <h1>Tactile maker.<br /><em>Lagos energy.</em></h1>
+      <p>A visual language for handmade crochet and bulk peanuts, shaped around a direct WhatsApp enquiry.</p>
+      <div class="guide__actions"><a class="button" href="/">See the current homepage</a><a class="button button--outline" href="#specimens">Explore the components</a></div>
+    </header>
+
+    <StitchDivider id="guide-top-stitch" tone="crochet" />
+
+    <section id="specimens" class="guide__section" aria-labelledby="palette-title">
+      <SectionHeading id="palette-title" eyebrow="01 / Wayfinding" title="Colour has a job." copy="Cream and forest anchor the brand. Magenta signals crochet; burnt orange signals peanuts." />
+      <div class="guide__palette" role="list">
+        <div class="guide__swatch guide__swatch--cream" role="listitem"><b>Cream</b><code>#FFF8EE</code></div>
+        <div class="guide__swatch guide__swatch--forest" role="listitem"><b>Forest</b><code>#163D2B</code></div>
+        <div class="guide__swatch guide__swatch--magenta" role="listitem"><b>Crochet</b><code>#A51B60</code></div>
+        <div class="guide__swatch guide__swatch--orange" role="listitem"><b>Peanuts</b><code>#B84E22</code></div>
+      </div>
+    </section>
+
+    <section class="guide__section" aria-labelledby="type-title">
+      <SectionHeading id="type-title" eyebrow="02 / Typography" title="A soft serif with a clear voice." copy="Fraunces brings the crafted feel. Inter keeps details, quantities and prices easy to read." />
+      <div class="guide__type-grid">
+        <div class="guide__type-block"><p class="guide__small">Fraunces · 600</p><p class="guide__display">Made by hand.<br /><em>Made to matter.</em></p><p class="guide__price guide__price--display"><span class="guide__badge">Sample content</span>₦40,000</p></div>
+        <div class="guide__type-block"><p class="guide__small">Inter · 400 / 500 / 700</p><p>Choose a ready piece, describe a custom crochet idea, or enquire about bulk peanuts. The details are confirmed on WhatsApp.</p><p class="guide__price"><span class="guide__badge">Sample content</span>₦40,000</p></div>
+      </div>
+    </section>
+
+    <StitchDivider id="guide-mid-stitch" tone="peanuts" pattern="dash" />
+
+    <section class="guide__section" aria-labelledby="parts-title">
+      <SectionHeading id="parts-title" eyebrow="03 / Components" title="Distinct, but related." copy="Buttons, cards and stickers make each department clear without relying on colour alone." />
+      <div class="guide__component-grid">
+        <SurfaceCard eyebrow="Crochet · Sample content" title="A custom piece, made for you" tone="crochet"><p>Custom crochet requests are quoted in chat.</p><div><Sticker tone="crochet">Made to order</Sticker></div><a class="button button--crochet" href="/">See the current homepage</a></SurfaceCard>
+        <SurfaceCard eyebrow="Peanuts · Sample content" title="Bulk buying, made simple" tone="peanuts"><p>Tell us what you need and where it is going.</p><div><Sticker tone="peanuts">Bulk friendly</Sticker></div><a class="button button--peanuts" href="/">See the current homepage</a></SurfaceCard>
+      </div>
+    </section>
+
+    <section class="guide__section" aria-labelledby="art-title">
+      <SectionHeading id="art-title" eyebrow="04 / Illustration" title="Visuals while photography is on its way." copy="These tiles appear only in preview. Every tile is marked as sample content and is removed from production." />
+      <div class="guide__art-grid">
+        <PlaceholderArt variant="yarn" alt="Sample illustration of a yarn ball" />
+        <PlaceholderArt variant="granny" alt="Sample illustration of a crochet square" />
+        <PlaceholderArt variant="top" alt="Sample illustration of a crochet top" />
+        <PlaceholderArt variant="tote" alt="Sample illustration of a crochet tote" />
+        <PlaceholderArt variant="beanie" alt="Sample illustration of a crochet beanie" />
+        <PlaceholderArt variant="peanuts" alt="Sample illustration of peanut pods" />
+        <PlaceholderArt variant="sack" alt="Sample illustration of a peanut sack" />
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .guide { padding-block: clamp(2rem, 6vw, 5rem) 6rem; }
+  .guide__intro { display: grid; gap: 1.4rem; max-inline-size: 58rem; padding-block: clamp(2rem, 8vw, 6rem); }
+  .guide__intro h1 { letter-spacing: -.055em; }
+  .guide__intro em, .guide__display em { color: var(--magenta); font-style: normal; }
+  .guide__label, .guide__small { color: var(--forest); font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .guide__intro > p:not(.guide__label) { font-size: clamp(1.15rem, 2vw, 1.45rem); }
+  .guide__actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+  .guide__section { display: grid; gap: 2rem; padding-block: clamp(3rem, 7vw, 6rem); }
+  .guide__palette { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+  .guide__swatch { display: flex; flex-direction: column; justify-content: end; min-block-size: 11rem; padding: 1.1rem; border-radius: var(--radius-card); }
+  .guide__swatch b { font-family: var(--font-display); font-size: 1.4rem; }
+  .guide__swatch code { font-family: var(--font-body); font-size: .75rem; }
+  .guide__swatch--cream { border: 1px solid var(--sand); background: var(--cream); color: var(--forest); }
+  .guide__swatch--forest { background: var(--forest); color: var(--cream); }
+  .guide__swatch--magenta { background: var(--magenta); color: var(--cream); }
+  .guide__swatch--orange { background: var(--orange); color: var(--cream); }
+  .guide__type-grid, .guide__component-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .guide__type-block { display: grid; align-content: start; gap: 1.5rem; min-block-size: 22rem; padding: clamp(1.5rem, 3vw, 2.5rem); border-radius: var(--radius-card); background: var(--sand); }
+  .guide__type-block:nth-child(2) { background: var(--forest); color: var(--cream); }
+  .guide__type-block:nth-child(2) .guide__small { color: var(--cream); }
+  .guide__display { font-family: var(--font-display); font-size: clamp(2rem, 3vw + 1rem, 3.5rem); font-weight: 600; font-variation-settings: 'SOFT' 50; line-height: 1.1; }
+  .guide__price { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .guide__price--display { font-family: var(--font-display); font-size: 1.5rem; font-variation-settings: 'SOFT' 50; }
+  .guide__badge { padding: .2rem .5rem; border-radius: var(--radius-pill); background: var(--cream); color: var(--forest); font-family: var(--font-body); font-size: .7rem; font-weight: 700; }
+  .guide__art-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 1rem; align-items: start; }
+  @media (max-width: 48rem) { .guide__palette { grid-template-columns: repeat(2, minmax(0, 1fr)); } .guide__type-grid, .guide__component-grid { grid-template-columns: 1fr; } }
+</style>

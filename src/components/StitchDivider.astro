@@ -1,0 +1,9 @@
+---
+interface Props { id: string; tone?: 'crochet' | 'peanuts' | 'forest'; pattern?: 'v' | 'dash' }
+const { id, tone = 'forest', pattern = 'v' } = Astro.props;
+// Repeating SVG stitch pattern for section breaks.
+---
+<svg class:list={['stitch-divider', tone !== 'forest' && `stitch-divider--${tone}`]} viewBox="0 0 1200 32" preserveAspectRatio="none" aria-hidden="true">
+  <defs><pattern id={id} width="28" height="32" patternUnits="userSpaceOnUse"><path d={pattern === 'v' ? 'M3 7l11 17L25 7' : 'M2 16h11m5 0h8'} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></pattern></defs>
+  <rect width="1200" height="32" fill={`url(#${id})`} />
+</svg>

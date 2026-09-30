@@ -1,0 +1,22 @@
+@layer components {
+  .surface-card {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius-card);
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    container-type: inline-size;
+  }
+  .surface-card--crochet { border-block-start: .45rem solid var(--magenta); }
+  .surface-card--peanuts { border-block-start: .45rem solid var(--orange); }
+  .surface-card--forest { border-block-start: .45rem solid var(--forest); }
+  .surface-card__eyebrow { color: var(--forest); font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .surface-card__title { font-size: clamp(1.5rem, 4cqi + 1rem, 2.5rem); }
+  .section-heading { display: grid; gap: .7rem; max-inline-size: 55rem; }
+  .section-heading__eyebrow { color: var(--magenta); font-size: .8rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+  .section-heading--peanuts .section-heading__eyebrow { color: var(--orange); }
+  .section-heading__copy { font-size: 1.05rem; }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "modstyle-crunch-and-cream",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "tsx scripts/build.ts",
+    "build:prod": "cross-env PUBLIC_SITE_MODE=production tsx scripts/build.ts",
+    "typecheck": "astro check",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "test:e2e": "playwright test --grep-invert @a11y",
+    "test:a11y": "playwright test --grep @a11y",
+    "test:preview": "cross-env RUN_PREVIEW_TESTS=1 playwright test --grep @preview",
+    "lhci": "lhci autorun",
+    "lhci:local": "node scripts/audit-local.mjs",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build:prod && pnpm test:e2e && pnpm test:a11y"
+  },
+  "dependencies": {
+    "astro": "7.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.12.0",
+    "gray-matter": "^4.0.3",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.2"
+  }
+}

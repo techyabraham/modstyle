@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.npm-cache/
+.pnpm-store/
+test-results/
+playwright-report/
+.lighthouseci/
+.lhci-tmp/
+.font-source/
+.env

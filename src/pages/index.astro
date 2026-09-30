@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { pricing } from '../config/pricing';
+import { formatNaira } from '../lib/money';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+import { isPublishable, parseMode } from '../lib/visibility';
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about crochet or bulk peanuts.`);
+---
+<BaseLayout title={`${site.brand.name} | Lagos`} description="Custom and ready crochet pieces and bulk peanuts in Lagos. Enquire on WhatsApp.">
+  <section class="intro-home page-wrap" aria-labelledby="intro-title">
+    <div class="intro-home__content">
+      <p class="intro-home__eyebrow">Crochet <span aria-hidden="true">✳</span> Peanuts</p>
+      <h1 id="intro-title">{site.brand.name}</h1>
+      <p class="intro-home__lead">{site.brand.headline}</p>
+      <p>Custom and ready crochet pieces. Peanuts for bulk buying.</p>
+      <a class="button" href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="intro-home__facts" aria-label="Ordering facts">
+      <p><strong>Minimum order</strong><span>{formatNaira(pricing.minimumPerDepartment)} per department</span></p>
+      <p><strong>Delivery</strong><span>₦3,000 to ₦10,000; exact fee confirmed on WhatsApp</span></p>
+      <p><strong>Payment</strong><span>Bank transfer; details shared in chat</span></p>
+    </div>
+    {isPublishable({ approved: site.contact.phoneApproved, required: [site.contact.whatsapp] }, mode) && <p>{site.contact.whatsapp}</p>}
+  </section>
+</BaseLayout>
+<style>
+  .intro-home { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(18rem, .6fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; min-block-size: min(78vh, 52rem); padding-block: clamp(3rem, 8vw, 7rem); }
+  .intro-home__content { display: grid; justify-items: start; gap: 1.5rem; }
+  .intro-home__eyebrow { color: var(--magenta); font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .intro-home__eyebrow span { color: var(--orange); padding-inline: .25rem; }
+  h1 { max-inline-size: 12ch; letter-spacing: -.055em; }
+  .intro-home__lead { max-inline-size: 22ch; color: var(--magenta); font-family: var(--font-display); font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem); font-weight: 600; font-variation-settings: 'SOFT' 50; line-height: 1.15; }
+  .intro-home__facts { padding: clamp(1.5rem, 3vw, 2.5rem); border-radius: 48% 52% 20% 20% / 18% 18% 12% 12%; background: var(--forest); color: var(--cream); transform: rotate(2deg); }
+  .intro-home__facts p { display: grid; gap: .15rem; padding-block: 1.25rem; border-block-end: 1px dashed rgb(255 248 238 / .5); }
+  .intro-home__facts p:last-child { border-block-end: 0; }
+  .intro-home__facts strong { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
+  .intro-home__facts span { font-size: 1rem; }
+  @media (max-width: 48rem) { .intro-home { grid-template-columns: 1fr; } .intro-home__facts { transform: none; border-radius: var(--radius-card); } }
+</style>

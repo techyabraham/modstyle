@@ -1,0 +1,6 @@
+---
+interface Props { tone?: 'crochet' | 'peanuts' | 'forest' }
+const { tone = 'forest' } = Astro.props;
+// Rounded label with a small hand-placed tilt.
+---
+<span class:list={['sticker', tone !== 'forest' && `sticker--${tone}`]}><slot /></span>

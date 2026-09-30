@@ -1,0 +1,13 @@
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { parseMode } from '../src/lib/visibility';
+import { checkAssets } from './check-assets';
+import { checkContent } from './check-content';
+import { guardProduction } from './guard-production';
+if (existsSync('.env')) process.loadEnvFile('.env');
+const mode = parseMode(process.env.PUBLIC_SITE_MODE);
+await checkAssets();
+await checkContent();
+const result = spawnSync(process.execPath, ['node_modules/astro/bin/astro.mjs', 'build'], { stdio: 'inherit', env: { ...process.env, PUBLIC_SITE_MODE: mode } });
+if (result.status !== 0) process.exit(result.status ?? 1);
+if (mode === 'production') await guardProduction();

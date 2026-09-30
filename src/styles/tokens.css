@@ -1,0 +1,23 @@
+@layer tokens {
+  :root {
+    --forest: #163d2b;
+    --forest-deep: #0e2a1d;
+    --magenta: #a51b60;
+    --magenta-soft: #f6d5e5;
+    --orange: #b84e22;
+    --orange-soft: #f8dccb;
+    --cream: #fff8ee;
+    --sand: #eadbc8;
+    --ink: #242720;
+    --radius-card: 1.25rem;
+    --radius-pill: 999px;
+    --page-max: 80rem;
+    --gutter: clamp(1rem, 4vw, 2.5rem);
+    --motion-fast: 160ms;
+    --motion-std: 280ms;
+    --ease: cubic-bezier(.2, .7, .2, 1);
+    --font-body: 'Inter', 'Inter Fallback', Arial, sans-serif;
+    --font-display: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
+    --shadow-card: 0 1.1rem 2.5rem rgb(14 42 29 / .10);
+  }
+}

@@ -1,0 +1,35 @@
+---
+import { site } from '../config/site';
+import { parseMode } from '../lib/visibility';
+import Wordmark from '../components/Wordmark.astro';
+import displayFontUrl from '../assets/fonts/fraunces-latin-ng.woff2?url';
+import '../styles/base.css';
+import '../styles/tokens.css';
+import '../styles/components/buttons.css';
+import '../styles/components/cards.css';
+import '../styles/components/graphic.css';
+import '../styles/components/shell.css';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta.env.SITE) : null;
+// Shared semantic shell; business content remains behind the visibility gate.
+---
+<!doctype html>
+<html lang="en-NG">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preload" href={displayFontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    {mode === 'preview' && <meta name="robots" content="noindex,nofollow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header"><div class="page-wrap site-header__inner"><Wordmark /><p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p></div></header>
+    <main class="site-main" id="main"><slot /></main>
+    <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><p class="site-footer__location">{site.location}</p></div></footer>
+  </body>
+</html>

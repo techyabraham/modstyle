@@ -1,0 +1,19 @@
+@layer components {
+  .wordmark { display: inline-flex; align-items: center; gap: .65rem; min-block-size: 4rem; text-decoration: none; white-space: nowrap; }
+  .wordmark__icon { inline-size: 3.2rem; block-size: 3.2rem; flex: none; color: var(--magenta); }
+  .wordmark__text { display: grid; line-height: 1; }
+  .wordmark__main { color: var(--forest-deep); font-family: var(--font-display); font-size: clamp(1.6rem, 2.5vw, 2rem); font-weight: 600; font-variation-settings: 'SOFT' 50; letter-spacing: -.04em; }
+  .wordmark__sub { margin-block-start: .12rem; color: var(--orange); font-size: .58rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+  .wordmark__logo { display: block; block-size: 3.5rem; inline-size: auto; max-inline-size: 13rem; object-fit: contain; }
+  .sticker { display: inline-flex; align-items: center; justify-content: center; min-block-size: 2.2rem; padding: .3rem .8rem; border-radius: var(--radius-pill); background: var(--forest); color: var(--cream); font-size: .76rem; font-weight: 800; line-height: 1.15; transform: rotate(-3deg); }
+  .sticker--crochet { background: var(--magenta); }
+  .sticker--peanuts { background: var(--orange); transform: rotate(3deg); }
+  .art-tile { position: relative; display: grid; place-items: center; isolation: isolate; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-card); background: var(--magenta-soft); color: var(--magenta); }
+  .art-tile[data-department='peanuts'] { aspect-ratio: 1; background: var(--orange-soft); color: var(--orange); }
+  .art-tile::before { content: ''; position: absolute; z-index: -1; inline-size: 75%; aspect-ratio: 1; border-radius: 38% 62% 55% 45%; background: rgb(255 248 238 / .72); transform: rotate(-12deg); }
+  .art-tile__drawing { inline-size: 78%; block-size: 78%; filter: drop-shadow(.45rem .7rem 0 rgb(14 42 29 / .12)); }
+  .art-tile__badge { position: absolute; inset-block-start: 1rem; inset-inline-start: 1rem; padding: .22rem .55rem; border-radius: var(--radius-pill); background: var(--forest); color: var(--cream); font-size: .7rem; font-weight: 700; }
+  .stitch-divider { display: block; inline-size: 100%; block-size: 2rem; color: var(--forest); }
+  .stitch-divider--crochet { color: var(--magenta); }
+  .stitch-divider--peanuts { color: var(--orange); }
+}

@@ -1,0 +1,10 @@
+---
+interface Props { id?: string; eyebrow: string; title: string; copy?: string; tone?: 'crochet' | 'peanuts' }
+const { id, eyebrow, title, copy, tone = 'crochet' } = Astro.props;
+// Consistent section lead with a department-coloured eyebrow.
+---
+<div class:list={['section-heading', tone === 'peanuts' && 'section-heading--peanuts']}>
+  <p class="section-heading__eyebrow">{eyebrow}</p>
+  <h2 id={id}>{title}</h2>
+  {copy && <p class="section-heading__copy">{copy}</p>}
+</div>

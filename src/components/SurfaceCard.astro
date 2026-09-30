@@ -1,0 +1,10 @@
+---
+interface Props { eyebrow: string; title: string; tone?: 'crochet' | 'peanuts' | 'forest' }
+const { eyebrow, title, tone = 'forest' } = Astro.props;
+// Reusable card surface with a visible department accent.
+---
+<article class:list={['surface-card', `surface-card--${tone}`]}>
+  <p class="surface-card__eyebrow">{eyebrow}</p>
+  <h3 class="surface-card__title">{title}</h3>
+  <slot />
+</article>
