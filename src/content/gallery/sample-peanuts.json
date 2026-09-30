@@ -1,0 +1,8 @@
+{
+  "slug": "sample-peanuts",
+  "status": "published",
+  "sample": true,
+  "department": "peanuts",
+  "image": { "src": "peanuts", "alt": "Sample illustration of peanuts" },
+  "caption": "Peanuts · sample"
+}

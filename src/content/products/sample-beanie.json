@@ -1,0 +1,18 @@
+{
+  "slug": "sample-beanie",
+  "status": "published",
+  "sample": true,
+  "department": "crochet",
+  "category": "Accessories",
+  "name": "Beanie · Sample",
+  "summary": "A sample crochet listing to show the catalogue layout.",
+  "description": "Sample content only. Product identity, available colours, sizing and price require client confirmation.",
+  "pricing": { "type": "quote" },
+  "images": [],
+  "leadTime": null,
+  "intendedWearer": "Children",
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}

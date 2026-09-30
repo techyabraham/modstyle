@@ -1,5 +1,12 @@
 # Decisions
 
+## Phase 4 — catalogue (2026-09-30)
+- Keep sample catalogue entries visible only in preview and visibly label their illustrations; exclude sample content from production output. Seed eight crochet listings and three peanut bulk-enquiry examples for layout and filter review.
+- Allow the sample ₦40,000 amount on exactly `sample-crochet-featured`; it remains a sample and cannot appear in production. Do not assign it to an actual product until the client confirms the product identity.
+- Do not infer peanut variety, pack size, ingredients, allergens, storage or shelf life. Offer a direct WhatsApp bulk quote path while those values remain unconfirmed.
+- Render product image arrays and gallery entries when approved photo files and alt descriptions are supplied. Current preview visuals are original sample SVGs, not product photographs. Production gallery and sample product-detail paths disappear until there are approved published entries.
+- Keep product enquiries direct to WhatsApp; basket, enquiry form and analytics belong to Phase 5.
+
 ## Phase 3 — homepage (2026-09-30)
 - Use the editable `site.brand.headline` candidate “Stitched with love. Packed with crunch.” for the hero. Brand voice and design remain pending client approval.
 - Keep the home page as a direct WhatsApp journey, with separate crochet and peanut enquiries and a general enquiry CTA. Do not publish contact details that lack approval.

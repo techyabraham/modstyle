@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PlaceholderArt from '../components/PlaceholderArt.astro';
+import IllustrationTile from '../components/IllustrationTile.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import SurfaceCard from '../components/SurfaceCard.astro';
 import Sticker from '../components/Sticker.astro';
@@ -53,13 +53,13 @@ export function getStaticPaths() {
     <section class="guide__section" aria-labelledby="art-title">
       <SectionHeading id="art-title" eyebrow="04 / Illustration" title="Visuals while photography is on its way." copy="These tiles appear only in preview. Every tile is marked as sample content and is removed from production." />
       <div class="guide__art-grid">
-        <PlaceholderArt variant="yarn" alt="Sample illustration of a yarn ball" />
-        <PlaceholderArt variant="granny" alt="Sample illustration of a crochet square" />
-        <PlaceholderArt variant="top" alt="Sample illustration of a crochet top" />
-        <PlaceholderArt variant="tote" alt="Sample illustration of a crochet tote" />
-        <PlaceholderArt variant="beanie" alt="Sample illustration of a crochet beanie" />
-        <PlaceholderArt variant="peanuts" alt="Sample illustration of peanut pods" />
-        <PlaceholderArt variant="sack" alt="Sample illustration of a peanut sack" />
+        <IllustrationTile variant="yarn" alt="Sample illustration of a yarn ball" />
+        <IllustrationTile variant="granny" alt="Sample illustration of a crochet square" />
+        <IllustrationTile variant="top" alt="Sample illustration of a crochet top" />
+        <IllustrationTile variant="tote" alt="Sample illustration of a crochet tote" />
+        <IllustrationTile variant="beanie" alt="Sample illustration of a crochet beanie" />
+        <IllustrationTile variant="peanuts" alt="Sample illustration of peanut pods" />
+        <IllustrationTile variant="sack" alt="Sample illustration of a peanut sack" />
       </div>
     </section>
   </div>

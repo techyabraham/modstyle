@@ -3,6 +3,8 @@ import AxeBuilder from '@axe-core/playwright';
 test('production shell is usable and exposes only approved facts', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Stitched with love. Packed with crunch.');
+  await expect(page.getByRole('link', { name: 'Explore crochet' })).toHaveAttribute('href', '/crochet/');
+  await expect(page.getByRole('link', { name: 'Explore peanuts' })).toHaveAttribute('href', '/peanuts/');
   const link = page.getByRole('link', { name: 'Start an enquiry' });
   const url = new URL((await link.getAttribute('href'))!);
   expect(url.hostname).toBe('wa.me');
@@ -24,6 +26,14 @@ test('production indexing and canonical defaults', async ({ page, request }) => 
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
   if (!process.env.SITE_URL) await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
+});
+test('production catalogue omits unapproved sample-only product and gallery routes', async ({ request }) => {
+  const crochet = await request.get('/crochet/');
+  expect(crochet.ok()).toBe(true);
+  expect(await crochet.text()).not.toMatch(/Sample content|sample-crochet-featured|₦40,000/);
+  expect((await request.get('/peanuts/')).ok()).toBe(true);
+  expect((await request.get('/products/sample-crochet-featured/')).status()).toBe(404);
+  expect((await request.get('/gallery/')).status()).toBe(404);
 });
 test('@a11y foundation has no serious or critical violations', async ({ page }) => {
   await page.goto('/');

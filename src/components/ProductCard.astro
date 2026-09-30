@@ -1,0 +1,27 @@
+---
+import type { ProductEntry } from '../lib/catalogue';
+import { formatNaira, priceLabel } from '../lib/money';
+import { sampleArtVariant } from '../lib/catalogue';
+import { buildWhatsAppLink } from '../lib/whatsapp';
+import { site } from '../config/site';
+import IllustrationTile from './IllustrationTile.astro';
+
+interface Props { product: ProductEntry; departmentTone?: 'crochet' | 'peanuts' }
+const { product, departmentTone = product.data.department } = Astro.props;
+const item = product.data;
+const art = sampleArtVariant(item.slug, item.department);
+const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about ${item.name}.`);
+const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNaira) : priceLabel(item.pricing);
+// Preview sample tile links the enquiry card directly to WhatsApp.
+---
+<article class:list={['catalogue-card', `catalogue-card--${departmentTone}`]} data-product-card data-category={'category' in item ? item.category : ''} data-wearer={'intendedWearer' in item ? item.intendedWearer ?? '' : ''} data-price-type={item.pricing.type}>
+  <a class="catalogue-card__art" href={`/products/${item.slug}/`} aria-label={`View ${item.name}`}>
+    {item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <div class="catalogue-card__art-fallback" aria-hidden="true"><span>{departmentTone === 'crochet' ? 'Crochet' : 'Peanuts'}</span></div>}
+  </a>
+  <div class="catalogue-card__body">
+    <div class="catalogue-card__meta"><span>{item.department === 'crochet' ? item.category : 'Bulk enquiry'}</span>{item.sample && <span class="catalogue-sample">Sample</span>}</div>
+    <h3><a href={`/products/${item.slug}/`}>{item.name}</a></h3>
+    <p>{item.summary}</p>
+    <div class="catalogue-card__footer"><strong>{price}</strong><a class="catalogue-card__arrow" href={enquiry} aria-label={`Enquire about ${item.name} on WhatsApp`}><span aria-hidden="true">↗</span></a></div>
+  </div>
+</article>

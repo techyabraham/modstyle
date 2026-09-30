@@ -1,6 +1,16 @@
 # Phase reports
 
-Phases 1, 2 and 3 are complete. Per the brief, work stops after each phase report. Phase 4 has not started.
+Phases 1, 2, 3 and 4 are complete. Per the brief, work stops after each phase report. Phase 5 has not started.
+
+## Phase 4 progress
+
+Built: `/crochet/` with category, intended wearer (only when populated) and price-type filters; `/peanuts/` with a bulk quote path; sample product detail routes with options/confirmed details and a keyboard-operable image lightbox; a masonry `/gallery/` with department filters and its own lightbox. Seeded eight crochet and three peanut preview samples. Exactly one sample listing, `sample-crochet-featured`, carries ₦40,000. Filters update the URL, and filter state can be restored with browser navigation. Product detail galleries render configured image arrays when approved photos are supplied.
+
+Content safety: every seeded item is marked sample and excluded from production. Peanut variety, pack size and food-safety fields stay blank because they were not supplied. Preview art is original SVG illustration labelled as sample content; there are no real approved product photos yet. Production therefore emits the homepage, crochet enquiry/catalogue shell and peanuts bulk enquiry shell only; product detail and gallery routes are omitted until approved non-sample entries exist. The output guard found a generated asset-name false positive during validation; the illustration component now uses a neutral filename, and the guard remains unchanged.
+
+Verified: `pnpm typecheck`, `pnpm lint`, and `pnpm test` passed (27 unit tests); `pnpm build:prod` passed the production guard; `pnpm test:e2e` passed 15 production browser checks across mobile/tablet/desktop; `pnpm test:a11y` passed all 3 axe checks; `pnpm build` plus `pnpm test:preview` passed all 12 preview checks across mobile/tablet/desktop, including filters, route visibility, lightbox keyboard close and focus restoration. Preview catalogue screenshots are in `test-results/catalogue-{mobile,tablet,desktop}.png`.
+
+Still needed for populated product/photo pages: approved product names and identities, real photographs, prices and options; confirmed peanut variety/pack size and any ingredients/allergen/storage/shelf-life details; brand/domain approvals and pricing-minimum confirmation. The current full-page Lighthouse baseline remains below the target recorded in Phase 3; performance hardening remains scheduled for Phase 7.
 
 ## Phase 3 progress
 

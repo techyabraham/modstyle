@@ -34,6 +34,7 @@
   .home-section-intro { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-block-end: clamp(2rem, 4vw, 3.25rem); }
   .home-section-intro .section-heading { max-inline-size: 45rem; }
   .department-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); }
+  .home-gallery-link { display: flex; justify-content: end; margin-block-start: 1.25rem; }
   .department-card { position: relative; display: grid; grid-template-rows: auto 1fr; overflow: hidden; min-inline-size: 0; border-radius: calc(var(--radius-card) * 1.4); background: white; box-shadow: var(--shadow-card); }
   .department-card--crochet { --department: var(--magenta); --department-soft: var(--magenta-soft); }
   .department-card--peanuts { --department: var(--orange); --department-soft: var(--orange-soft); }

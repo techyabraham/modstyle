@@ -1,6 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PlaceholderArt from '../components/PlaceholderArt.astro';
+import IllustrationTile from '../components/IllustrationTile.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StitchDivider from '../components/StitchDivider.astro';
 import Sticker from '../components/Sticker.astro';
@@ -9,11 +10,11 @@ import { pricing } from '../config/pricing';
 import { formatNaira } from '../lib/money';
 import { buildWhatsAppLink } from '../lib/whatsapp';
 import { parseMode } from '../lib/visibility';
+import { visibleGallery } from '../lib/catalogue';
 import '../styles/home.css';
 
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
-const crochetEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about crochet pieces.`);
-const peanutsEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about bulk peanuts.`);
+const galleryEntries = visibleGallery(await getCollection('gallery'), mode);
 const generalEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to ask about crochet or bulk peanuts.`);
 const orderingSteps = [
   { number: '01', title: 'Choose or describe', copy: 'Pick a piece, or tell us what you have in mind.' },
@@ -51,8 +52,8 @@ const homeFaqs = [
         <path d="M106 438c51-14 78-50 82-104m282-196c-17 23-23 46-20 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
       </svg>
       <div class="home-hero__art-label home-hero__art-label--top"><span>Made with care</span><b aria-hidden="true">✳</b></div>
-      <div class="home-hero__art-card home-hero__art-card--crochet"><PlaceholderArt variant="granny" alt="Sample illustration of crochet texture" /><span class="home-hero__art-name">Crochet</span></div>
-      <div class="home-hero__art-card home-hero__art-card--peanuts"><PlaceholderArt variant="peanuts" alt="Sample illustration of peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
+      <div class="home-hero__art-card home-hero__art-card--crochet"><IllustrationTile variant="granny" alt="Sample illustration of crochet texture" /><span class="home-hero__art-name">Crochet</span></div>
+      <div class="home-hero__art-card home-hero__art-card--peanuts"><IllustrationTile variant="peanuts" alt="Sample illustration of peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
       <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
       <span class="home-hero__art-note">{mode === 'preview' ? 'Illustrations are sample content' : 'Crochet · Peanuts'}</span>
     </div>
@@ -73,30 +74,31 @@ const homeFaqs = [
       <article class="department-card department-card--crochet">
         <div class="department-card__visual" aria-hidden="true">
           <span class="department-card__shape"></span>
-          <PlaceholderArt variant="top" alt="Sample illustration of a crochet top" />
+          <IllustrationTile variant="top" alt="Sample illustration of a crochet top" />
           <span class="department-card__number">01 / HANDMADE</span>
         </div>
         <div class="department-card__body">
           <p class="department-card__eyebrow">Crochet · Custom and ready pieces</p>
           <h3>Made by hand.<br />Made for you.</h3>
           <p>Explore ready pieces or tell us about a custom crochet request. Custom work is quoted on WhatsApp.</p>
-          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--crochet" href={crochetEnquiry}>Enquire about crochet <span aria-hidden="true">↗</span></a></div>
+          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--crochet" href="/crochet/">Explore crochet <span aria-hidden="true">↗</span></a></div>
         </div>
       </article>
       <article class="department-card department-card--peanuts">
         <div class="department-card__visual" aria-hidden="true">
           <span class="department-card__shape"></span>
-          <PlaceholderArt variant="sack" alt="Sample illustration of a peanut sack" />
+          <IllustrationTile variant="sack" alt="Sample illustration of a peanut sack" />
           <span class="department-card__number">02 / BULK BUYING</span>
         </div>
         <div class="department-card__body">
           <p class="department-card__eyebrow">Peanuts · Bulk buying</p>
           <h3>A little crunch.<br />A lot to share.</h3>
           <p>Tell us the quantity you need and where it’s going. We’ll confirm the details and quote in chat.</p>
-          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--peanuts" href={peanutsEnquiry}>Enquire about peanuts <span aria-hidden="true">↗</span></a></div>
+          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--peanuts" href="/peanuts/">Explore peanuts <span aria-hidden="true">↗</span></a></div>
         </div>
       </article>
     </div>
+    {galleryEntries.length > 0 && <p class="home-gallery-link"><a class="text-link" href="/gallery/">{mode === 'preview' ? 'View the sample gallery' : 'View the gallery'} <span aria-hidden="true">→</span></a></p>}
   </section>
 
   <StitchDivider id="home-thread-divider" tone="crochet" />
@@ -126,7 +128,7 @@ const homeFaqs = [
   </section>
 
   <section class="home-last-call page-wrap" aria-labelledby="last-call-title">
-    <div class="home-last-call__art" aria-hidden="true"><span class="home-last-call__ring"></span><PlaceholderArt variant="yarn" alt="Sample illustration of yarn" /><span class="home-last-call__spark">✳</span></div>
+    <div class="home-last-call__art" aria-hidden="true"><span class="home-last-call__ring"></span><IllustrationTile variant="yarn" alt="Sample illustration of yarn" /><span class="home-last-call__spark">✳</span></div>
     <div class="home-last-call__copy"><p class="home-last-call__eyebrow">Your next favourite thing starts here</p><h2 id="last-call-title">Tell us what<br />you have in mind.</h2><p>One message is all it takes to get started.</p><a class="button home-last-call__button" href={generalEnquiry}>Continue on WhatsApp <span aria-hidden="true">↗</span></a></div>
     <span class="home-last-call__note">Modstyle Crunch And Cream · Lagos</span>
   </section>

@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import IllustrationTile from '../../components/IllustrationTile.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { site } from '../../config/site';
+import { pricing } from '../../config/pricing';
+import { formatNaira } from '../../lib/money';
+import { visibleProducts } from '../../lib/catalogue';
+import { parseMode } from '../../lib/visibility';
+import { buildWhatsAppLink } from '../../lib/whatsapp';
+import '../../styles/catalogue.css';
+
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const products = visibleProducts(await getCollection('products'), mode, 'crochet');
+const categories = [...new Set(products.flatMap(product => 'category' in product.data ? [product.data.category] : []))].sort();
+const wearers = [...new Set(products.flatMap(product => 'intendedWearer' in product.data && product.data.intendedWearer ? [product.data.intendedWearer] : []))].sort();
+const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to ask about a custom crochet piece.`);
+---
+<BaseLayout title={`Crochet | ${site.brand.name}`} description="Custom and ready crochet pieces from Modstyle Crunch And Cream in Lagos. Enquire on WhatsApp.">
+  <section class="catalogue-hero catalogue-hero--crochet">
+    <div class="page-wrap catalogue-hero__inner">
+      <div class="catalogue-hero__copy"><a class="catalogue-back" href="/">← Back to home</a><p class="catalogue-eyebrow">Department 01 · Crochet</p><h1>Made by hand.<br />Made for you.</h1><p>Explore ready pieces or tell us what you have in mind. Custom crochet requests are quoted on WhatsApp.</p><div class="catalogue-hero__facts"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span><span>Custom and ready pieces</span></div></div>
+      <div class="catalogue-hero__visual"><IllustrationTile variant="top" alt="Sample illustration of crochet" /><span class="catalogue-hero__visual-note">Made in Lagos</span></div>
+    </div>
+  </section>
+  <section class="catalogue-section page-wrap" aria-labelledby="crochet-items-title">
+    <div class="catalogue-section__heading"><SectionHeading id="crochet-items-title" eyebrow="The crochet edit" title="A piece for your plans." copy={products.length ? `${products.length} catalogue entries. Sample listings are labelled.` : 'Share your idea and ask about a custom piece.'} /><span class="catalogue-count" data-filter-count aria-live="polite">{products.length} items</span></div>
+    {products.length > 0 && <>
+      <form class="catalogue-filters" data-catalogue-filter aria-label="Filter crochet items">
+        <label>Category<select name="category" data-filter="category"><option value="">All categories</option>{categories.map(category => <option value={category}>{category}</option>)}</select></label>
+        {wearers.length > 0 && <label>Intended wearer<select name="wearer" data-filter="wearer"><option value="">Anyone</option>{wearers.map(wearer => <option value={wearer}>{wearer}</option>)}</select></label>}
+        <label>Price type<select name="price" data-filter="price"><option value="">All price types</option><option value="fixed">Fixed price</option><option value="from">From a price</option><option value="quote">Request a quote</option></select></label>
+        <button class="catalogue-filter-reset" type="reset">Clear filters</button>
+      </form>
+      <noscript><p class="catalogue-noscript">Filters need JavaScript. All items are listed below and remain available.</p></noscript>
+      <p class="visually-hidden" data-filter-status aria-live="polite"></p>
+      <div class="catalogue-grid" data-product-grid>{products.map(product => <ProductCard product={product} departmentTone="crochet" />)}</div>
+      <p class="catalogue-empty-filter" data-filter-empty hidden>No items match those filters. Try another combination.</p>
+    </>}
+    {products.length === 0 && <div class="catalogue-empty-state"><span class="catalogue-empty-state__mark" aria-hidden="true">✳</span><p>Ready pieces will appear here when their details and photos are approved.</p><a class="button button--crochet" href={customEnquiry}>Ask about a custom piece <span aria-hidden="true">↗</span></a></div>}
+  </section>
+  <section class="custom-piece page-wrap" aria-labelledby="custom-piece-title">
+    <div class="custom-piece__art"><IllustrationTile variant="granny" alt="Sample illustration of crochet stitches" /></div>
+    <div class="custom-piece__copy"><p class="catalogue-eyebrow">Something in mind?</p><h2 id="custom-piece-title">Let’s make it yours.</h2><p>Custom pieces are quoted on WhatsApp. Share your idea and the details you already know.</p><a class="button button--crochet" href={customEnquiry}>Ask about a custom piece <span aria-hidden="true">↗</span></a></div>
+    {mode === 'preview' && <span class="catalogue-sample custom-piece__badge">Sample content</span>}
+  </section>
+  <section class="catalogue-facts page-wrap" aria-label="Crochet ordering information"><p><span>Minimum order</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></p><p><span>Custom requests</span><strong>Quoted on WhatsApp</strong><small>Ask about a piece and share your idea.</small></p><p><span>Delivery</span><strong>{pricing.deliveryText}</strong><small>Payment is by bank transfer; details are shared in chat.</small></p></section>
+</BaseLayout>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-catalogue-filter]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-product-card]')];
+  const count = document.querySelector<HTMLElement>('[data-filter-count]');
+  const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+  const status = document.querySelector<HTMLElement>('[data-filter-status]');
+  const params = new URLSearchParams(location.search);
+  const applyFilters = (updateUrl: boolean) => {
+    if (!form) return;
+    const values = Object.fromEntries(new FormData(form).entries());
+    let visible = 0;
+    cards.forEach(card => {
+      const matched = (!values.category || card.dataset.category === values.category)
+        && (!values.wearer || card.dataset.wearer === values.wearer)
+        && (!values.price || card.dataset.priceType === values.price);
+      card.hidden = !matched;
+      if (matched) visible += 1;
+    });
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'item' : 'items'}`;
+    if (empty) empty.hidden = visible > 0;
+    if (status) status.textContent = `Showing ${visible} of ${cards.length} crochet items.`;
+    if (updateUrl) {
+      const next = new URL(location.href);
+      Object.entries(values).forEach(([key, value]) => value ? next.searchParams.set(key, String(value)) : next.searchParams.delete(key));
+      history.pushState({}, '', next);
+    }
+  };
+  if (form) {
+    form.querySelectorAll<HTMLSelectElement>('select').forEach(select => { select.value = params.get(select.name) ?? ''; });
+    form.addEventListener('change', () => applyFilters(true));
+    form.addEventListener('reset', () => requestAnimationFrame(() => applyFilters(true)));
+    window.addEventListener('popstate', () => {
+      form.querySelectorAll<HTMLSelectElement>('select').forEach(select => { select.value = new URLSearchParams(location.search).get(select.name) ?? ''; });
+      applyFilters(false);
+    });
+    applyFilters(false);
+  }
+</script>

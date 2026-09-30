@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import IllustrationTile from '../../components/IllustrationTile.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { site } from '../../config/site';
+import { pricing } from '../../config/pricing';
+import { formatNaira } from '../../lib/money';
+import { visibleProducts } from '../../lib/catalogue';
+import { parseMode } from '../../lib/visibility';
+import { buildWhatsAppLink } from '../../lib/whatsapp';
+import '../../styles/catalogue.css';
+
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+const products = visibleProducts(await getCollection('products'), mode, 'peanuts');
+const bulkEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about buying peanuts in bulk.`);
+---
+<BaseLayout title={`Peanuts | ${site.brand.name}`} description="Peanuts for bulk buying from Modstyle Crunch And Cream in Lagos. Ask about quantities and delivery on WhatsApp.">
+  <section class="catalogue-hero catalogue-hero--peanuts">
+    <div class="page-wrap catalogue-hero__inner">
+      <div class="catalogue-hero__copy"><a class="catalogue-back" href="/">← Back to home</a><p class="catalogue-eyebrow">Department 02 · Peanuts</p><h1>A little crunch.<br />A lot to share.</h1><p>Buying in bulk? Tell us how much you need and where it’s going. We’ll confirm the details and quote in chat.</p><div class="catalogue-hero__facts"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span><span>Bulk requests are quote-based</span></div></div>
+      <div class="catalogue-hero__visual"><IllustrationTile variant="peanuts" alt="Sample illustration of peanuts" /><span class="catalogue-hero__visual-note">Bulk buying</span></div>
+    </div>
+  </section>
+  <section class="peanuts-order page-wrap" aria-labelledby="peanuts-order-title">
+    <div class="peanuts-order__intro"><SectionHeading id="peanuts-order-title" eyebrow="Peanuts · bulk buying" title="Tell us what you need." copy="Share a quantity and delivery area. We’ll confirm the details, total and delivery fee on WhatsApp." /><a class="button button--peanuts" href={bulkEnquiry}>Request a bulk quote <span aria-hidden="true">↗</span></a></div>
+    {mode === 'preview' && <div class="peanuts-order__note"><span class="catalogue-sample">Sample content</span><p>Varieties and pack sizes have not been confirmed. Ask us on WhatsApp and we’ll discuss what is available.</p></div>}
+  </section>
+  {products.length > 0 && <section class="catalogue-section page-wrap" aria-labelledby="peanuts-items-title">
+    <div class="catalogue-section__heading"><SectionHeading id="peanuts-items-title" eyebrow="Bulk enquiries" title="Start with a conversation." copy="These sample entries show how bulk requests will be listed. Product details are still to be confirmed." tone="peanuts" /><span class="catalogue-count">{products.length} sample items</span></div>
+    <div class="catalogue-grid catalogue-grid--peanuts">{products.map(product => <ProductCard product={product} departmentTone="peanuts" />)}</div>
+  </section>}
+  <section class="catalogue-facts page-wrap" aria-label="Peanuts ordering information"><p><span>Minimum order</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></p><p><span>Delivery</span><strong>{formatNaira(pricing.deliveryMin)}–{formatNaira(pricing.deliveryMax)}</strong><small>Depends on destination. Exact fee confirmed on WhatsApp.</small></p><p><span>Payment</span><strong>Bank transfer</strong><small>Account details are shared inside WhatsApp.</small></p></section>
+</BaseLayout>

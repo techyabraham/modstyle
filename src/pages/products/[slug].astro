@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IllustrationTile from '../../components/IllustrationTile.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { formatNaira, priceLabel } from '../../lib/money';
+import { parseMode } from '../../lib/visibility';
+import { visibleProducts, sampleArtVariant, type ProductEntry } from '../../lib/catalogue';
+import { buildWhatsAppLink } from '../../lib/whatsapp';
+import { site } from '../../config/site';
+import { pricing } from '../../config/pricing';
+import '../../styles/catalogue.css';
+
+const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
+export async function getStaticPaths() {
+  const products = visibleProducts(await getCollection('products'), parseMode(import.meta.env.PUBLIC_SITE_MODE));
+  return products.map(product => ({ params: { slug: product.data.slug }, props: { product } }));
+}
+
+const { product } = Astro.props as { product: ProductEntry };
+const item = product.data;
+const related = visibleProducts(await getCollection('products'), mode, item.department).filter(candidate => candidate.data.slug !== item.slug).slice(0, 3);
+const departmentLabel = item.department === 'crochet' ? 'Crochet' : 'Peanuts';
+const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNaira) : priceLabel(item.pricing);
+const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about ${item.name}. Please confirm availability, total and delivery.`);
+const art = sampleArtVariant(item.slug, item.department);
+const primaryImage = item.images[0];
+---
+<BaseLayout title={`${item.name} | ${site.brand.name}`} description={item.summary}>
+  <div class="page-wrap product-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href={item.department === 'crochet' ? '/crochet/' : '/peanuts/'}>{departmentLabel}</a><span aria-hidden="true">/</span><span aria-current="page">{item.name}</span></nav>
+    <div class="product-detail">
+      <div class="product-detail__media">
+        <button class="product-detail__image-button" type="button" data-open-lightbox aria-label={`Open larger view of ${item.name}`}>
+          <span class="product-detail__media-frame" data-product-media>
+            {primaryImage ? <img src={primaryImage.src} alt={primaryImage.alt} width="1200" height="1200" fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
+          </span>
+          <span class="product-detail__zoom" aria-hidden="true">↗</span>
+        </button>
+        {item.images.length > 1 && <div class="product-gallery-thumbnails" aria-label="More product images">{item.images.map((image, index) => <button type="button" data-product-thumbnail data-src={image.src} data-alt={image.alt} aria-label={`Show image ${index + 1} of ${item.images.length}`} aria-pressed={index === 0}><img src={image.src} alt="" width="120" height="120" loading="lazy" /></button>)}</div>}
+        {item.sample && <p class="catalogue-sample product-detail__sample">Sample content</p>}
+      </div>
+      <div class="product-detail__copy">
+        <p class="catalogue-eyebrow">{departmentLabel}{item.department === 'crochet' ? ` · ${item.category}` : ' · Bulk enquiry'}</p>
+        <h1>{item.name}</h1>
+        {item.sample && <span class="catalogue-sample product-detail__badge">Sample content</span>}
+        <p class="product-detail__summary">{item.summary}</p>
+        <p class="product-detail__price">{price}</p>
+        <div class="product-detail__facts"><span>Minimum</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></div>
+        {item.department === 'crochet' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Options</h2>
+          {(item.sizes.length > 0 || item.colours.length > 0) ? <div>{item.sizes.length > 0 && <p><strong>Size:</strong> {item.sizes.join(', ')}</p>}{item.colours.length > 0 && <ul class="colour-options" aria-label="Colour options">{item.colours.map(colour => <li><span style={`--swatch: ${colour.hex}`} aria-hidden="true"></span><span>{colour.name}</span></li>)}</ul>}</div> : <p>{item.sample ? 'Sample content · sizes and colours are yet to be confirmed.' : 'Ask us about size and colour availability in chat.'}</p>}
+        </section>}
+        {item.department === 'peanuts' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Bulk details</h2><p>{item.sample ? 'Sample content · variety and pack size have not been supplied.' : 'Ask us about available varieties and pack sizes in chat.'}</p></section>}
+        <a class="button" href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a>
+        <p class="product-detail__fineprint">We’ll confirm availability, total and delivery in chat. Payment is by bank transfer; details are shared on WhatsApp.</p>
+      </div>
+    </div>
+    <section class="product-description" aria-labelledby="description-title"><div><p class="catalogue-eyebrow">Details</p><h2 id="description-title">About this {departmentLabel.toLowerCase()} listing</h2></div><div><p>{item.description}</p>
+      {item.department === 'crochet' && (item.materials || item.care) && <div class="product-description__extra">{item.materials && <p><strong>Materials:</strong> {item.materials}</p>}{item.care && <p><strong>Care:</strong> {item.care}</p>}</div>}
+      {item.department === 'peanuts' && (item.variety || item.packSize || item.ingredients || item.allergens || item.storage || item.shelfLife) && <div class="product-description__extra">{item.variety && <p><strong>Variety:</strong> {item.variety}</p>}{item.packSize && <p><strong>Pack size:</strong> {item.packSize}</p>}{item.ingredients && <p><strong>Ingredients:</strong> {item.ingredients}</p>}{item.allergens && <p><strong>Allergens:</strong> {item.allergens}</p>}{item.storage && <p><strong>Storage:</strong> {item.storage}</p>}{item.shelfLife && <p><strong>Shelf life:</strong> {item.shelfLife}</p>}</div>}
+      {item.sample && <div class="product-description__extra"><span class="catalogue-sample">Sample content</span><p>Product details, materials or food information will be added after the client confirms them.</p></div>}
+    </div></section>
+    {related.length > 0 && <section class="related-products" aria-labelledby="related-title"><div class="catalogue-section__heading"><div><p class="catalogue-eyebrow">More to explore</p><h2 id="related-title">More from {departmentLabel.toLowerCase()}.</h2></div><a class="text-link" href={item.department === 'crochet' ? '/crochet/' : '/peanuts/'}>View department <span aria-hidden="true">→</span></a></div><div class="catalogue-grid">{related.map(candidate => <ProductCard product={candidate} departmentTone={item.department} />)}</div></section>}
+  </div>
+  <dialog class="catalogue-lightbox" aria-labelledby="lightbox-title" data-product-lightbox>
+    <div class="catalogue-lightbox__bar"><h2 id="lightbox-title">{item.name}</h2><button type="button" class="catalogue-lightbox__close" data-close-lightbox aria-label="Close image">×</button></div>
+    <div class="catalogue-lightbox__image" data-lightbox-image></div>
+  </dialog>
+</BaseLayout>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-product-lightbox]');
+  const target = dialog?.querySelector<HTMLElement>('[data-lightbox-image]');
+  const media = document.querySelector<HTMLElement>('[data-product-media]');
+  const trigger = document.querySelector<HTMLButtonElement>('[data-open-lightbox]');
+  const close = dialog?.querySelector<HTMLButtonElement>('[data-close-lightbox]');
+  if (dialog && target && trigger) {
+    trigger.addEventListener('click', () => {
+      if (media) target.replaceChildren(...[...media.children].map(child => child.cloneNode(true)));
+      dialog.showModal();
+      close?.focus();
+    });
+    document.querySelectorAll<HTMLButtonElement>('[data-product-thumbnail]').forEach(thumbnail => thumbnail.addEventListener('click', () => {
+      const image = media?.querySelector('img');
+      if (!image || !thumbnail.dataset.src) return;
+      image.src = thumbnail.dataset.src;
+      image.alt = thumbnail.dataset.alt ?? '';
+      document.querySelectorAll('[data-product-thumbnail]').forEach(button => button.setAttribute('aria-pressed', String(button === thumbnail)));
+    }));
+    close?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => { target.replaceChildren(); trigger.focus(); });
+  }
+</script>

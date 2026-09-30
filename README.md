@@ -1,6 +1,6 @@
 # Modstyle Crunch And Cream
 
-Static Astro website. This checkout currently contains Phase 1 (foundation), not the complete website.
+Static Astro website. Phases 1–4 are implemented; Phase 5 (basket and enquiry form) has not started.
 
 Use Node 24 LTS and pnpm 11.19.0.
 
@@ -14,6 +14,6 @@ pnpm lhci
 
 On Windows, use `pnpm lhci:local` for the same mobile score and transfer budgets. The LHCI Chrome launcher cannot remove its temporary profile on this host.
 
-`pnpm build` defaults to preview with noindex and disallow-all robots. `pnpm build:prod` explicitly builds production and runs the output guard. Copy `.env.example` to `.env` to configure an approved domain. Unknown content stays empty. Never put private documents in this repository.
+`pnpm build` defaults to preview with noindex and disallow-all robots. It includes clearly labelled sample products and artwork. `pnpm build:prod` explicitly builds production and runs the output guard; sample product and gallery routes are omitted until approved entries are supplied. Copy `.env.example` to `.env` to configure an approved domain. Unknown content stays empty. Never put private documents in this repository.
 
 Decisions: `docs/DECISIONS.md`. Phase status: `docs/PHASES.md`.

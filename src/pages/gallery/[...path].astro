@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IllustrationTile from '../../components/IllustrationTile.astro';
+import { site } from '../../config/site';
+import { parseMode } from '../../lib/visibility';
+import { visibleGallery, type GalleryEntry } from '../../lib/catalogue';
+import '../../styles/catalogue.css';
+import '../../styles/gallery.css';
+
+export async function getStaticPaths() {
+  const entries = visibleGallery(await getCollection('gallery'), parseMode(import.meta.env.PUBLIC_SITE_MODE));
+  if (!entries.length) return [];
+  return [{ params: { path: undefined }, props: { entries } }];
+}
+const { entries } = Astro.props as { entries: GalleryEntry[] };
+---
+<BaseLayout title={`Gallery | ${site.brand.name}`} description="A gallery of crochet work and peanuts from Modstyle Crunch And Cream.">
+  <div class="page-wrap gallery-page">
+    <a class="catalogue-back" href="/">← Back to home</a>
+    <header class="gallery-heading"><p class="catalogue-eyebrow">Made, packed, shared</p><h1>Gallery</h1><p>A look at the work and products. Sample illustrations are marked clearly.</p></header>
+    <div class="gallery-toolbar">
+      <div class="gallery-filters" role="group" aria-label="Filter gallery by department">
+        <button type="button" data-gallery-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-gallery-filter="crochet" aria-pressed="false">Crochet</button>
+        <button type="button" data-gallery-filter="peanuts" aria-pressed="false">Peanuts</button>
+      </div>
+      <p data-gallery-count aria-live="polite">{entries.length} items</p>
+    </div>
+    <div class="gallery-grid" data-gallery-grid>
+      {entries.map(entry => <button class="gallery-tile" type="button" data-gallery-item data-department={entry.data.department} aria-label={`Open image: ${entry.data.image.alt}`}>
+        <IllustrationTile variant={entry.data.image.src as 'yarn' | 'granny' | 'top' | 'tote' | 'beanie' | 'peanuts' | 'sack'} alt={entry.data.image.alt} />
+        <span class="gallery-tile__caption"><span>{entry.data.caption ?? entry.data.image.alt}</span><span class="catalogue-sample">Sample</span></span>
+      </button>)}
+    </div>
+    <p class="visually-hidden" data-gallery-empty hidden>No gallery items match this department.</p>
+  </div>
+  <dialog class="catalogue-lightbox gallery-lightbox" aria-labelledby="gallery-lightbox-title" data-gallery-lightbox>
+    <div class="catalogue-lightbox__bar"><h2 id="gallery-lightbox-title" data-lightbox-title>Gallery image</h2><button type="button" class="catalogue-lightbox__close" data-lightbox-close aria-label="Close image">×</button></div>
+    <div class="catalogue-lightbox__image" data-lightbox-image></div>
+  </dialog>
+</BaseLayout>
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-gallery-filter]')];
+  const items = [...document.querySelectorAll<HTMLButtonElement>('[data-gallery-item]')];
+  const count = document.querySelector<HTMLElement>('[data-gallery-count]');
+  const empty = document.querySelector<HTMLElement>('[data-gallery-empty]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-gallery-lightbox]');
+  const imageTarget = dialog?.querySelector<HTMLElement>('[data-lightbox-image]');
+  const title = dialog?.querySelector<HTMLElement>('[data-lightbox-title]');
+  const closeButton = dialog?.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+  let activeTrigger: HTMLButtonElement | null = null;
+  const filter = (department: string) => {
+    let shown = 0;
+    items.forEach(item => {
+      const matches = department === 'all' || item.dataset.department === department;
+      item.hidden = !matches;
+      if (matches) shown += 1;
+    });
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.galleryFilter === department)));
+    if (count) count.textContent = `${shown} ${shown === 1 ? 'item' : 'items'}`;
+    if (empty) empty.hidden = shown > 0;
+  };
+  buttons.forEach(button => button.addEventListener('click', () => filter(button.dataset.galleryFilter ?? 'all')));
+  items.forEach(item => item.addEventListener('click', () => {
+    if (!dialog || !imageTarget) return;
+    activeTrigger = item;
+    const art = item.querySelector('.art-tile');
+    if (art) imageTarget.replaceChildren(art.cloneNode(true));
+    if (title) title.textContent = item.getAttribute('aria-label')?.replace('Open image: ', '') ?? 'Gallery image';
+    dialog.showModal();
+    closeButton?.focus();
+  }));
+  closeButton?.addEventListener('click', () => dialog?.close());
+  dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  dialog?.addEventListener('close', () => {
+    imageTarget?.replaceChildren();
+    activeTrigger?.focus();
+    activeTrigger = null;
+  });
+</script>

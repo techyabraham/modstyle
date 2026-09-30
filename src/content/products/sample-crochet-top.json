@@ -1,0 +1,18 @@
+{
+  "slug": "sample-crochet-top",
+  "status": "published",
+  "sample": true,
+  "department": "crochet",
+  "category": "Apparel",
+  "name": "Crochet Top · Sample",
+  "summary": "A sample crochet listing to show the catalogue layout.",
+  "description": "Sample content only. Product identity, available colours, sizing and price require client confirmation.",
+  "pricing": { "type": "quote" },
+  "images": [],
+  "leadTime": null,
+  "intendedWearer": "Adults",
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}
