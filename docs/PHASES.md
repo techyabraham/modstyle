@@ -1,6 +1,14 @@
 # Phase reports
 
-Phases 1 and 2 are complete. Per the brief, work stops after each phase report. Phase 3 has not started.
+Phases 1, 2 and 3 are complete. Per the brief, work stops after each phase report. Phase 4 has not started.
+
+## Phase 3 progress
+
+Built the `/` homepage with a split hero, department panels, marquee ribbon, four ordering steps, confirmed minimum/delivery/payment details, four ground-truth FAQs, and a final WhatsApp CTA. Founder and reviews remain absent because approved content has not been supplied; there are no published products to feature. Illustrations are labelled sample content in preview.
+
+Verified: `pnpm check` passed (27 unit tests, 12 production browser tests, 3 axe tests, production build and guard). `pnpm test:preview` passed all 6 homepage/styleguide runs across mobile, tablet and desktop, with no serious/critical axe violations or horizontal overflow. Full-page homepage screenshots are in `test-results/homepage-{mobile,tablet,desktop}.png`. Production emits only `/` and `/robots.txt`.
+
+The latest three-run mobile Lighthouse audit does not meet the final performance budget: median Performance 68, Accessibility 100, Best Practices 100, SEO 100; LCP 2,732 ms, CLS 0, TBT 1,835 ms. The local four-times CPU slowdown shows substantial style/layout work on the complete page. Phase 7 is the planned performance-hardening phase; this result is recorded as open work and the page is not represented as meeting the final performance target.
 
 ## Phase 2 progress
 

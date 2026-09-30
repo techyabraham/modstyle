@@ -1,41 +1,133 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderArt from '../components/PlaceholderArt.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import StitchDivider from '../components/StitchDivider.astro';
+import Sticker from '../components/Sticker.astro';
 import { site } from '../config/site';
 import { pricing } from '../config/pricing';
 import { formatNaira } from '../lib/money';
 import { buildWhatsAppLink } from '../lib/whatsapp';
-import { isPublishable, parseMode } from '../lib/visibility';
+import { parseMode } from '../lib/visibility';
+import '../styles/home.css';
+
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
-const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about crochet or bulk peanuts.`);
+const crochetEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about crochet pieces.`);
+const peanutsEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about bulk peanuts.`);
+const generalEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to ask about crochet or bulk peanuts.`);
+const orderingSteps = [
+  { number: '01', title: 'Choose or describe', copy: 'Pick a piece, or tell us what you have in mind.' },
+  { number: '02', title: 'Confirm in chat', copy: 'We’ll confirm availability, details and delivery on WhatsApp.' },
+  { number: '03', title: 'Pay by transfer', copy: 'Bank transfer details are shared inside the chat.' },
+  { number: '04', title: 'We’ll take it from there', copy: 'We’ll confirm the next steps with you on WhatsApp.' },
+];
+const homeFaqs = [
+  { question: 'What is the minimum order?', answer: `${formatNaira(pricing.minimumPerDepartment)} per department, based on the items subtotal.` },
+  { question: 'How much is delivery?', answer: `${pricing.deliveryText} Delivery is separate from the items total.` },
+  { question: 'How do I pay?', answer: 'Payment is by bank transfer. Account details are shared inside WhatsApp.' },
+  { question: 'Can I request a custom crochet piece?', answer: 'Yes. Custom crochet requests are quoted on WhatsApp.' },
+];
 ---
-<BaseLayout title={`${site.brand.name} | Lagos`} description="Custom and ready crochet pieces and bulk peanuts in Lagos. Enquire on WhatsApp.">
-  <section class="intro-home page-wrap" aria-labelledby="intro-title">
-    <div class="intro-home__content">
-      <p class="intro-home__eyebrow">Crochet <span aria-hidden="true">✳</span> Peanuts</p>
-      <h1 id="intro-title">{site.brand.name}</h1>
-      <p class="intro-home__lead">{site.brand.headline}</p>
-      <p>Custom and ready crochet pieces. Peanuts for bulk buying.</p>
-      <a class="button" href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a>
+<BaseLayout title={`${site.brand.name} | Crochet & Peanuts in Lagos`} description="Custom and ready crochet pieces, plus peanuts for bulk buying. Based in Lagos, Nigeria. Enquire on WhatsApp.">
+  <section class="home-hero page-wrap" aria-labelledby="home-title">
+    <div class="home-hero__copy">
+      <p class="home-kicker"><span class="home-kicker__dot" aria-hidden="true"></span> Two sides of Modstyle <span class="home-kicker__place">Lagos, Nigeria</span></p>
+      <h1 id="home-title">{site.brand.headline}</h1>
+      <p class="home-hero__intro">Handmade crochet pieces. Peanuts for bulk buying. Tell us what you’re looking for and we’ll take it from there on WhatsApp.</p>
+      <div class="home-hero__actions">
+        <a class="button" href={generalEnquiry}>Start an enquiry <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="#departments">Explore the departments <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="home-hero__proof" aria-label="Ordering at a glance">
+        <span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span>
+        <span class="home-hero__proof-sep" aria-hidden="true"></span>
+        <span>Quote-based custom and bulk requests</span>
+      </div>
     </div>
-    <div class="intro-home__facts" aria-label="Ordering facts">
-      <p><strong>Minimum order</strong><span>{formatNaira(pricing.minimumPerDepartment)} per department</span></p>
-      <p><strong>Delivery</strong><span>₦3,000 to ₦10,000; exact fee confirmed on WhatsApp</span></p>
-      <p><strong>Payment</strong><span>Bank transfer; details shared in chat</span></p>
+    <div class="home-hero__art" role="group" aria-label="Illustrations of the two departments">
+      <div class="home-hero__art-disc" aria-hidden="true"></div>
+      <svg class="home-hero__thread" viewBox="0 0 560 520" fill="none" aria-hidden="true">
+        <path d="M55 346c79-74 28-182 107-231 74-46 146 19 107 83-36 59-133 23-125-48 9-81 122-109 202-53 113 80 29 184 112 223 47 22 66-2 74-39" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 11" />
+        <path d="M106 438c51-14 78-50 82-104m282-196c-17 23-23 46-20 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+      </svg>
+      <div class="home-hero__art-label home-hero__art-label--top"><span>Made with care</span><b aria-hidden="true">✳</b></div>
+      <div class="home-hero__art-card home-hero__art-card--crochet"><PlaceholderArt variant="granny" alt="Sample illustration of crochet texture" /><span class="home-hero__art-name">Crochet</span></div>
+      <div class="home-hero__art-card home-hero__art-card--peanuts"><PlaceholderArt variant="peanuts" alt="Sample illustration of peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
+      <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
+      <span class="home-hero__art-note">{mode === 'preview' ? 'Illustrations are sample content' : 'Crochet · Peanuts'}</span>
     </div>
-    {isPublishable({ approved: site.contact.phoneApproved, required: [site.contact.whatsapp] }, mode) && <p>{site.contact.whatsapp}</p>}
+  </section>
+
+  <div class="home-ribbon" aria-hidden="true">
+    <div class="home-ribbon__track" aria-hidden="true">
+      {Array.from({ length: 4 }, () => <span>Made in Lagos <i>✳</i> Crochet <i>✳</i> Peanuts for bulk <i>✳</i> Enquire on WhatsApp <i>✳</i></span>)}
+    </div>
+  </div>
+
+  <section class="home-departments page-wrap" id="departments" aria-labelledby="departments-title">
+    <div class="home-section-intro">
+      <SectionHeading id="departments-title" eyebrow="Two departments, one chat" title="Find your kind of good." copy="Choose a department to get started. We’ll confirm the details together on WhatsApp." />
+      <Sticker>Made in Lagos</Sticker>
+    </div>
+    <div class="department-grid">
+      <article class="department-card department-card--crochet">
+        <div class="department-card__visual" aria-hidden="true">
+          <span class="department-card__shape"></span>
+          <PlaceholderArt variant="top" alt="Sample illustration of a crochet top" />
+          <span class="department-card__number">01 / HANDMADE</span>
+        </div>
+        <div class="department-card__body">
+          <p class="department-card__eyebrow">Crochet · Custom and ready pieces</p>
+          <h3>Made by hand.<br />Made for you.</h3>
+          <p>Explore ready pieces or tell us about a custom crochet request. Custom work is quoted on WhatsApp.</p>
+          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--crochet" href={crochetEnquiry}>Enquire about crochet <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </article>
+      <article class="department-card department-card--peanuts">
+        <div class="department-card__visual" aria-hidden="true">
+          <span class="department-card__shape"></span>
+          <PlaceholderArt variant="sack" alt="Sample illustration of a peanut sack" />
+          <span class="department-card__number">02 / BULK BUYING</span>
+        </div>
+        <div class="department-card__body">
+          <p class="department-card__eyebrow">Peanuts · Bulk buying</p>
+          <h3>A little crunch.<br />A lot to share.</h3>
+          <p>Tell us the quantity you need and where it’s going. We’ll confirm the details and quote in chat.</p>
+          <div class="department-card__footer"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum</span><a class="button button--peanuts" href={peanutsEnquiry}>Enquire about peanuts <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <StitchDivider id="home-thread-divider" tone="crochet" />
+
+  <section class="home-ordering" aria-labelledby="ordering-title">
+    <div class="page-wrap home-ordering__inner">
+      <div class="home-ordering__heading"><SectionHeading id="ordering-title" eyebrow="Simple by design" title="Good things start with a conversation." copy="Send an enquiry. We’ll work through the details together." /><span class="home-ordering__scribble" aria-hidden="true">↘</span></div>
+      <ol class="ordering-steps">
+        {orderingSteps.map(step => <li class="ordering-step"><span class="ordering-step__number">{step.number}</span><h3>{step.title}</h3><p>{step.copy}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-facts page-wrap" aria-label="Minimum order and delivery details">
+    <div class="home-facts__mark" aria-hidden="true">✳</div>
+    <div class="home-facts__main"><p class="home-facts__eyebrow">A few details to know</p><h2>Based in Lagos.<br />Ready when you are.</h2></div>
+    <div class="home-facts__items">
+      <p><span>Minimum</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Based on the items subtotal.</small></p>
+      <p><span>Delivery</span><strong>{formatNaira(pricing.deliveryMin)}–{formatNaira(pricing.deliveryMax)}</strong><small>Depends on destination. Exact fee confirmed on WhatsApp.</small></p>
+      <p><span>Payment</span><strong>Bank transfer</strong><small>Account details are shared inside WhatsApp.</small></p>
+    </div>
+  </section>
+
+  <section class="home-faq page-wrap" aria-labelledby="faq-title">
+    <div class="home-faq__heading"><SectionHeading id="faq-title" eyebrow="Before you message" title="A few quick answers." copy="Still have a question? We’re happy to chat." /><a class="text-link" href={generalEnquiry}>Ask us on WhatsApp <span aria-hidden="true">↗</span></a></div>
+    <div class="home-faq__list">{homeFaqs.map((faq, index) => <details class="home-faq__item" open={index === 0}><summary><span class="home-faq__index">0{index + 1}</span>{faq.question}<span class="home-faq__toggle" aria-hidden="true"></span></summary><p>{faq.answer}</p></details>)}</div>
+  </section>
+
+  <section class="home-last-call page-wrap" aria-labelledby="last-call-title">
+    <div class="home-last-call__art" aria-hidden="true"><span class="home-last-call__ring"></span><PlaceholderArt variant="yarn" alt="Sample illustration of yarn" /><span class="home-last-call__spark">✳</span></div>
+    <div class="home-last-call__copy"><p class="home-last-call__eyebrow">Your next favourite thing starts here</p><h2 id="last-call-title">Tell us what<br />you have in mind.</h2><p>One message is all it takes to get started.</p><a class="button home-last-call__button" href={generalEnquiry}>Continue on WhatsApp <span aria-hidden="true">↗</span></a></div>
+    <span class="home-last-call__note">Modstyle Crunch And Cream · Lagos</span>
   </section>
 </BaseLayout>
-<style>
-  .intro-home { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(18rem, .6fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; min-block-size: min(78vh, 52rem); padding-block: clamp(3rem, 8vw, 7rem); }
-  .intro-home__content { display: grid; justify-items: start; gap: 1.5rem; }
-  .intro-home__eyebrow { color: var(--magenta); font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
-  .intro-home__eyebrow span { color: var(--orange); padding-inline: .25rem; }
-  h1 { max-inline-size: 12ch; letter-spacing: -.055em; }
-  .intro-home__lead { max-inline-size: 22ch; color: var(--magenta); font-family: var(--font-display); font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem); font-weight: 600; font-variation-settings: 'SOFT' 50; line-height: 1.15; }
-  .intro-home__facts { padding: clamp(1.5rem, 3vw, 2.5rem); border-radius: 48% 52% 20% 20% / 18% 18% 12% 12%; background: var(--forest); color: var(--cream); transform: rotate(2deg); }
-  .intro-home__facts p { display: grid; gap: .15rem; padding-block: 1.25rem; border-block-end: 1px dashed rgb(255 248 238 / .5); }
-  .intro-home__facts p:last-child { border-block-end: 0; }
-  .intro-home__facts strong { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
-  .intro-home__facts span { font-size: 1rem; }
-  @media (max-width: 48rem) { .intro-home { grid-template-columns: 1fr; } .intro-home__facts { transform: none; border-radius: var(--radius-card); } }
-</style>

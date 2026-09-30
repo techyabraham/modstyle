@@ -2,21 +2,21 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 test('production shell is usable and exposes only approved facts', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Modstyle Crunch And Cream');
-  const link = page.getByRole('link', { name: 'Enquire on WhatsApp' });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Stitched with love. Packed with crunch.');
+  const link = page.getByRole('link', { name: 'Start an enquiry' });
   const url = new URL((await link.getAttribute('href'))!);
   expect(url.hostname).toBe('wa.me');
-  expect(url.searchParams.get('text')).toContain("I'd like to enquire");
+  expect(url.searchParams.get('text')).toContain("I'd like to ask about crochet or bulk peanuts");
   await expect(page.locator('body')).not.toContainText(/Sample content|oluwarewaa|R__pierre|2349151715923|40,000/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
 });
-test('WhatsApp remains available without JavaScript', async ({ browser }) => {
+test('WhatsApp remains available without JavaScript', async ({ browser }, testInfo) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:4321/');
-  await expect(page.getByRole('link', { name: 'Enquire on WhatsApp' })).toHaveAttribute('href', /^https:\/\/wa.me\//);
+  await page.goto(new URL('/', testInfo.project.use.baseURL as string).toString());
+  await expect(page.getByRole('link', { name: 'Start an enquiry' })).toHaveAttribute('href', /^https:\/\/wa.me\//);
   await context.close();
 });
 test('production indexing and canonical defaults', async ({ page, request }) => {

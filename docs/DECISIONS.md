@@ -1,5 +1,12 @@
 # Decisions
 
+## Phase 3 — homepage (2026-09-30)
+- Use the editable `site.brand.headline` candidate “Stitched with love. Packed with crunch.” for the hero. Brand voice and design remain pending client approval.
+- Keep the home page as a direct WhatsApp journey, with separate crochet and peanut enquiries and a general enquiry CTA. Do not publish contact details that lack approval.
+- Use only confirmed facts for the four homepage FAQs: per-department minimum, delivery range and confirmation, bank transfer, and custom crochet quotes. The minimum remains described as an items subtotal excluding delivery, a configurable assumption still awaiting confirmation.
+- Omit featured products, founder and review sections when there are no publishable entries. Preview artwork remains visibly labelled sample content; production output contains none.
+- The complete homepage exceeds the final local Lighthouse performance budget on the four-times CPU slowdown profile. Record the current median in `docs/PHASES.md`; tune in Phase 7 before claiming the final budget is met.
+
 ## Phase 2 — design system (2026-09-30)
 - Use a warm cream, forest and clay light theme with Fraunces headings and Inter body text. Dark mode is deferred because no dark palette was approved or required in the brief.
 - Self-host OFL-licensed fonts. Fraunces is split into Latin/₦ and Latin Extended WOFF2 subsets to keep the critical heading font small. Inter remains one subset. Preserve the variable axes needed by the design. Both families pass real-browser glyph coverage for `₦40,000`.
