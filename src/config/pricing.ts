@@ -5,7 +5,6 @@ export const pricing = {
   deliveryMax: 10_000,
   deliveryText: 'Delivery ₦3,000 to ₦10,000 depending on destination. Exact fee confirmed on WhatsApp.',
   featuredPriceProductSlug: null as string | null,
-  sampleFeaturedPriceProductSlug: 'sample-crochet-featured',
 };
 export type Pricing =
   | { type: 'fixed'; amountNaira: number }

@@ -21,6 +21,14 @@ const canonical = import.meta.env.SITE ? new URL(Astro.url.pathname, import.meta
 const socialImage = import.meta.env.SITE ? new URL('/social-card.png', import.meta.env.SITE) : null;
 const structuredData = mode === 'production' ? [localBusinessJsonLd(import.meta.env.SITE), ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])] : [];
 const hasGallery = visibleGallery(await getCollection('gallery'), mode).length > 0;
+const primaryLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Crochet', href: '/crochet/' },
+  { label: 'Peanuts', href: '/peanuts/' },
+  ...(hasGallery ? [{ label: 'Gallery', href: '/gallery/' }] : []),
+  { label: 'FAQ', href: '/faq/' },
+  { label: 'Contact', href: '/contact/' },
+];
 // Shared semantic shell; business content remains behind the visibility gate.
 ---
 <!doctype html>
@@ -53,9 +61,48 @@ const hasGallery = visibleGallery(await getCollection('gallery'), mode).length >
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header"><div class="page-wrap site-header__inner"><Wordmark /><EnquiryBasket /><p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p></div></header>
+    <header class="site-header"><div class="page-wrap site-header__inner" data-site-header-inner>
+      <Wordmark />
+      <nav class="primary-nav" id="primary-navigation" aria-label="Main navigation" data-primary-nav>
+        <ul class="primary-nav__list">{primaryLinks.map(link => <li><a class="primary-nav__link" href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.label}</a></li>)}</ul>
+      </nav>
+      <div class="site-header__actions"><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-navigation" aria-expanded="false" data-menu-toggle hidden><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path class="menu-toggle__bars" d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /><path class="menu-toggle__close" d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg><span>Menu</span></button><EnquiryBasket /></div>
+      <p class="site-header__place">Made in Lagos<br />Crochet &amp; peanuts</p>
+    </div></header>
     <main class="site-main" id="main"><slot /></main>
-    <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><nav class="site-footer__nav" aria-label="Supporting pages"><a href="/our-story/">Our story</a>{hasGallery && <a href="/gallery/">Gallery</a>}<a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a href="/policies/">Policies</a></nav><p class="site-footer__location">{site.location}</p></div></footer>
+  <footer class="site-footer"><div class="page-wrap site-footer__inner"><p class="site-footer__brand">{site.brand.name}</p><nav class="site-footer__nav" aria-label="Supporting pages"><a href="/our-story/">Our story</a>{hasGallery && <a href="/gallery/">Gallery</a>}<a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a href="/policies/">Policies</a></nav><p class="site-footer__location">{site.location}</p></div></footer>
+    <script>
+      const headerInner = document.querySelector<HTMLElement>('[data-site-header-inner]');
+      const primaryNav = document.querySelector<HTMLElement>('[data-primary-nav]');
+      const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+      if (headerInner && primaryNav && menuToggle) {
+        headerInner.dataset.menuReady = 'true';
+        menuToggle.hidden = false;
+        const setMenuOpen = (open: boolean, restoreFocus = false) => {
+          headerInner.dataset.menuOpen = String(open);
+          primaryNav.dataset.open = String(open);
+          menuToggle.setAttribute('aria-expanded', String(open));
+          menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+          menuToggle.querySelector('span')!.textContent = open ? 'Close' : 'Menu';
+          if (restoreFocus) menuToggle.focus();
+        };
+        menuToggle.addEventListener('click', () => {
+          const open = headerInner.dataset.menuOpen !== 'true';
+          setMenuOpen(open);
+          if (open && window.matchMedia('(max-width: 68rem)').matches) primaryNav.querySelector<HTMLAnchorElement>('a')?.focus();
+        });
+        primaryNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenuOpen(false)));
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && headerInner.dataset.menuOpen === 'true') setMenuOpen(false, true);
+        });
+        document.addEventListener('pointerdown', event => {
+          if (headerInner.dataset.menuOpen === 'true' && event.target instanceof Node && !headerInner.contains(event.target)) setMenuOpen(false);
+        });
+        window.matchMedia('(min-width: 68.001rem)').addEventListener('change', event => {
+          if (event.matches) setMenuOpen(false);
+        });
+      }
+    </script>
     {analyticsId && <script is:inline defer data-domain={analyticsId} src="https://plausible.io/js/script.js"></script>}
     {analyticsId && <script is:inline>
       document.addEventListener('mcc:analytics', event => {

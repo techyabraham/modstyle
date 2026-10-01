@@ -9,6 +9,7 @@ export type ReviewEntry = CollectionEntry<'reviews'>;
 
 export function visibleProducts(entries: ProductEntry[], mode: SiteMode, department?: 'crochet' | 'peanuts'): ProductEntry[] {
   return entries
+    .filter(entry => !entry.data.sample)
     .filter(entry => isPublishable({
       ...entry.data,
       required: [entry.data.slug, entry.data.name, entry.data.summary, entry.data.description],
@@ -19,6 +20,7 @@ export function visibleProducts(entries: ProductEntry[], mode: SiteMode, departm
 
 export function visibleGallery(entries: GalleryEntry[], mode: SiteMode): GalleryEntry[] {
   return entries
+    .filter(entry => !entry.data.sample)
     .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.image.alt] }, mode))
     .sort((left, right) => left.data.slug.localeCompare(right.data.slug));
 }
@@ -31,23 +33,7 @@ export function visibleFaqs(entries: FaqEntry[], mode: SiteMode): FaqEntry[] {
 
 export function visibleReviews(entries: ReviewEntry[], mode: SiteMode): ReviewEntry[] {
   return entries
-    .filter(entry => isPublishable({ ...entry.data, approved: entry.data.approved || (mode === 'preview' && entry.data.sample), required: [entry.data.slug, entry.data.name, entry.data.text] }, mode))
+    .filter(entry => !entry.data.sample)
+    .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.name, entry.data.text] }, mode))
     .sort((left, right) => left.data.name.localeCompare(right.data.name));
-}
-
-export function sampleArtVariant(slug: string, department: 'crochet' | 'peanuts'): 'yarn' | 'granny' | 'top' | 'tote' | 'beanie' | 'peanuts' | 'sack' {
-  const variants: Record<string, 'yarn' | 'granny' | 'top' | 'tote' | 'beanie' | 'peanuts' | 'sack'> = {
-    'sample-granny-tote': 'granny',
-    'sample-bucket-hat': 'beanie',
-    'sample-crochet-top': 'top',
-    'sample-beanie': 'beanie',
-    'sample-flower-cardigan': 'granny',
-    'sample-mini-bag': 'tote',
-    'sample-market-tote': 'tote',
-    'sample-crochet-featured': 'yarn',
-    'sample-peanuts-01': 'peanuts',
-    'sample-peanuts-02': 'sack',
-    'sample-peanuts-03': 'peanuts',
-  };
-  return variants[slug] ?? (department === 'peanuts' ? 'peanuts' : 'yarn');
 }

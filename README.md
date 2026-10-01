@@ -10,7 +10,7 @@ pnpm exec playwright install chromium
 pnpm dev
 ```
 
-Local preview mode is the default and includes labelled sample content. To verify a production build, set `SITE_URL` to the approved domain origin and run `pnpm build:prod`; this build omits samples and runs the output guard. `pnpm check` runs typecheck, lint, unit tests, production browser checks and axe checks. Run `pnpm lhci` for the configured mobile Lighthouse budgets; on Windows use `pnpm lhci:local` if LHCI cannot clean up its temporary Chrome profile.
+Local preview mode is the default. Product catalogues, the gallery and reviews show only published listings; they do not include sample cards. The preview-only styleguide and labelled notes for unconfirmed business information remain. To verify a production build, set `SITE_URL` to the approved domain origin and run `pnpm build:prod`; this build runs the output guard. `pnpm check` runs typecheck, lint, unit tests, production browser checks and axe checks. Run `pnpm lhci` for the configured mobile Lighthouse budgets; on Windows use `pnpm lhci:local` if LHCI cannot clean up its temporary Chrome profile.
 
 Read the handover guides:
 

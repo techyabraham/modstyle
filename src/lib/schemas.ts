@@ -15,8 +15,7 @@ export const productSchema = z.discriminatedUnion('department', [
   z.object({ ...product, department: z.literal('peanuts'), variety: text.nullish(), packSize: text.nullish(), ingredients: text.nullish(), allergens: text.nullish(), storage: text.nullish(), shelfLife: text.nullish() }).strict(),
 ]).superRefine((value, ctx) => {
   if (value.pricing.type !== 'quote' && value.pricing.amountNaira === 40_000) {
-    const assigned = value.sample ? pricing.sampleFeaturedPriceProductSlug : pricing.featuredPriceProductSlug;
-    if (value.slug !== assigned || (value.sample && value.department !== 'crochet')) ctx.addIssue({ code: 'custom', path: ['pricing'], message: '₦40,000 may only belong to the configured featured product' });
+    if (value.slug !== pricing.featuredPriceProductSlug) ctx.addIssue({ code: 'custom', path: ['pricing'], message: '₦40,000 may only belong to the configured featured product' });
   }
 });
 export const faqSchema = z.object({ ...common, question: text, answer: text, group: z.enum(['Ordering', 'Minimums and pricing', 'Payment', 'Delivery', 'Custom crochet', 'Peanuts and bulk']), order: z.number().int().default(0) }).strict();

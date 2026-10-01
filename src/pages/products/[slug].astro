@@ -1,12 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import IllustrationTile from '../../components/IllustrationTile.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import ResponsiveProductImage from '../../components/ResponsiveProductImage.astro';
 import { formatNaira, priceLabel } from '../../lib/money';
 import { parseMode } from '../../lib/visibility';
-import { visibleProducts, sampleArtVariant, type ProductEntry } from '../../lib/catalogue';
+import { visibleProducts, type ProductEntry } from '../../lib/catalogue';
 import { buildWhatsAppLink } from '../../lib/whatsapp';
 import { site } from '../../config/site';
 import { pricing } from '../../config/pricing';
@@ -25,7 +24,6 @@ const related = visibleProducts(await getCollection('products'), mode, item.depa
 const departmentLabel = item.department === 'crochet' ? 'Crochet' : 'Peanuts';
 const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNaira) : priceLabel(item.pricing);
 const enquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand.name}, I'd like to enquire about ${item.name}. Please confirm availability, total and delivery.`);
-const art = sampleArtVariant(item.slug, item.department);
 const primaryImage = item.images[0];
 const basketItem = JSON.stringify({ slug: item.slug, name: item.name, department: item.department, options: {}, quantity: 1, pricing: item.pricing });
 const productSchema = productJsonLd(item, import.meta.env.SITE);
@@ -37,24 +35,22 @@ const productSchema = productJsonLd(item, import.meta.env.SITE);
       <div class="product-detail__media">
         <button class="product-detail__image-button" type="button" data-open-lightbox aria-label={`Open larger view of ${item.name}`}>
           <span class="product-detail__media-frame" data-product-media>
-            {primaryImage ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 48rem) 100vw, 50vw" loading="eager" fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
+            {primaryImage ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 48rem) 100vw, 50vw" loading="eager" fetchpriority="high" /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
           </span>
           <span class="product-detail__zoom" aria-hidden="true">↗</span>
         </button>
         {item.images.length > 1 && <div class="product-gallery-thumbnails" aria-label="More product images">{item.images.map((image, index) => <button type="button" data-product-thumbnail data-src={image.src} data-alt={image.alt} aria-label={`Show image ${index + 1} of ${item.images.length}`} aria-pressed={index === 0}><img src={image.src} alt="" width="120" height="120" loading="lazy" /></button>)}</div>}
-        {item.sample && <p class="catalogue-sample product-detail__sample">Sample content</p>}
       </div>
       <div class="product-detail__copy">
         <p class="catalogue-eyebrow">{departmentLabel}{item.department === 'crochet' ? ` · ${item.category}` : ' · Bulk enquiry'}</p>
         <h1>{item.name}</h1>
-        {item.sample && <span class="catalogue-sample product-detail__badge">Sample content</span>}
         <p class="product-detail__summary">{item.summary}</p>
         <p class="product-detail__price">{price}</p>
         <div class="product-detail__facts"><span>Minimum</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></div>
         {item.department === 'crochet' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Options</h2>
-          {(item.sizes.length > 0 || item.colours.length > 0) ? <div class="product-option-controls">{item.sizes.length > 0 && <label>Size<select data-product-option="size"><option value="">Choose a size</option>{item.sizes.map(size => <option value={size}>{size}</option>)}</select></label>}{item.colours.length > 0 && <label>Colour<select data-product-option="colour"><option value="">Choose a colour</option>{item.colours.map(colour => <option value={colour.name}>{colour.name}</option>)}</select></label>}</div> : <p>{item.sample ? 'Sample content · sizes and colours are yet to be confirmed.' : 'Ask us about size and colour availability in chat.'}</p>}
+          {(item.sizes.length > 0 || item.colours.length > 0) ? <div class="product-option-controls">{item.sizes.length > 0 && <label>Size<select data-product-option="size"><option value="">Choose a size</option>{item.sizes.map(size => <option value={size}>{size}</option>)}</select></label>}{item.colours.length > 0 && <label>Colour<select data-product-option="colour"><option value="">Choose a colour</option>{item.colours.map(colour => <option value={colour.name}>{colour.name}</option>)}</select></label>}</div> : <p>Ask us about size and colour availability in chat.</p>}
         </section>}
-        {item.department === 'peanuts' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Bulk details</h2><p>{item.sample ? 'Sample content · variety and pack size have not been supplied.' : 'Choose your quantity and contact us to confirm bulk availability and your order total.'}</p></section>}
+        {item.department === 'peanuts' && <section class="product-detail__options" aria-labelledby="options-title"><h2 id="options-title">Bulk details</h2><p>Choose your quantity and contact us to confirm bulk availability and your order total.</p></section>}
         <label class="product-quantity">Quantity<input type="number" data-product-quantity min="1" max="999" step="1" value="1" inputmode="numeric" /></label>
         <p class="visually-hidden" aria-live="polite" data-product-status></p>
         <div class="product-detail__actions"><button class="button button--outline" type="button" data-basket-add={basketItem}>Add to enquiry</button><a class="button" data-analytics-whatsapp data-analytics-department={item.department} data-analytics-product-slug={item.slug} href={enquiry}>Enquire on WhatsApp <span aria-hidden="true">↗</span></a></div>
@@ -64,7 +60,6 @@ const productSchema = productJsonLd(item, import.meta.env.SITE);
     <section class="product-description" aria-labelledby="description-title"><div><p class="catalogue-eyebrow">Details</p><h2 id="description-title">About this {departmentLabel.toLowerCase()} listing</h2></div><div><p>{item.description}</p>
       {item.department === 'crochet' && (item.materials || item.care) && <div class="product-description__extra">{item.materials && <p><strong>Materials:</strong> {item.materials}</p>}{item.care && <p><strong>Care:</strong> {item.care}</p>}</div>}
       {item.department === 'peanuts' && (item.variety || item.packSize || item.ingredients || item.allergens || item.storage || item.shelfLife) && <div class="product-description__extra">{item.variety && <p><strong>Variety:</strong> {item.variety}</p>}{item.packSize && <p><strong>Pack size:</strong> {item.packSize}</p>}{item.ingredients && <p><strong>Ingredients:</strong> {item.ingredients}</p>}{item.allergens && <p><strong>Allergens:</strong> {item.allergens}</p>}{item.storage && <p><strong>Storage:</strong> {item.storage}</p>}{item.shelfLife && <p><strong>Shelf life:</strong> {item.shelfLife}</p>}</div>}
-      {item.sample && <div class="product-description__extra"><span class="catalogue-sample">Sample content</span><p>Product details, materials or food information will be added after the client confirms them.</p></div>}
     </div></section>
     {related.length > 0 && <section class="related-products" aria-labelledby="related-title"><div class="catalogue-section__heading"><div><p class="catalogue-eyebrow">More to explore</p><h2 id="related-title">More from {departmentLabel.toLowerCase()}.</h2></div><a class="text-link" href={item.department === 'crochet' ? '/crochet/' : '/peanuts/'}>View department <span aria-hidden="true">→</span></a></div><div class="catalogue-grid">{related.map(candidate => <ProductCard product={candidate} departmentTone={item.department} />)}</div></section>}
   </div>

@@ -44,9 +44,9 @@ Choose exactly one price type:
 
 Amounts are whole naira. A quote never contributes a numeric basket total. Do not treat sample amounts as real prices.
 
-## Assign the one ₦40,000 price
+## Assign an approved ₦40,000 price
 
-The sample price is reserved for `sample-crochet-featured` and is excluded from production. When the client identifies the real item, update `pricing.featuredPriceProductSlug` in `src/config/pricing.ts` to that item's exact slug. Set its confirmed price to the appropriate ₦40,000 price object, set `sample` to false, and publish it only after the identity and price are approved. Do not assign ₦40,000 to a second product. The content check enforces this rule.
+No current listing uses ₦40,000. The schema rejects that amount while `featuredPriceProductSlug` in `src/config/pricing.ts` is unset. Set it to the exact slug of an approved listing before assigning that amount; the content check rejects it on every other product.
 
 ## Replace the logo
 
@@ -87,7 +87,7 @@ Add a Markdown file in `src/content/faqs/`. Copy the frontmatter fields and grou
 
 ## Preview and production builds
 
-Local `pnpm dev` runs preview mode by default. Preview has labelled sample content, `noindex,nofollow`, and disallowed crawling. `pnpm build` creates the preview output in `dist/`; `pnpm test:preview` exercises its sample catalogue and interactions.
+Local `pnpm dev` runs preview mode by default. The product catalogues, gallery and reviews contain no sample listing cards; the preview-only styleguide and labelled notes for unconfirmed business information remain. Preview also uses `noindex,nofollow` and disallows crawling. `pnpm build` creates the preview output in `dist/`; `pnpm test:preview` exercises the published catalogue and responsive menu interactions.
 
 `pnpm build:prod` forces production mode, creates `dist/`, and automatically runs the output guard. Set `SITE_URL` to the approved canonical origin for canonical tags, social URLs, sitemap and `robots.txt`. PowerShell example:
 

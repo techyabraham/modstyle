@@ -39,11 +39,11 @@ it('shows only supplied CAC and NAFDAC identifiers and associates the registered
 it.each(["Line one\n₦40,000 & it's ready 😀", 'A'.repeat(3000)])('round-trips WhatsApp text', message => {
   expect(new URL(buildWhatsAppLink(site.contact.whatsapp, message)).searchParams.get('text')).toBe(message);
 });
-const product = { slug: 'sample-crochet-featured', name: 'Sample', summary: 'Sample', description: 'Sample', status: 'published', sample: true, department: 'crochet', category: 'Sample', pricing: { type: 'fixed', amountNaira: 40_000 } };
-it('restricts the special price to one assigned product', () => {
+const product = { slug: 'burgundy-cream-crochet-set', name: 'Burgundy & Cream Crochet Set', summary: 'A crochet set.', description: 'Ask us about the set.', status: 'published', sample: false, department: 'crochet', category: 'Apparel', pricing: { type: 'from', amountNaira: 42_000 } };
+it('keeps the unassigned ₦40,000 price out of product listings', () => {
   expect(productSchema.safeParse(product).success).toBe(true);
-  expect(productSchema.safeParse({ ...product, slug: 'another-product' }).success).toBe(false);
-  expect(productSchema.safeParse({ ...product, sample: false }).success).toBe(false);
+  expect(productSchema.safeParse({ ...product, pricing: { type: 'fixed', amountNaira: 40_000 } }).success).toBe(false);
+  expect(productSchema.safeParse({ ...product, slug: 'another-product', pricing: { type: 'fixed', amountNaira: 40_000 } }).success).toBe(false);
 });
 it('rejects cross-department fields, missing alt and invalid slugs', () => {
   expect(productSchema.safeParse({ ...product, ingredients: 'unknown' }).success).toBe(false);

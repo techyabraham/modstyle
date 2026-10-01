@@ -18,10 +18,9 @@ const { reviews } = Astro.props as { reviews: ReviewEntry[] };
   <main class="support-page page-wrap reviews-page" aria-labelledby="reviews-title">
     <p class="support-page__eyebrow">Shared with permission</p><h1 id="reviews-title">Reviews</h1>
     {reviews.length ? <div class="review-grid">{reviews.map(({ data }) => <article class="review-card">
-      {data.sample && <span class="catalogue-sample">Sample content</span>}
       {data.photo && <img src={data.photo.src} alt={data.photo.alt} width="640" height="480" loading="lazy" />}
       <blockquote><p>{data.text}</p></blockquote><p class="review-card__byline"><strong>{data.name}</strong>{data.product && <span> · {data.product}</span>}</p>
-    </article>)}</div> : <p class="support-sample">Sample content · Approved customer reviews will appear here when supplied. No reviews are published yet.</p>}
+    </article>)}</div> : <p class="support-sample">Approved customer reviews will appear here when supplied. No reviews are published yet.</p>}
     <p class="reviews-note">Reviews are published only after approval. No ratings or endorsements are inferred.</p>
   </main>
 </BaseLayout>

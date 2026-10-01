@@ -16,6 +16,6 @@ Production and preview browser checks run at mobile, tablet and desktop viewport
 
 ## Release check
 
-Run `pnpm check` and `pnpm build && pnpm test:preview`. Both commands must pass. `pnpm check` includes axe-core checks and production-mode route checks; `pnpm test:preview` covers sample product/gallery interactions. Re-run after changes to navigation, dialogs, forms, focus styles or motion.
+Run `pnpm check` and `pnpm build && pnpm test:preview`. Both commands must pass. `pnpm check` includes axe-core checks and production-mode route checks; `pnpm test:preview` covers the published product/gallery interactions and responsive menu. Re-run after changes to navigation, dialogs, forms, focus styles or motion.
 
 Automated Chromium and keyboard tests do not replace a screen-reader or browser/OS accessibility review. Before launch, have a person test current Chrome/Edge with NVDA and a current mobile screen reader, paying particular attention to product images, form error announcements, native dialogs and the empty/persisted basket states. Record any follow-up with the browser, assistive technology and route tested.

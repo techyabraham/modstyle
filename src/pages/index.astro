@@ -99,7 +99,7 @@ const homeFaqs = [
         </div>
       </article>
     </div>
-    {galleryEntries.length > 0 && <p class="home-gallery-link"><a class="text-link" href="/gallery/">{mode === 'preview' ? 'View the sample gallery' : 'View the gallery'} <span aria-hidden="true">→</span></a></p>}
+    {galleryEntries.length > 0 && <p class="home-gallery-link"><a class="text-link" href="/gallery/">View the gallery <span aria-hidden="true">→</span></a></p>}
   </section>
 
   <StitchDivider id="home-thread-divider" tone="crochet" />
@@ -126,7 +126,6 @@ const homeFaqs = [
   {reviews.length > 0 && <section class="home-reviews page-wrap" aria-labelledby="home-reviews-title">
     <div class="home-reviews__heading"><SectionHeading id="home-reviews-title" eyebrow="In their words" title="Shared by our customers." copy="Approved feedback, shared with permission." /><a class="text-link" href="/reviews/">See all reviews <span aria-hidden="true">→</span></a></div>
     <div class="home-reviews__grid">{reviews.slice(0, 3).map(({ data }) => <article class="home-review">
-      {data.sample && <span class="catalogue-sample">Sample content</span>}
       <blockquote>{data.text}</blockquote><p><strong>{data.name}</strong>{data.product && <span> · {data.product}</span>}</p>
     </article>)}</div>
   </section>}

@@ -27,7 +27,7 @@ const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.bra
     </div>
   </section>
   <section class="catalogue-section page-wrap" aria-labelledby="crochet-items-title">
-    <div class="catalogue-section__heading"><SectionHeading id="crochet-items-title" eyebrow="The crochet edit" title="A piece for your plans." copy={products.length ? mode === 'preview' ? `${products.length} listings, including labelled samples. Ask us about a custom piece too.` : `${products.length} ready-to-view listings. Ask us about a custom piece too.` : 'Share your idea and ask about a custom piece.'} /><span class="catalogue-count" data-filter-count aria-live="polite">{products.length} items</span></div>
+    <div class="catalogue-section__heading"><SectionHeading id="crochet-items-title" eyebrow="The crochet edit" title="A piece for your plans." copy={products.length ? `${products.length} ready-to-view listings. Ask us about a custom piece too.` : 'Share your idea and ask about a custom piece.'} /><span class="catalogue-count" data-filter-count aria-live="polite">{products.length} items</span></div>
     {products.length > 0 && <>
       <form class="catalogue-filters" data-catalogue-filter aria-label="Filter crochet items">
         <label>Category<select name="category" data-filter="category"><option value="">All categories</option>{categories.map(category => <option value={category}>{category}</option>)}</select></label>
@@ -45,7 +45,6 @@ const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.bra
   <section class="custom-piece page-wrap" aria-labelledby="custom-piece-title">
     <div class="custom-piece__art"><ResponsiveProductImage src="/images/products/crochet/olive-pink-cream-crochet-set.webp" alt="An olive, pink and cream crochet set with open stitches and scalloped edges." sizes="(max-width: 42rem) 80vw, 35vw" /></div>
     <div class="custom-piece__copy"><p class="catalogue-eyebrow">Something in mind?</p><h2 id="custom-piece-title">Let’s make it yours.</h2><p>Custom pieces are quoted on WhatsApp. Share your idea and the details you already know.</p><a class="button button--crochet" href={customEnquiry}>Ask about a custom piece <span aria-hidden="true">↗</span></a></div>
-    {mode === 'preview' && <span class="catalogue-sample custom-piece__badge">Sample content</span>}
   </section>
   <section class="page-wrap catalogue-form-wrap" aria-label="Custom crochet enquiry form"><QuickEnquiryForm department="crochet" /></section>
   <section class="catalogue-facts page-wrap" aria-label="Crochet ordering information"><p><span>Minimum order</span><strong>{formatNaira(pricing.minimumPerDepartment)} per department</strong><small>Items subtotal; delivery is separate.</small></p><p><span>Custom requests</span><strong>Quoted on WhatsApp</strong><small>Ask about a piece and share your idea.</small></p><p><span>Delivery</span><strong>{pricing.deliveryText}</strong><small>Payment is by bank transfer; details are shared in chat.</small></p></section>
