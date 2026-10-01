@@ -16,6 +16,7 @@ Read the handover guides:
 
 - [Editing products, prices, reviews, FAQs and configuration](docs/EDITING.md)
 - [Photo, logo and other asset specifications](docs/ASSET-CHECKLIST.md)
+- [Provisional peanut photo names and review contact sheet](docs/PEANUT-PHOTO-NAMES.md)
 - [Cloudflare Pages and Netlify deployment](docs/DEPLOY.md)
 - [Keyboard and accessibility check record](docs/A11Y-CHECK.md)
 - [Client inputs still needed](docs/CLIENT-INPUTS.md)

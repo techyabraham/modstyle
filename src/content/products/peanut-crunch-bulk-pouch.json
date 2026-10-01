@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-bulk-pouch",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Bulk Pouch",
+  "summary": "Peanut Crunch — Bulk Pouch for bulk peanut orders.",
+  "description": "Bulk clear pouch for larger peanut orders. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 22000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-bulk-pouch.webp",
+      "alt": "A clear bulk pouch of small, golden-brown crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

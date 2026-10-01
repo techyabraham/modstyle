@@ -8,7 +8,6 @@ import { visibleGallery, type GalleryEntry } from '../../lib/catalogue';
 import '../../styles/catalogue.css';
 import '../../styles/gallery.css';
 
-const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
 export async function getStaticPaths() {
   const entries = visibleGallery(await getCollection('gallery'), parseMode(import.meta.env.PUBLIC_SITE_MODE));
   if (!entries.length) return [];
@@ -19,7 +18,7 @@ const { entries } = Astro.props as { entries: GalleryEntry[] };
 <BaseLayout title={`Gallery | ${site.brand.name}`} description="A gallery of crochet work and peanuts from Modstyle Crunch And Cream.">
   <div class="page-wrap gallery-page">
     <a class="catalogue-back" href="/">← Back to home</a>
-    <header class="gallery-heading"><p class="catalogue-eyebrow">Made, packed, shared</p><h1>Gallery</h1><p>A look at the work and products.{mode === 'preview' ? ' Sample illustrations are marked clearly.' : ''}</p></header>
+    <header class="gallery-heading"><p class="catalogue-eyebrow">Made, packed, shared</p><h1>Gallery</h1><p>A look at the work and products.</p></header>
     <div class="gallery-toolbar">
       <div class="gallery-filters" role="group" aria-label="Filter gallery by department">
         <button type="button" data-gallery-filter="all" aria-pressed="true">All</button>
@@ -31,7 +30,7 @@ const { entries } = Astro.props as { entries: GalleryEntry[] };
     <div class="gallery-grid" data-gallery-grid>
       {entries.map(entry => <button class="gallery-tile" type="button" data-gallery-item data-department={entry.data.department} aria-label={`Open image: ${entry.data.image.alt}`}>
         {entry.data.sample ? <IllustrationTile variant={entry.data.image.src as 'yarn' | 'granny' | 'top' | 'tote' | 'beanie' | 'peanuts' | 'sack'} alt={entry.data.image.alt} /> : <img src={entry.data.image.src} alt={entry.data.image.alt} width="1200" height="1200" loading="lazy" />}
-        <span class="gallery-tile__caption"><span>{entry.data.caption ?? entry.data.image.alt}</span>{entry.data.sample && <span class="catalogue-sample">Sample</span>}</span>
+        <span class="gallery-tile__caption"><span>{entry.data.caption ?? entry.data.image.alt}</span>{entry.data.sample && <span class="catalogue-sample">Sample</span>}{entry.data.status === 'draft' && <span class="catalogue-sample">Draft · review only</span>}</span>
       </button>)}
     </div>
     <p class="visually-hidden" data-gallery-empty hidden>No gallery items match this department.</p>
@@ -67,7 +66,13 @@ const { entries } = Astro.props as { entries: GalleryEntry[] };
     if (!dialog || !imageTarget) return;
     activeTrigger = item;
     const art = item.querySelector('.art-tile');
+    const image = item.querySelector('img');
     if (art) imageTarget.replaceChildren(art.cloneNode(true));
+    else if (image) {
+      const enlarged = image.cloneNode(true) as HTMLImageElement;
+      enlarged.loading = 'eager';
+      imageTarget.replaceChildren(enlarged);
+    }
     if (title) title.textContent = item.getAttribute('aria-label')?.replace('Open image: ', '') ?? 'Gallery image';
     dialog.showModal();
     closeButton?.focus();

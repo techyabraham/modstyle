@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-twin-pouch",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Twin Pouch Set",
+  "summary": "Peanut Crunch — Twin Pouch Set for bulk peanut orders.",
+  "description": "Two clear peanut pouches presented together. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 14000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-twin-pouch.webp",
+      "alt": "Two clear pouches of crunchy peanuts with red package accents."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

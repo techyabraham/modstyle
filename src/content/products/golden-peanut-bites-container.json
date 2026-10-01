@@ -1,0 +1,26 @@
+{
+  "slug": "golden-peanut-bites-container",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Golden Peanut Bites — Container",
+  "summary": "Golden Peanut Bites — Container for bulk peanut orders.",
+  "description": "Golden peanut bites in a clear container. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 12500
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/golden-peanut-bites-container.webp",
+      "alt": "A clear food container holding round golden crunchy peanut bites."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

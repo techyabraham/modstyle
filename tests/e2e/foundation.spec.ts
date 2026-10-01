@@ -34,13 +34,20 @@ test('production hides unset compliance claims', async ({ page }) => {
   await page.goto('/peanuts/');
   await expect(page.getByRole('list', { name: 'Business registration details' })).toHaveCount(0);
 });
-test('production catalogue omits unapproved sample-only product and gallery routes', async ({ request }) => {
+test('production catalogue omits samples and publishes all peanut product listings', async ({ request }) => {
   const crochet = await request.get('/crochet/');
   expect(crochet.ok()).toBe(true);
   expect(await crochet.text()).not.toMatch(/Sample content|sample-crochet-featured|₦40,000/);
-  expect((await request.get('/peanuts/')).ok()).toBe(true);
+  const peanuts = await request.get('/peanuts/');
+  expect(peanuts.ok()).toBe(true);
+  const peanutHtml = await peanuts.text();
+  expect(peanutHtml.match(/<article\b[^>]*data-product-card/g)).toHaveLength(16);
+  expect(peanutHtml).toContain('Peanut Crunch — Bulk Pouch');
+  expect(peanutHtml).toContain('Golden Peanut Bites — Container');
   expect((await request.get('/products/sample-crochet-featured/')).status()).toBe(404);
+  expect((await request.get('/products/peanut-crunch-bulk-pouch/')).ok()).toBe(true);
   expect((await request.get('/gallery/')).status()).toBe(404);
+  expect((await request.get('/images/products/peanuts/peanut-crunch-bulk-pouch.webp')).ok()).toBe(true);
   expect((await request.get('/reviews/')).status()).toBe(404);
 });
 test('supporting pages, sitemap and social metadata expose only confirmed production content', async ({ page, request }) => {
@@ -60,6 +67,7 @@ test('supporting pages, sitemap and social metadata expose only confirmed produc
   expect(sitemap).toContain('/our-story/');
   expect(sitemap).toContain('/faq/');
   expect(sitemap).toContain('/policies/');
+  expect(sitemap).toContain('/products/peanut-crunch-bulk-pouch/');
   expect(sitemap).not.toMatch(/sample-|\/gallery\/|\/reviews\/|invalid\.example/);
   const robots = await (await request.get('/robots.txt')).text();
   if (process.env.SITE_URL) expect(robots).toContain(new URL('/sitemap.xml', process.env.SITE_URL).href);

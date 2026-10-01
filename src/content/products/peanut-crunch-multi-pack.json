@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-multi-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Multi-Pack",
+  "summary": "Peanut Crunch — Multi-Pack for bulk peanut orders.",
+  "description": "Grouped multi-pack presentation of peanut crunch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 16500
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-multi-pack.webp",
+      "alt": "A grouped set of clear packs containing crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

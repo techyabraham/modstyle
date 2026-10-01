@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-mini-pack-set",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Mini Pack Set",
+  "summary": "Peanut Crunch — Mini Pack Set for bulk peanut orders.",
+  "description": "Set of mini peanut packs. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 13000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-mini-pack-set.webp",
+      "alt": "Several small clear packs of crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

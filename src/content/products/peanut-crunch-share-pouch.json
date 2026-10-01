@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-share-pouch",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Share Pouch",
+  "summary": "Peanut Crunch — Share Pouch for bulk peanut orders.",
+  "description": "Wide share pouch of peanut crunch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 16000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-share-pouch.webp",
+      "alt": "A wide clear pouch filled with crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

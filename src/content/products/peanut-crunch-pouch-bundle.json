@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-pouch-bundle",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Pouch Bundle",
+  "summary": "Peanut Crunch — Pouch Bundle for bulk peanut orders.",
+  "description": "Bundle of clear peanut pouches. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 24000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-pouch-bundle.webp",
+      "alt": "A bundle of clear pouches filled with crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

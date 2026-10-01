@@ -9,3 +9,6 @@ playwright-report/
 .lhci-tmp/
 .font-source/
 .env
+# Local source bundle retained after its assets and review documents are integrated.
+Modstyle-Peanut-Catalogue-Drop-In/
+Modstyle-Peanut-Catalogue-Drop-In.zip

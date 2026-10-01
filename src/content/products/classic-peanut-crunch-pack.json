@@ -1,0 +1,26 @@
+{
+  "slug": "classic-peanut-crunch-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Classic Peanut Crunch — Pack",
+  "summary": "Classic Peanut Crunch — Pack for bulk peanut orders.",
+  "description": "Classic clear pack of peanut crunch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 9000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/classic-peanut-crunch-pack.webp",
+      "alt": "A clear pouch of crunchy peanut bites."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

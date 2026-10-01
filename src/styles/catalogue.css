@@ -61,6 +61,7 @@
   .catalogue-lightbox__bar h2 { font-size: 1.3rem; }
   .catalogue-lightbox__close { display: grid; inline-size: 2.75rem; block-size: 2.75rem; place-items: center; border: 0; border-radius: 50%; background: var(--forest); color: white; font-size: 1.5rem; cursor: pointer; }
   .catalogue-lightbox__image .art-tile { inline-size: 100%; max-block-size: 74dvh; aspect-ratio: 1; border-radius: .75rem; }
+  .catalogue-lightbox__image > img { display: block; inline-size: 100%; max-block-size: 74dvh; block-size: auto; object-fit: contain; border-radius: .75rem; }
   .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding-block: 1.2rem; color: var(--forest); font-size: .9rem; }
   .product-page { padding-block-end: 2rem; }
   .product-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .95fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; padding-block: 1rem 3rem; }

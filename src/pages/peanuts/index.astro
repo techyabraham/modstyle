@@ -28,10 +28,9 @@ const bulkEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand
   <section class="peanuts-order page-wrap" aria-labelledby="peanuts-order-title">
     <div class="peanuts-order__intro"><SectionHeading id="peanuts-order-title" eyebrow="Peanuts · bulk buying" title="Tell us what you need." copy="Share a quantity and delivery area. We’ll confirm the details, total and delivery fee on WhatsApp." /><a class="button button--peanuts" href={bulkEnquiry}>Request a bulk quote <span aria-hidden="true">↗</span></a></div>
     <ComplianceChips />
-    {mode === 'preview' && <div class="peanuts-order__note"><span class="catalogue-sample">Sample content</span><p>Varieties and pack sizes have not been confirmed. Ask us on WhatsApp and we’ll discuss what is available.</p></div>}
   </section>
   {products.length > 0 && <section class="catalogue-section page-wrap" aria-labelledby="peanuts-items-title">
-    <div class="catalogue-section__heading"><SectionHeading id="peanuts-items-title" eyebrow="Bulk enquiries" title="Start with a conversation." copy="These sample entries show how bulk requests will be listed. Product details are still to be confirmed." tone="peanuts" /><span class="catalogue-count">{products.length} sample items</span></div>
+    <div class="catalogue-section__heading"><SectionHeading id="peanuts-items-title" eyebrow="Bulk enquiries" title="Find your peanut favourite." copy="Choose a listing and quantity, then request a bulk quote. We’ll confirm availability, delivery and your order total on WhatsApp." tone="peanuts" /><span class="catalogue-count">{products.length} listings</span></div>
     <div class="catalogue-grid catalogue-grid--peanuts">{products.map(product => <ProductCard product={product} departmentTone="peanuts" />)}</div>
   </section>}
   <section class="page-wrap catalogue-form-wrap" aria-label="Bulk peanuts enquiry form"><QuickEnquiryForm department="peanuts" /></section>

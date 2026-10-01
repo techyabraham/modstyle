@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-tube-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Tube Pack",
+  "summary": "Peanut Crunch — Tube Pack for bulk peanut orders.",
+  "description": "Clear tube pack of peanut crunch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 18000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-tube-pack.webp",
+      "alt": "Several small clear tubes filled with crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

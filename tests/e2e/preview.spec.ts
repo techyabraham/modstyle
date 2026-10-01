@@ -54,8 +54,9 @@ test('@preview catalogue lists labelled samples and filters crochet items', asyn
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(page.locator('[data-product-card]:visible')).toHaveCount(8);
   await page.goto('/peanuts/');
-  await expect(page.locator('[data-product-card]')).toHaveCount(3);
-  await expect(page.locator('body')).toContainText('Varieties and pack sizes have not been confirmed');
+  await expect(page.locator('[data-product-card]')).toHaveCount(19);
+  await expect(page.locator('[data-product-card] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
+  await expect(page.locator('body')).toContainText('From ₦22,000');
   await page.screenshot({ path: `test-results/catalogue-${testInfo.project.name}.png`, fullPage: true });
 });
 
@@ -70,15 +71,24 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await expect(page.locator('[data-product-lightbox]')).not.toBeVisible();
   await expect(productTrigger).toBeFocused();
 
+  await page.goto('/products/peanut-crunch-bulk-pouch/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Peanut Crunch — Bulk Pouch');
+  await expect(page.locator('.product-detail__price')).toHaveText('From ₦22,000');
+  await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('src', '/images/products/peanuts/peanut-crunch-bulk-pouch.webp');
+
   await page.goto('/gallery/');
   await expect(page.locator('[data-gallery-item]')).toHaveCount(4);
+  await expect(page.locator('[data-gallery-item] img[src*="/images/products/peanuts/"]')).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gallery');
   await page.getByRole('button', { name: 'Peanuts', exact: true }).click();
   await expect(page.locator('[data-gallery-item]:visible')).toHaveCount(1);
-  await page.locator('[data-gallery-item]:visible').click();
+  const galleryTrigger = page.locator('[data-gallery-item]:visible').first();
+  await galleryTrigger.click();
   await expect(page.locator('[data-gallery-lightbox]')).toBeVisible();
+  await expect(page.locator('[data-gallery-lightbox] .art-tile')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-gallery-lightbox]')).not.toBeVisible();
-  await expect(page.locator('[data-gallery-item]:visible')).toBeFocused();
+  await expect(galleryTrigger).toBeFocused();
 });
 
 test('@preview basket saves options, separates department minimums and creates a short WhatsApp message', async ({ page }) => {

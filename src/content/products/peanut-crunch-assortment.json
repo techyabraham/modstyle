@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-assortment",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Assortment",
+  "summary": "Peanut Crunch — Assortment for bulk peanut orders.",
+  "description": "Assortment of peanut packages. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 28000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-assortment.webp",
+      "alt": "A selection of crunchy peanut products shown in several package styles."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

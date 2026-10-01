@@ -1,0 +1,26 @@
+{
+  "slug": "golden-peanut-crunch-pouch",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Golden Peanut Crunch — Pouch",
+  "summary": "Golden Peanut Crunch — Pouch for bulk peanut orders.",
+  "description": "Upright golden peanut crunch pouch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 12000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/golden-peanut-crunch-pouch.webp",
+      "alt": "A clear upright pouch of golden-brown crunchy peanuts."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}

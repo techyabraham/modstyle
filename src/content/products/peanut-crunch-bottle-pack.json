@@ -1,0 +1,26 @@
+{
+  "slug": "peanut-crunch-bottle-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "name": "Peanut Crunch — Bottle Pack",
+  "summary": "Peanut Crunch — Bottle Pack for bulk peanut orders.",
+  "description": "Bottle presentation of peanut crunch. Choose a quantity and contact us on WhatsApp to confirm availability and your order total.",
+  "pricing": {
+    "type": "from",
+    "amountNaira": 10000
+  },
+  "images": [
+    {
+      "src": "/images/products/peanuts/peanut-crunch-bottle-pack.webp",
+      "alt": "A clear bottle filled with crunchy peanut bites."
+    }
+  ],
+  "leadTime": null,
+  "variety": null,
+  "packSize": null,
+  "ingredients": null,
+  "allergens": null,
+  "storage": null,
+  "shelfLife": null
+}
