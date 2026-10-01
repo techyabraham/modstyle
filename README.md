@@ -1,19 +1,24 @@
 # Modstyle Crunch And Cream
 
-Static Astro website. Phases 1–6 are implemented; Phase 7 (accessibility, performance and production hardening) has not started.
+Static Astro website for the Crochet and Peanuts departments. Phases 1–8 are complete; read the handover documents before adding client content or deploying.
 
-Use Node 24 LTS and pnpm 11.19.0.
+Use Node `24.15.0` and pnpm `11.19.0`.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm exec playwright install chromium
 pnpm dev
-pnpm check
-pnpm lhci
 ```
 
-On Windows, use `pnpm lhci:local` for the same mobile score and transfer budgets. The LHCI Chrome launcher cannot remove its temporary profile on this host.
+Local preview mode is the default and includes labelled sample content. To verify a production build, set `SITE_URL` to the approved domain origin and run `pnpm build:prod`; this build omits samples and runs the output guard. `pnpm check` runs typecheck, lint, unit tests, production browser checks and axe checks. Run `pnpm lhci` for the configured mobile Lighthouse budgets; on Windows use `pnpm lhci:local` if LHCI cannot clean up its temporary Chrome profile.
 
-`pnpm build` defaults to preview with noindex and disallow-all robots. It includes clearly labelled sample products and artwork. `pnpm build:prod` explicitly builds production and runs the output guard; sample product and gallery routes are omitted until approved entries are supplied. Copy `.env.example` to `.env` to configure an approved domain. Unknown content stays empty. Never put private documents in this repository.
+Read the handover guides:
 
-Decisions: `docs/DECISIONS.md`. Phase status: `docs/PHASES.md`.
+- [Editing products, prices, reviews, FAQs and configuration](docs/EDITING.md)
+- [Photo, logo and other asset specifications](docs/ASSET-CHECKLIST.md)
+- [Cloudflare Pages and Netlify deployment](docs/DEPLOY.md)
+- [Keyboard and accessibility check record](docs/A11Y-CHECK.md)
+- [Client inputs still needed](docs/CLIENT-INPUTS.md)
+- [Phase reports](docs/PHASES.md) and [decisions](docs/DECISIONS.md)
+
+Never commit `.env`, payment details, receipts, certificates or private documents. Unknown claims remain empty until the client supplies and approves them.

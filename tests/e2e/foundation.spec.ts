@@ -30,6 +30,10 @@ test('production indexing and canonical defaults', async ({ page, request }) => 
   if (!process.env.SITE_URL) await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
+test('production hides unset compliance claims', async ({ page }) => {
+  await page.goto('/peanuts/');
+  await expect(page.getByRole('list', { name: 'Business registration details' })).toHaveCount(0);
+});
 test('production catalogue omits unapproved sample-only product and gallery routes', async ({ request }) => {
   const crochet = await request.get('/crochet/');
   expect(crochet.ok()).toBe(true);
@@ -99,6 +103,12 @@ test('reduced-motion preference disables continuous movement and page scrolling 
 });
 test('@a11y foundation has no serious or critical violations', async ({ page }) => {
   await page.goto('/');
+  for (const selector of ['.home-departments', '.home-ordering', '.home-facts', '.home-faq', '.home-last-call']) {
+    const section = page.locator(selector);
+    await section.scrollIntoViewIfNeeded();
+    await expect.poll(() => section.evaluate(element => element.checkVisibility({ contentVisibilityAuto: true }))).toBe(true);
+    await section.evaluate(element => { (element as HTMLElement).style.contentVisibility = 'visible'; });
+  }
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 });

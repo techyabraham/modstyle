@@ -1,6 +1,14 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 test.skip(process.env.RUN_PREVIEW_TESTS !== '1', 'Run after pnpm build with pnpm test:preview');
+async function revealHomeSections(page: import('@playwright/test').Page) {
+  for (const selector of ['.home-departments', '.home-ordering', '.home-facts', '.home-faq', '.home-last-call']) {
+    const section = page.locator(selector);
+    await section.scrollIntoViewIfNeeded();
+    await expect.poll(() => section.evaluate(element => element.checkVisibility({ contentVisibilityAuto: true }))).toBe(true);
+    await section.evaluate(element => { (element as HTMLElement).style.contentVisibility = 'visible'; });
+  }
+}
 test('@preview styleguide stays accessible and within the viewport', async ({ page }, testInfo) => {
   await page.goto('/_styleguide/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Tactile maker');
@@ -27,12 +35,7 @@ test('@preview homepage is complete, accessible and within the viewport', async 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
-  for (const selector of ['.home-departments', '.home-ordering', '.home-facts', '.home-faq', '.home-last-call']) {
-    const section = page.locator(selector);
-    await section.scrollIntoViewIfNeeded();
-    await expect.poll(() => section.evaluate(element => element.checkVisibility({ contentVisibilityAuto: true }))).toBe(true);
-    await section.evaluate(element => { (element as HTMLElement).style.contentVisibility = 'visible'; });
-  }
+  await revealHomeSections(page);
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await page.screenshot({ path: `test-results/homepage-${testInfo.project.name}.png`, fullPage: true });
 });
@@ -173,4 +176,40 @@ test('@preview supporting pages show confirmed FAQs and labelled empty states', 
   await expect(page.locator('.review-card')).toHaveCount(1);
   await expect(page.locator('.review-card')).toContainText('Sample content');
   await expect(page.locator('.review-card')).toContainText('An approved customer review will appear here once one is supplied.');
+});
+
+test('@preview keyboard-only walkthrough keeps skip link, basket, lightbox and FAQ operable', async ({ page }) => {
+  await page.goto('/');
+  const skip = page.getByRole('link', { name: 'Skip to content' });
+  const basket = page.locator('[data-basket-open]');
+  await page.keyboard.press('Tab');
+  await expect(skip).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main$/);
+  for (let index = 0; index < 8 && !(await basket.evaluate(element => element === document.activeElement)); index += 1) await page.keyboard.press('Shift+Tab');
+  await expect(basket).toBeFocused();
+  await page.keyboard.press('Enter');
+  const basketDialog = page.locator('[data-basket-dialog]');
+  await expect(basketDialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(basketDialog).toBeHidden();
+  await expect(basket).toBeFocused();
+
+  await page.goto('/products/sample-crochet-featured/');
+  const imageButton = page.locator('[data-open-lightbox]');
+  for (let index = 0; index < 12 && !(await imageButton.evaluate(element => element === document.activeElement)); index += 1) await page.keyboard.press('Tab');
+  await expect(imageButton).toBeFocused();
+  await page.keyboard.press('Enter');
+  const lightbox = page.locator('[data-product-lightbox]');
+  await expect(lightbox).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(lightbox).toBeHidden();
+  await expect(imageButton).toBeFocused();
+
+  await page.goto('/faq/');
+  const firstQuestion = page.locator('.faq-item summary').first();
+  for (let index = 0; index < 24 && !(await firstQuestion.evaluate(element => element === document.activeElement)); index += 1) await page.keyboard.press('Tab');
+  await expect(firstQuestion).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.faq-item').first()).toHaveAttribute('open', '');
 });

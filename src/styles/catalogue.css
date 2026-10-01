@@ -25,6 +25,9 @@
   .catalogue-card__art { display: block; overflow: hidden; background: var(--magenta-soft); color: var(--magenta); }
   .catalogue-card--peanuts .catalogue-card__art { background: var(--orange-soft); color: var(--orange); }
   .catalogue-card__art .art-tile { aspect-ratio: 1.1; }
+  .catalogue-card__art > img { display: block; inline-size: 100%; object-fit: cover; }
+  .catalogue-card__art[data-department='crochet'] > img { aspect-ratio: 4 / 5; }
+  .catalogue-card__art[data-department='peanuts'] > img { aspect-ratio: 1; }
   .catalogue-card__art .art-tile__badge { inset-block-start: .8rem; inset-inline-start: .8rem; }
   .catalogue-card__art-fallback { display: grid; aspect-ratio: 1.1; place-items: center; background: var(--sand); color: var(--forest); font: 600 1.6rem var(--font-display); }
   .catalogue-card__body { padding: 1rem 1.1rem 1.15rem; }
@@ -64,6 +67,7 @@
   .product-detail__image-button { position: relative; display: block; inline-size: 100%; padding: 0; overflow: hidden; border: 0; border-radius: var(--radius-card); background: var(--magenta-soft); color: var(--magenta); cursor: zoom-in; }
   .product-detail__media-frame { display: block; }
   .product-detail__media-frame > img { display: block; inline-size: 100%; aspect-ratio: 1; object-fit: cover; }
+  .product-detail[data-department='crochet'] .product-detail__media-frame > img { aspect-ratio: 4 / 5; }
   .product-detail__image-button .art-tile { aspect-ratio: 1; }
   .product-gallery-thumbnails { display: flex; flex-wrap: wrap; gap: .6rem; margin-block-start: .7rem; }
   .product-gallery-thumbnails button { inline-size: 4.5rem; block-size: 4.5rem; padding: 0; overflow: hidden; border: 2px solid transparent; border-radius: .6rem; background: white; cursor: pointer; }

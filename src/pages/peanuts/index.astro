@@ -5,6 +5,7 @@ import ProductCard from '../../components/ProductCard.astro';
 import QuickEnquiryForm from '../../components/QuickEnquiryForm.astro';
 import IllustrationTile from '../../components/IllustrationTile.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
+import ComplianceChips from '../../components/ComplianceChips.astro';
 import { site } from '../../config/site';
 import { pricing } from '../../config/pricing';
 import { formatNaira } from '../../lib/money';
@@ -26,6 +27,7 @@ const bulkEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand
   </section>
   <section class="peanuts-order page-wrap" aria-labelledby="peanuts-order-title">
     <div class="peanuts-order__intro"><SectionHeading id="peanuts-order-title" eyebrow="Peanuts · bulk buying" title="Tell us what you need." copy="Share a quantity and delivery area. We’ll confirm the details, total and delivery fee on WhatsApp." /><a class="button button--peanuts" href={bulkEnquiry}>Request a bulk quote <span aria-hidden="true">↗</span></a></div>
+    <ComplianceChips />
     {mode === 'preview' && <div class="peanuts-order__note"><span class="catalogue-sample">Sample content</span><p>Varieties and pack sizes have not been confirmed. Ask us on WhatsApp and we’ll discuss what is available.</p></div>}
   </section>
   {products.length > 0 && <section class="catalogue-section page-wrap" aria-labelledby="peanuts-items-title">

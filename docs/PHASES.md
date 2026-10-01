@@ -1,6 +1,16 @@
 # Phase reports
 
-Phases 1–7 are complete. Per the brief, work stops after each phase report.
+Phases 1–8 are complete. Per the brief, work stops after each phase report.
+
+## Phase 8 progress
+
+Prepared the handover guides for editing products and prices, assigning the reserved ₦40,000 item, replacing the logo, entering approved compliance IDs, adding approved reviews and FAQs, managing preview/production builds, preparing assets, and deploying to Cloudflare Pages or Netlify. Updated the README, added the missing keyboard-only browser walkthrough/accessibility record, exposed supplied CAC/NAFDAC identifiers on the peanuts page, and connected approved product photos to product cards with department-correct crops.
+
+Production route coverage is documented as `/`, `/crochet/`, `/peanuts/`, `/products/{slug}/` when approved products exist, `/our-story/`, `/gallery/` and `/reviews/` only when approved entries exist, `/faq/`, `/contact/`, `/policies/`, plus the branded 404 page. Current production output remains a confirmed-facts site without a product catalogue, gallery, or reviews.
+
+Verified on 2026-10-01: `pnpm check` passed typecheck across 56 files with zero diagnostics, lint, 39 unit tests, the production build and sample-content guard, 30 production browser checks (24 preview-only skips), and 6 axe scans across mobile, tablet and desktop. `pnpm build && pnpm test:preview` passed all 24 preview checks across those three widths, including the keyboard-only skip link, basket, lightbox and FAQ walkthrough. `pnpm lhci:local` passed all configured budgets over three mobile runs: median Performance 94, Accessibility 100, Best Practices 100, SEO 100; LCP 2,414 ms, CLS 0, TBT 161 ms; transfer 242,303 bytes, scripts 8,934 bytes, stylesheets 28,275 bytes. The reserved `https://example.test` origin was used to exercise canonical metadata; no real production domain was supplied. Content schema/unit checks verify compliance chips are empty when unset and only associate a registered name with a supplied CAC number. The generated social card was refreshed from the current local fonts. Automated keyboard and axe checks do not replace a human screen-reader review.
+
+Handover is ready. Client must-haves and optional inputs are grouped in `docs/CLIENT-INPUTS.md`. Known limitations remain: no stock tracking, online payment, server-side order submission or order confirmation; enquiries proceed through WhatsApp.
 
 ## Phase 7 progress
 

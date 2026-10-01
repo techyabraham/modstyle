@@ -1,5 +1,12 @@
 # Decisions
 
+## Phase 8 — handover (2026-10-01)
+- Store real product and founder images under `public/images/` and reference them by site-root URL from content/config. The current site serves these files directly; prepare and compress web-ready crops before adding them because product images do not pass through an automatic image CDN or format conversion.
+- Show only supplied CAC/NAFDAC identifiers on the peanuts page. Associate a registered name with the CAC RC number; unset values render no chip. Never store or publish certificates or receipts.
+- Continue to build all Cloudflare and Netlify Git deployments with `pnpm build:prod`, including host-generated preview deploys, so a deployment URL cannot accidentally expose sample catalogue content. Keep sample-rich preview local.
+- Keep analytics opt-in. The strict default CSP blocks Plausible until the client approves analytics and the two required Plausible sources are added to `script-src` and `connect-src`.
+- Require customer permission before publishing reviews or customer imagery. Keep founder, brand voice, domain, food claims, policy terms and prices gated until explicitly supplied and approved.
+
 ## Phase 7 — hardening (2026-09-30)
 - Use `content-visibility: auto` with intrinsic block-size estimates for homepage sections below the hero, preserving scroll geometry while reducing work before they enter view.
 - Do not rebuild the empty enquiry basket on every page load. Keep the static zero-count shell and restore saved state when the customer opens the basket or adds an item; direct WhatsApp links still work with JavaScript disabled.

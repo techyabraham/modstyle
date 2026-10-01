@@ -32,11 +32,11 @@ const productSchema = productJsonLd(item, import.meta.env.SITE);
 <BaseLayout title={`${item.name} | ${site.brand.name}`} description={item.summary} jsonLd={productSchema}>
   <div class="page-wrap product-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href={item.department === 'crochet' ? '/crochet/' : '/peanuts/'}>{departmentLabel}</a><span aria-hidden="true">/</span><span aria-current="page">{item.name}</span></nav>
-    <div class="product-detail">
+    <div class="product-detail" data-department={item.department}>
       <div class="product-detail__media">
         <button class="product-detail__image-button" type="button" data-open-lightbox aria-label={`Open larger view of ${item.name}`}>
           <span class="product-detail__media-frame" data-product-media>
-            {primaryImage ? <img src={primaryImage.src} alt={primaryImage.alt} width="1200" height="1200" fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
+            {primaryImage ? <img src={primaryImage.src} alt={primaryImage.alt} width="1200" height={item.department === 'crochet' ? '1500' : '1200'} fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
           </span>
           <span class="product-detail__zoom" aria-hidden="true">↗</span>
         </button>

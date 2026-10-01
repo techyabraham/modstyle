@@ -1,0 +1,6 @@
+@layer components {
+  .compliance-chips { display: flex; flex-wrap: wrap; gap: .65rem; margin: 0; padding: 0; list-style: none; }
+  .compliance-chips li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .5rem; padding: .55rem .8rem; border: 1px solid var(--sand); border-radius: var(--radius-pill); background: white; color: var(--forest-deep); font-size: .78rem; }
+  .compliance-chips li > span:first-child { color: var(--forest); font-weight: 700; }
+  .compliance-chips li > span:last-child:not(:first-child) { color: #55584f; }
+}

@@ -5,6 +5,7 @@ import { buildWhatsAppLink } from '../../src/lib/whatsapp';
 import { productSchema } from '../../src/lib/schemas';
 import { inspectOutput } from '../../scripts/guard-production';
 import { site } from '../../src/config/site';
+import { buildComplianceChips } from '../../src/lib/compliance';
 describe('visibility', () => {
   it('defaults to preview and rejects invalid modes', () => { expect(parseMode()).toBe('preview'); expect(() => parseMode('prod')).toThrow(); });
   it.each(['preview', 'production'] as const)('requires complete approved content in %s', mode => {
@@ -25,6 +26,15 @@ it('formats the Naira union without assigning a total to quotes', () => {
   expect(priceLabel({ type: 'fixed', amountNaira: 30_000 })).toBe('₦30,000');
   expect(priceLabel({ type: 'from', amountNaira: 30_000 })).toBe('From ₦30,000');
   expect(priceLabel({ type: 'quote' })).toBe('Request a quote');
+});
+it('shows only supplied CAC and NAFDAC identifiers and associates the registered name with CAC', () => {
+  expect(buildComplianceChips({ cacRcNumber: null, registeredName: null, nafdacNumber: null })).toEqual([]);
+  expect(buildComplianceChips({ cacRcNumber: '123456', registeredName: 'Approved Foods Ltd', nafdacNumber: null })).toEqual([
+    { label: 'CAC RC No.', value: '123456', detail: 'Approved Foods Ltd' },
+  ]);
+  expect(buildComplianceChips({ cacRcNumber: ' ', registeredName: 'Unassociated name', nafdacNumber: 'NAF-123' })).toEqual([
+    { label: 'NAFDAC No.', value: 'NAF-123', detail: null },
+  ]);
 });
 it.each(["Line one\n₦40,000 & it's ready 😀", 'A'.repeat(3000)])('round-trips WhatsApp text', message => {
   expect(new URL(buildWhatsAppLink(site.contact.whatsapp, message)).searchParams.get('text')).toBe(message);

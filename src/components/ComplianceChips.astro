@@ -1,0 +1,10 @@
+---
+import { site } from '../config/site';
+import { buildComplianceChips } from '../lib/compliance';
+import '../styles/compliance.css';
+
+const entries = buildComplianceChips(site.compliance);
+---
+{entries.length > 0 && <ul class="compliance-chips" aria-label="Business registration details">
+  {entries.map(entry => <li><span>{entry.label}</span><strong>{entry.value}</strong>{entry.detail && <span>{entry.detail}</span>}</li>)}
+</ul>}
