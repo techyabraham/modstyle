@@ -1,0 +1,11 @@
+{
+  "slug": "peanut-crunch-assortment",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "image": {
+    "src": "/images/products/peanuts/peanut-crunch-assortment.webp",
+    "alt": "A selection of crunchy peanut products shown in several package styles."
+  },
+  "caption": "Peanut Crunch — Assortment"
+}

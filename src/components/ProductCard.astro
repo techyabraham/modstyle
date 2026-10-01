@@ -18,7 +18,7 @@ const price = item.pricing.type === 'fixed' ? formatNaira(item.pricing.amountNai
 ---
 <article class:list={['catalogue-card', `catalogue-card--${departmentTone}`]} data-product-card data-category={'category' in item ? item.category : ''} data-wearer={'intendedWearer' in item ? item.intendedWearer ?? '' : ''} data-price-type={item.pricing.type}>
   <a class="catalogue-card__art" data-department={item.department} href={`/products/${item.slug}/`} aria-label={`View ${item.name}`}>
-    {primaryImage ? item.department === 'crochet' ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 42rem) 100vw, (max-width: 70rem) 50vw, 33vw" /> : <img src={primaryImage.src} alt={primaryImage.alt} width="1200" height="1200" loading="lazy" decoding="async" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <div class="catalogue-card__art-fallback" aria-hidden="true"><span>{departmentTone === 'crochet' ? 'Crochet' : 'Peanuts'}</span></div>}
+    {primaryImage ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 42rem) 100vw, (max-width: 70rem) 50vw, 33vw" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <div class="catalogue-card__art-fallback" aria-hidden="true"><span>{departmentTone === 'crochet' ? 'Crochet' : 'Peanuts'}</span></div>}
   </a>
   <div class="catalogue-card__body">
     <div class="catalogue-card__meta"><span>{item.department === 'crochet' ? item.category : 'Bulk enquiry'}</span>{item.sample && <span class="catalogue-sample">Sample</span>}</div>

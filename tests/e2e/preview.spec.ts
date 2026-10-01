@@ -31,7 +31,8 @@ test('@preview homepage is complete, accessible and within the viewport', async 
   await expect(page.getByRole('link', { name: 'View the sample gallery' })).toHaveAttribute('href', '/gallery/');
   await expect(page.getByRole('link', { name: 'Start an enquiry' })).toHaveAttribute('href', /^https:\/\/wa\.me\//);
   await expect(page.locator('.home-faq__item')).toHaveCount(4);
-  await expect(page.locator('.art-tile__badge').first()).toHaveText('Sample content');
+  await expect(page.locator('.home-hero__art-card--peanuts img')).toHaveAttribute('srcset', /golden-peanut-crunch-pouch-480\.webp 480w/);
+  await expect(page.locator('.department-card--peanuts img')).toHaveAttribute('srcset', /peanut-crunch-assortment-800\.webp 800w/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
@@ -57,6 +58,8 @@ test('@preview catalogue lists labelled samples and filters crochet items', asyn
   await page.goto('/peanuts/');
   await expect(page.locator('[data-product-card]')).toHaveCount(19);
   await expect(page.locator('[data-product-card] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
+  await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /modstyle-peanut-crunch-collection-480\.webp 480w/);
+  await expect(page.locator('[data-product-card] img').first()).toHaveAttribute('srcset', /-480\.webp 480w.*-800\.webp 800w/);
   await expect(page.locator('body')).toContainText('From ₦22,000');
   await page.screenshot({ path: `test-results/catalogue-${testInfo.project.name}.png`, fullPage: true });
 });
@@ -76,21 +79,22 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Peanut Crunch — Bulk Pouch');
   await expect(page.locator('.product-detail__price')).toHaveText('From ₦22,000');
   await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('src', '/images/products/peanuts/peanut-crunch-bulk-pouch.webp');
+  await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('srcset', /peanut-crunch-bulk-pouch-480\.webp 480w/);
 
   await page.goto('/products/burgundy-cream-crochet-set/');
   await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('srcset', /burgundy-cream-crochet-set-480\.webp 480w.*burgundy-cream-crochet-set-800\.webp 800w/);
 
   await page.goto('/gallery/');
-  await expect(page.locator('[data-gallery-item]')).toHaveCount(8);
+  await expect(page.locator('[data-gallery-item]')).toHaveCount(23);
   await expect(page.locator('[data-gallery-item] img[src*="/images/products/crochet/"]')).toHaveCount(4);
-  await expect(page.locator('[data-gallery-item] img[src*="/images/products/peanuts/"]')).toHaveCount(0);
+  await expect(page.locator('[data-gallery-item] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gallery');
   await page.getByRole('button', { name: 'Peanuts', exact: true }).click();
-  await expect(page.locator('[data-gallery-item]:visible')).toHaveCount(1);
+  await expect(page.locator('[data-gallery-item]:visible')).toHaveCount(16);
   const galleryTrigger = page.locator('[data-gallery-item]:visible').first();
   await galleryTrigger.click();
   await expect(page.locator('[data-gallery-lightbox]')).toBeVisible();
-  await expect(page.locator('[data-gallery-lightbox] .art-tile')).toBeVisible();
+  await expect(page.locator('[data-gallery-lightbox] img[src*="/images/products/peanuts/"]')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-gallery-lightbox]')).not.toBeVisible();
   await expect(galleryTrigger).toBeFocused();

@@ -49,14 +49,18 @@ test('production catalogue omits samples and publishes the crochet and peanut pr
   expect(peanutHtml.match(/<article\b[^>]*data-product-card/g)).toHaveLength(16);
   expect(peanutHtml).toContain('Peanut Crunch — Bulk Pouch');
   expect(peanutHtml).toContain('Golden Peanut Bites — Container');
+  expect(peanutHtml).toContain('peanut-crunch-bulk-pouch-480.webp 480w');
+  expect(peanutHtml).toContain('modstyle-peanut-crunch-collection.webp');
   expect((await request.get('/products/sample-crochet-featured/')).status()).toBe(404);
   expect((await request.get('/products/burgundy-cream-crochet-set/')).ok()).toBe(true);
   expect((await request.get('/products/peanut-crunch-bulk-pouch/')).ok()).toBe(true);
   const gallery = await request.get('/gallery/');
   expect(gallery.ok()).toBe(true);
-  expect((await gallery.text()).match(/<button\b[^>]*data-gallery-item/g)).toHaveLength(4);
+  expect((await gallery.text()).match(/<button\b[^>]*data-gallery-item/g)).toHaveLength(20);
+  expect((await gallery.text())).toContain('peanut-crunch-bulk-pouch-480.webp 480w');
   expect((await request.get('/images/products/crochet/burgundy-cream-crochet-set-240.webp')).ok()).toBe(true);
   expect((await request.get('/images/products/peanuts/peanut-crunch-bulk-pouch.webp')).ok()).toBe(true);
+  expect((await request.get('/images/products/peanuts/peanut-crunch-bulk-pouch-240.webp')).ok()).toBe(true);
   expect((await request.get('/reviews/')).status()).toBe(404);
 });
 test('supporting pages, sitemap and social metadata expose only confirmed production content', async ({ page, request }) => {

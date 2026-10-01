@@ -53,6 +53,7 @@
   .department-card__shape::after { inset: 19%; border-style: solid; }
   .department-card__visual .art-tile { inline-size: clamp(9rem, 18vw, 15rem); border: .45rem solid var(--cream); box-shadow: 0 1rem 2rem rgb(14 42 29 / .14); transform: rotate(-5deg); }
   .department-card__photo { inline-size: clamp(9rem, 18vw, 15rem); aspect-ratio: 4 / 5; border: .45rem solid var(--cream); border-radius: var(--radius-card); background: var(--cream); object-fit: cover; box-shadow: 0 1rem 2rem rgb(14 42 29 / .14); transform: rotate(-5deg); }
+  .department-card--peanuts .department-card__photo { transform: rotate(5deg); }
   .department-card--peanuts .art-tile { transform: rotate(5deg); }
   .department-card__number { position: absolute; inset-block-start: 1.3rem; inset-inline-end: 1.5rem; color: var(--forest-deep); font-size: .67rem; font-weight: 800; letter-spacing: .13em; }
   .department-card__body { display: grid; align-content: start; gap: .85rem; padding: clamp(1.4rem, 3vw, 2.5rem); }

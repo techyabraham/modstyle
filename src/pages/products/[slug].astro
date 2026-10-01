@@ -37,7 +37,7 @@ const productSchema = productJsonLd(item, import.meta.env.SITE);
       <div class="product-detail__media">
         <button class="product-detail__image-button" type="button" data-open-lightbox aria-label={`Open larger view of ${item.name}`}>
           <span class="product-detail__media-frame" data-product-media>
-            {primaryImage ? item.department === 'crochet' ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 48rem) 100vw, 50vw" loading="eager" fetchpriority="high" /> : <img src={primaryImage.src} alt={primaryImage.alt} width="1200" height="1200" fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
+            {primaryImage ? <ResponsiveProductImage src={primaryImage.src} alt={primaryImage.alt} sizes="(max-width: 48rem) 100vw, 50vw" loading="eager" fetchpriority="high" /> : item.sample ? <IllustrationTile variant={art} alt={`Sample illustration for ${item.name}`} /> : <span class="catalogue-card__art-fallback" aria-hidden="true">{departmentLabel}</span>}
           </span>
           <span class="product-detail__zoom" aria-hidden="true">↗</span>
         </button>

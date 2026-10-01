@@ -1,0 +1,11 @@
+{
+  "slug": "classic-peanut-crunch-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "image": {
+    "src": "/images/products/peanuts/classic-peanut-crunch-pack.webp",
+    "alt": "A clear pouch of crunchy peanut bites."
+  },
+  "caption": "Classic Peanut Crunch — Pack"
+}

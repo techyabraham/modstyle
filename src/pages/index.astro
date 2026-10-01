@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import IllustrationTile from '../components/IllustrationTile.astro';
 import ResponsiveProductImage from '../components/ResponsiveProductImage.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StitchDivider from '../components/StitchDivider.astro';
@@ -47,7 +46,7 @@ const homeFaqs = [
         <span>Quote-based custom and bulk requests</span>
       </div>
     </div>
-    <div class="home-hero__art" role="group" aria-label={mode === 'preview' ? 'Crochet product photo and sample peanut illustration' : 'Crochet product photo'}>
+    <div class="home-hero__art" role="group" aria-label="Crochet and peanut product photos">
       <div class="home-hero__art-disc" aria-hidden="true"></div>
       <svg class="home-hero__thread" viewBox="0 0 560 520" fill="none" aria-hidden="true">
         <path d="M55 346c79-74 28-182 107-231 74-46 146 19 107 83-36 59-133 23-125-48 9-81 122-109 202-53 113 80 29 184 112 223 47 22 66-2 74-39" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 11" />
@@ -55,9 +54,9 @@ const homeFaqs = [
       </svg>
       <div class="home-hero__art-label home-hero__art-label--top"><span>Made with care</span><b aria-hidden="true">✳</b></div>
       <div class="home-hero__art-card home-hero__art-card--crochet"><ResponsiveProductImage src="/images/products/crochet/pink-purple-crochet-tank-top.webp" alt="A pink and deep-purple striped crochet tank top." sizes="(max-width: 42rem) 37vw, 15rem" loading="eager" fetchpriority="low" class="home-hero__photo" /><span class="home-hero__art-name">Crochet</span></div>
-      <div class="home-hero__art-card home-hero__art-card--peanuts"><IllustrationTile variant="peanuts" alt="Sample illustration of peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
+      <div class="home-hero__art-card home-hero__art-card--peanuts"><ResponsiveProductImage src="/images/products/peanuts/golden-peanut-crunch-pouch.webp" alt="A clear upright pouch of golden-brown crunchy peanuts." sizes="(max-width: 42rem) 37vw, 15rem" fetchpriority="low" class="home-hero__photo home-hero__photo--peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
       <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
-      <span class="home-hero__art-note">{mode === 'preview' ? 'Peanut illustration is sample content' : 'Crochet · Peanuts'}</span>
+      <span class="home-hero__art-note">Crochet · Peanuts</span>
     </div>
   </section>
 
@@ -89,7 +88,7 @@ const homeFaqs = [
       <article class="department-card department-card--peanuts">
         <div class="department-card__visual" aria-hidden="true">
           <span class="department-card__shape"></span>
-          <IllustrationTile variant="sack" alt="Sample illustration of a peanut sack" />
+          <ResponsiveProductImage src="/images/products/peanuts/peanut-crunch-assortment.webp" alt="A selection of crunchy peanut products shown in several package styles." sizes="(max-width: 42rem) 70vw, (max-width: 60rem) 35vw, 30vw" class="department-card__photo department-card__photo--peanuts" />
           <span class="department-card__number">02 / BULK BUYING</span>
         </div>
         <div class="department-card__body">

@@ -12,6 +12,7 @@
   .catalogue-hero__visual { position: relative; min-inline-size: 0; }
   .catalogue-hero__visual .art-tile { aspect-ratio: 1; border-radius: 50% 50% 44% 56% / 46% 48% 52% 54%; }
   .catalogue-hero__photo { display: block; inline-size: 100%; aspect-ratio: 4 / 5; border: .45rem solid var(--cream); border-radius: 50% 50% 44% 56% / 46% 48% 52% 54%; background: var(--cream); object-fit: cover; box-shadow: var(--shadow-card); }
+  .catalogue-hero--peanuts .catalogue-hero__photo { aspect-ratio: 1; }
   .catalogue-hero__visual-note { position: absolute; inset-inline-end: 0; inset-block-end: 1.4rem; padding: .6rem 1rem; border-radius: var(--radius-pill); background: var(--cream); box-shadow: var(--shadow-card); font-weight: 700; }
   .catalogue-section { padding-block: clamp(3.5rem, 7vw, 6rem); }
   .catalogue-section__heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-block-end: 1.5rem; }

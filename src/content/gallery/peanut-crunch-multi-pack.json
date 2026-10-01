@@ -1,0 +1,11 @@
+{
+  "slug": "peanut-crunch-multi-pack",
+  "status": "published",
+  "sample": false,
+  "department": "peanuts",
+  "image": {
+    "src": "/images/products/peanuts/peanut-crunch-multi-pack.webp",
+    "alt": "A grouped set of clear packs containing crunchy peanuts."
+  },
+  "caption": "Peanut Crunch — Multi-Pack"
+}
