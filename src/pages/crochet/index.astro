@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import QuickEnquiryForm from '../../components/QuickEnquiryForm.astro';
-import IllustrationTile from '../../components/IllustrationTile.astro';
+import ResponsiveProductImage from '../../components/ResponsiveProductImage.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import { site } from '../../config/site';
 import { pricing } from '../../config/pricing';
@@ -23,11 +23,11 @@ const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.bra
   <section class="catalogue-hero catalogue-hero--crochet">
     <div class="page-wrap catalogue-hero__inner">
       <div class="catalogue-hero__copy"><a class="catalogue-back" href="/">← Back to home</a><p class="catalogue-eyebrow">Department 01 · Crochet</p><h1>Made by hand.<br />Made for you.</h1><p>Explore ready pieces or tell us what you have in mind. Custom crochet requests are quoted on WhatsApp.</p><div class="catalogue-hero__facts"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span><span>Custom and ready pieces</span></div></div>
-      <div class="catalogue-hero__visual"><IllustrationTile variant="top" alt="Sample illustration of crochet" /><span class="catalogue-hero__visual-note">Made in Lagos</span></div>
+      <div class="catalogue-hero__visual"><ResponsiveProductImage src="/images/products/crochet/burgundy-cream-crochet-set.webp" alt="A burgundy crochet top with cream straps and a matching burgundy-and-cream patterned skirt." sizes="(max-width: 42rem) 88vw, 40vw" loading="eager" fetchpriority="high" class="catalogue-hero__photo" /><span class="catalogue-hero__visual-note">Made in Lagos</span></div>
     </div>
   </section>
   <section class="catalogue-section page-wrap" aria-labelledby="crochet-items-title">
-    <div class="catalogue-section__heading"><SectionHeading id="crochet-items-title" eyebrow="The crochet edit" title="A piece for your plans." copy={products.length ? `${products.length} catalogue entries. Sample listings are labelled.` : 'Share your idea and ask about a custom piece.'} /><span class="catalogue-count" data-filter-count aria-live="polite">{products.length} items</span></div>
+    <div class="catalogue-section__heading"><SectionHeading id="crochet-items-title" eyebrow="The crochet edit" title="A piece for your plans." copy={products.length ? mode === 'preview' ? `${products.length} listings, including labelled samples. Ask us about a custom piece too.` : `${products.length} ready-to-view listings. Ask us about a custom piece too.` : 'Share your idea and ask about a custom piece.'} /><span class="catalogue-count" data-filter-count aria-live="polite">{products.length} items</span></div>
     {products.length > 0 && <>
       <form class="catalogue-filters" data-catalogue-filter aria-label="Filter crochet items">
         <label>Category<select name="category" data-filter="category"><option value="">All categories</option>{categories.map(category => <option value={category}>{category}</option>)}</select></label>
@@ -43,7 +43,7 @@ const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.bra
     {products.length === 0 && <div class="catalogue-empty-state"><span class="catalogue-empty-state__mark" aria-hidden="true">✳</span><p>Ready pieces will appear here when their details and photos are approved.</p><a class="button button--crochet" href={customEnquiry}>Ask about a custom piece <span aria-hidden="true">↗</span></a></div>}
   </section>
   <section class="custom-piece page-wrap" aria-labelledby="custom-piece-title">
-    <div class="custom-piece__art"><IllustrationTile variant="granny" alt="Sample illustration of crochet stitches" /></div>
+    <div class="custom-piece__art"><ResponsiveProductImage src="/images/products/crochet/olive-pink-cream-crochet-set.webp" alt="An olive, pink and cream crochet set with open stitches and scalloped edges." sizes="(max-width: 42rem) 80vw, 35vw" /></div>
     <div class="custom-piece__copy"><p class="catalogue-eyebrow">Something in mind?</p><h2 id="custom-piece-title">Let’s make it yours.</h2><p>Custom pieces are quoted on WhatsApp. Share your idea and the details you already know.</p><a class="button button--crochet" href={customEnquiry}>Ask about a custom piece <span aria-hidden="true">↗</span></a></div>
     {mode === 'preview' && <span class="catalogue-sample custom-piece__badge">Sample content</span>}
   </section>

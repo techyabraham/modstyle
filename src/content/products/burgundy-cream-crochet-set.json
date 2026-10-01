@@ -1,0 +1,23 @@
+{
+  "slug": "burgundy-cream-crochet-set",
+  "status": "published",
+  "sample": false,
+  "department": "crochet",
+  "category": "Apparel",
+  "name": "Burgundy & Cream Crochet Set",
+  "summary": "A two-piece crochet set in burgundy and cream.",
+  "description": "A burgundy crochet top with a matching cream-and-burgundy skirt. Message us to confirm availability and ask about sizing or custom options.",
+  "pricing": { "type": "from", "amountNaira": 42000 },
+  "images": [
+    {
+      "src": "/images/products/crochet/burgundy-cream-crochet-set.webp",
+      "alt": "A burgundy crochet top with cream straps and a matching burgundy-and-cream patterned skirt, laid flat."
+    }
+  ],
+  "leadTime": null,
+  "intendedWearer": null,
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}

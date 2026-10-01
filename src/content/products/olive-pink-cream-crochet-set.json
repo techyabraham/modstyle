@@ -1,0 +1,23 @@
+{
+  "slug": "olive-pink-cream-crochet-set",
+  "status": "published",
+  "sample": false,
+  "department": "crochet",
+  "category": "Apparel",
+  "name": "Olive, Pink & Cream Crochet Set",
+  "summary": "An open-stitch crochet set in olive, pink and cream.",
+  "description": "A two-piece crochet set with scalloped edges and an open stitch pattern. Message us to confirm availability and ask about sizing or custom options.",
+  "pricing": { "type": "from", "amountNaira": 45000 },
+  "images": [
+    {
+      "src": "/images/products/crochet/olive-pink-cream-crochet-set.webp",
+      "alt": "An olive, pink and cream open-stitch crochet two-piece set with scalloped edges, laid flat."
+    }
+  ],
+  "leadTime": null,
+  "intendedWearer": null,
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}

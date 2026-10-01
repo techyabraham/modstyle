@@ -1,0 +1,23 @@
+{
+  "slug": "pink-purple-crochet-tank-top",
+  "status": "published",
+  "sample": false,
+  "department": "crochet",
+  "category": "Apparel",
+  "name": "Pink & Purple Crochet Tank Top",
+  "summary": "A striped sleeveless crochet top in pink and deep purple.",
+  "description": "A sleeveless crochet top with pink and deep-purple stripes. Message us to confirm availability and ask about sizing or custom options.",
+  "pricing": { "type": "from", "amountNaira": 32000 },
+  "images": [
+    {
+      "src": "/images/products/crochet/pink-purple-crochet-tank-top.webp",
+      "alt": "A pink and deep-purple striped crochet sleeveless top with shoulder straps, laid flat."
+    }
+  ],
+  "leadTime": null,
+  "intendedWearer": null,
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}

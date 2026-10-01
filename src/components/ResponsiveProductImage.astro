@@ -1,0 +1,17 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  sizes: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { src, alt, sizes, class: className, loading = 'lazy', fetchpriority } = Astro.props;
+const isResponsiveCrochetPhoto = src.startsWith('/images/products/crochet/') && src.endsWith('.webp');
+const srcset = isResponsiveCrochetPhoto
+  ? `${src.replace(/\.webp$/, '-240.webp')} 240w, ${src.replace(/\.webp$/, '-480.webp')} 480w, ${src.replace(/\.webp$/, '-800.webp')} 800w, ${src} 1000w`
+  : undefined;
+---
+<img src={src} srcset={srcset} sizes={sizes} alt={alt} width="1000" height="1250" class={className} style="block-size: auto" loading={loading} decoding="async" fetchpriority={fetchpriority} />

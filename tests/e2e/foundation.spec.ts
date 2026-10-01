@@ -34,10 +34,15 @@ test('production hides unset compliance claims', async ({ page }) => {
   await page.goto('/peanuts/');
   await expect(page.getByRole('list', { name: 'Business registration details' })).toHaveCount(0);
 });
-test('production catalogue omits samples and publishes all peanut product listings', async ({ request }) => {
+test('production catalogue omits samples and publishes the crochet and peanut product listings', async ({ request }) => {
   const crochet = await request.get('/crochet/');
   expect(crochet.ok()).toBe(true);
-  expect(await crochet.text()).not.toMatch(/Sample content|sample-crochet-featured|₦40,000/);
+  const crochetHtml = await crochet.text();
+  expect(crochetHtml).not.toMatch(/Sample content|sample-crochet-featured|₦40,000/);
+  expect(crochetHtml.match(/<article\b[^>]*data-product-card/g)).toHaveLength(4);
+  expect(crochetHtml).toContain('Burgundy &amp; Cream Crochet Set');
+  expect(crochetHtml).toContain('From ₦32,000');
+  expect(crochetHtml).toContain('srcset=');
   const peanuts = await request.get('/peanuts/');
   expect(peanuts.ok()).toBe(true);
   const peanutHtml = await peanuts.text();
@@ -45,8 +50,12 @@ test('production catalogue omits samples and publishes all peanut product listin
   expect(peanutHtml).toContain('Peanut Crunch — Bulk Pouch');
   expect(peanutHtml).toContain('Golden Peanut Bites — Container');
   expect((await request.get('/products/sample-crochet-featured/')).status()).toBe(404);
+  expect((await request.get('/products/burgundy-cream-crochet-set/')).ok()).toBe(true);
   expect((await request.get('/products/peanut-crunch-bulk-pouch/')).ok()).toBe(true);
-  expect((await request.get('/gallery/')).status()).toBe(404);
+  const gallery = await request.get('/gallery/');
+  expect(gallery.ok()).toBe(true);
+  expect((await gallery.text()).match(/<button\b[^>]*data-gallery-item/g)).toHaveLength(4);
+  expect((await request.get('/images/products/crochet/burgundy-cream-crochet-set-240.webp')).ok()).toBe(true);
   expect((await request.get('/images/products/peanuts/peanut-crunch-bulk-pouch.webp')).ok()).toBe(true);
   expect((await request.get('/reviews/')).status()).toBe(404);
 });
@@ -68,7 +77,9 @@ test('supporting pages, sitemap and social metadata expose only confirmed produc
   expect(sitemap).toContain('/faq/');
   expect(sitemap).toContain('/policies/');
   expect(sitemap).toContain('/products/peanut-crunch-bulk-pouch/');
-  expect(sitemap).not.toMatch(/sample-|\/gallery\/|\/reviews\/|invalid\.example/);
+  expect(sitemap).toContain('/gallery/');
+  expect(sitemap).toContain('/products/burgundy-cream-crochet-set/');
+  expect(sitemap).not.toMatch(/sample-|\/reviews\/|invalid\.example/);
   const robots = await (await request.get('/robots.txt')).text();
   if (process.env.SITE_URL) expect(robots).toContain(new URL('/sitemap.xml', process.env.SITE_URL).href);
   const image = await request.get('/social-card.png');
@@ -91,7 +102,7 @@ test('custom not-found page provides working recovery links', async ({ page }) =
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 test('every production route has no horizontal overflow or dead internal links', async ({ page, request }) => {
-  const routes = ['/', '/crochet/', '/peanuts/', '/our-story/', '/faq/', '/contact/', '/policies/'];
+  const routes = ['/', '/crochet/', '/peanuts/', '/gallery/', '/our-story/', '/faq/', '/contact/', '/policies/'];
   for (const route of routes) {
     const response = await page.goto(route);
     expect(response?.ok(), route).toBe(true);
@@ -122,7 +133,7 @@ test('@a11y foundation has no serious or critical violations', async ({ page }) 
 });
 test('@a11y department enquiry forms and the open basket have no serious or critical violations', async ({ page }) => {
   const axe = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
-  for (const route of ['/crochet/', '/peanuts/', '/our-story/', '/faq/', '/contact/', '/policies/']) {
+  for (const route of ['/crochet/', '/peanuts/', '/gallery/', '/our-story/', '/faq/', '/contact/', '/policies/']) {
     await page.goto(route);
     const results = await axe();
     expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);

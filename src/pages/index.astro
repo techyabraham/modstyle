@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import IllustrationTile from '../components/IllustrationTile.astro';
+import ResponsiveProductImage from '../components/ResponsiveProductImage.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StitchDivider from '../components/StitchDivider.astro';
 import Sticker from '../components/Sticker.astro';
@@ -46,17 +47,17 @@ const homeFaqs = [
         <span>Quote-based custom and bulk requests</span>
       </div>
     </div>
-    <div class="home-hero__art" role="group" aria-label="Illustrations of the two departments">
+    <div class="home-hero__art" role="group" aria-label={mode === 'preview' ? 'Crochet product photo and sample peanut illustration' : 'Crochet product photo'}>
       <div class="home-hero__art-disc" aria-hidden="true"></div>
       <svg class="home-hero__thread" viewBox="0 0 560 520" fill="none" aria-hidden="true">
         <path d="M55 346c79-74 28-182 107-231 74-46 146 19 107 83-36 59-133 23-125-48 9-81 122-109 202-53 113 80 29 184 112 223 47 22 66-2 74-39" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 11" />
         <path d="M106 438c51-14 78-50 82-104m282-196c-17 23-23 46-20 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
       </svg>
       <div class="home-hero__art-label home-hero__art-label--top"><span>Made with care</span><b aria-hidden="true">✳</b></div>
-      <div class="home-hero__art-card home-hero__art-card--crochet"><IllustrationTile variant="granny" alt="Sample illustration of crochet texture" /><span class="home-hero__art-name">Crochet</span></div>
+      <div class="home-hero__art-card home-hero__art-card--crochet"><ResponsiveProductImage src="/images/products/crochet/pink-purple-crochet-tank-top.webp" alt="A pink and deep-purple striped crochet tank top." sizes="(max-width: 42rem) 37vw, 15rem" loading="eager" fetchpriority="low" class="home-hero__photo" /><span class="home-hero__art-name">Crochet</span></div>
       <div class="home-hero__art-card home-hero__art-card--peanuts"><IllustrationTile variant="peanuts" alt="Sample illustration of peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
       <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
-      <span class="home-hero__art-note">{mode === 'preview' ? 'Illustrations are sample content' : 'Crochet · Peanuts'}</span>
+      <span class="home-hero__art-note">{mode === 'preview' ? 'Peanut illustration is sample content' : 'Crochet · Peanuts'}</span>
     </div>
   </section>
 
@@ -75,7 +76,7 @@ const homeFaqs = [
       <article class="department-card department-card--crochet">
         <div class="department-card__visual" aria-hidden="true">
           <span class="department-card__shape"></span>
-          <IllustrationTile variant="top" alt="Sample illustration of a crochet top" />
+          <ResponsiveProductImage src="/images/products/crochet/red-pink-cream-crochet-set.webp" alt="" sizes="(max-width: 42rem) 70vw, (max-width: 60rem) 35vw, 30vw" class="department-card__photo" />
           <span class="department-card__number">01 / HANDMADE</span>
         </div>
         <div class="department-card__body">
@@ -137,7 +138,7 @@ const homeFaqs = [
   </section>
 
   <section class="home-last-call page-wrap" aria-labelledby="last-call-title">
-    <div class="home-last-call__art" aria-hidden="true"><span class="home-last-call__ring"></span><IllustrationTile variant="yarn" alt="Sample illustration of yarn" /><span class="home-last-call__spark">✳</span></div>
+    <div class="home-last-call__art" aria-hidden="true"><span class="home-last-call__ring"></span><ResponsiveProductImage src="/images/products/crochet/pink-purple-crochet-tank-top.webp" alt="" sizes="(max-width: 42rem) 9rem, 14rem" class="home-last-call__photo" /><span class="home-last-call__spark">✳</span></div>
     <div class="home-last-call__copy"><p class="home-last-call__eyebrow">Your next favourite thing starts here</p><h2 id="last-call-title">Tell us what<br />you have in mind.</h2><p>One message is all it takes to get started.</p><a class="button home-last-call__button" href={generalEnquiry}>Continue on WhatsApp <span aria-hidden="true">↗</span></a></div>
     <span class="home-last-call__note">Modstyle Crunch And Cream · Lagos</span>
   </section>

@@ -43,7 +43,8 @@ test('@preview homepage is complete, accessible and within the viewport', async 
 test('@preview catalogue lists labelled samples and filters crochet items', async ({ page }, testInfo) => {
   await page.goto('/crochet/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Made by hand.');
-  await expect(page.locator('[data-product-card]')).toHaveCount(8);
+  await expect(page.locator('[data-product-card]')).toHaveCount(12);
+  await expect(page.locator('[data-product-card] img[src*="/images/products/crochet/"]')).toHaveCount(4);
   await expect(page.locator('.catalogue-card .catalogue-sample')).toHaveCount(8);
   await expect(page.getByRole('combobox', { name: 'Category' })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'Intended wearer' })).toBeVisible();
@@ -52,7 +53,7 @@ test('@preview catalogue lists labelled samples and filters crochet items', asyn
   await expect(page.locator('[data-product-card]:visible')).toContainText('₦40,000');
   await expect(page).toHaveURL(/price=fixed/);
   await page.getByRole('button', { name: 'Clear filters' }).click();
-  await expect(page.locator('[data-product-card]:visible')).toHaveCount(8);
+  await expect(page.locator('[data-product-card]:visible')).toHaveCount(12);
   await page.goto('/peanuts/');
   await expect(page.locator('[data-product-card]')).toHaveCount(19);
   await expect(page.locator('[data-product-card] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
@@ -76,8 +77,12 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await expect(page.locator('.product-detail__price')).toHaveText('From ₦22,000');
   await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('src', '/images/products/peanuts/peanut-crunch-bulk-pouch.webp');
 
+  await page.goto('/products/burgundy-cream-crochet-set/');
+  await expect(page.locator('.product-detail__media-frame img')).toHaveAttribute('srcset', /burgundy-cream-crochet-set-480\.webp 480w.*burgundy-cream-crochet-set-800\.webp 800w/);
+
   await page.goto('/gallery/');
-  await expect(page.locator('[data-gallery-item]')).toHaveCount(4);
+  await expect(page.locator('[data-gallery-item]')).toHaveCount(8);
+  await expect(page.locator('[data-gallery-item] img[src*="/images/products/crochet/"]')).toHaveCount(4);
   await expect(page.locator('[data-gallery-item] img[src*="/images/products/peanuts/"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gallery');
   await page.getByRole('button', { name: 'Peanuts', exact: true }).click();
@@ -89,6 +94,13 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-gallery-lightbox]')).not.toBeVisible();
   await expect(galleryTrigger).toBeFocused();
+  await page.getByRole('button', { name: 'Crochet', exact: true }).click();
+  await expect(page.locator('[data-gallery-item]:visible')).toHaveCount(7);
+  const crochetGalleryTrigger = page.locator('[data-gallery-item]:visible').first();
+  await crochetGalleryTrigger.click();
+  await expect(page.locator('[data-gallery-lightbox] img[src*="/images/products/crochet/"]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(crochetGalleryTrigger).toBeFocused();
 });
 
 test('@preview basket saves options, separates department minimums and creates a short WhatsApp message', async ({ page }) => {

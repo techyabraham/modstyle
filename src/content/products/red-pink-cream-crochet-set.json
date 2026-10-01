@@ -1,0 +1,23 @@
+{
+  "slug": "red-pink-cream-crochet-set",
+  "status": "published",
+  "sample": false,
+  "department": "crochet",
+  "category": "Apparel",
+  "name": "Red, Pink & Cream Crochet Set",
+  "summary": "A striped crochet two-piece set in red, pink and cream.",
+  "description": "A striped crochet top and matching bottoms with tie straps. Message us to confirm availability and ask about sizing or custom options.",
+  "pricing": { "type": "from", "amountNaira": 48000 },
+  "images": [
+    {
+      "src": "/images/products/crochet/red-pink-cream-crochet-set.webp",
+      "alt": "A red, pink and cream striped crochet two-piece set with tie straps, laid flat."
+    }
+  ],
+  "leadTime": null,
+  "intendedWearer": null,
+  "sizes": [],
+  "colours": [],
+  "materials": null,
+  "care": null
+}
