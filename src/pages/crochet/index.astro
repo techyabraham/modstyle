@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import QuickEnquiryForm from '../../components/QuickEnquiryForm.astro';
 import ResponsiveProductImage from '../../components/ResponsiveProductImage.astro';
+import ResponsiveHeroImage from '../../components/ResponsiveHeroImage.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import { site } from '../../config/site';
 import { pricing } from '../../config/pricing';
@@ -23,7 +24,7 @@ const customEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.bra
   <section class="catalogue-hero catalogue-hero--crochet">
     <div class="page-wrap catalogue-hero__inner">
       <div class="catalogue-hero__copy"><a class="catalogue-back" href="/">← Back to home</a><p class="catalogue-eyebrow">Department 01 · Crochet</p><h1>Made by hand.<br />Made for you.</h1><p>Explore ready pieces or tell us what you have in mind. Custom crochet requests are quoted on WhatsApp.</p><div class="catalogue-hero__facts"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span><span>Custom and ready pieces</span></div></div>
-      <div class="catalogue-hero__visual"><ResponsiveProductImage src="/images/products/crochet/burgundy-cream-crochet-set.webp" alt="A burgundy crochet top with cream straps and a matching burgundy-and-cream patterned skirt." sizes="(max-width: 42rem) 88vw, 40vw" loading="eager" fetchpriority="high" class="catalogue-hero__photo" /><span class="catalogue-hero__visual-note">Made in Lagos</span></div>
+      <div class="catalogue-hero__visual"><ResponsiveHeroImage image="crochet-made-by-hand" alt="A woman displays a colorful handmade crochet bag and top in a yarn-filled studio." sizes="(max-width: 42rem) calc(100vw - 2rem), (max-width: 70rem) 45vw, 36rem" class="catalogue-hero__photo catalogue-hero__photo--crochet" /><span class="catalogue-hero__visual-note">Made in Lagos</span></div>
     </div>
   </section>
   <section class="catalogue-section page-wrap" aria-labelledby="crochet-items-title">

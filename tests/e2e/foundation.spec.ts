@@ -113,7 +113,8 @@ test('custom not-found page provides working recovery links', async ({ page }) =
   await expect(page.getByRole('link', { name: 'Explore peanuts' })).toHaveAttribute('href', '/peanuts/');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-test('every production route has no horizontal overflow or dead internal links', async ({ page, request }) => {
+test('every production route has no horizontal overflow or dead internal links', async ({ page, request }, testInfo) => {
+  if (testInfo.project.name === 'mobile') await page.setViewportSize({ width: 320, height: 760 });
   const routes = ['/', '/crochet/', '/peanuts/', '/gallery/', '/our-story/', '/faq/', '/contact/', '/policies/'];
   for (const route of routes) {
     const response = await page.goto(route);
