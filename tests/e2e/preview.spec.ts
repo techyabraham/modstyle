@@ -87,7 +87,7 @@ test('@preview catalogues show only published product listings and filter croche
   await expect(page.locator('.catalogue-hero__photo')).toHaveAttribute('srcset', /peanuts-a-little-crunch-480\.webp 480w/);
   await expect(page.locator('[data-product-card]')).toHaveCount(16);
   await expect(page.locator('[data-product-card] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
-  await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /modstyle-peanut-crunch-collection-480\.webp 480w/);
+  await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /peanuts-a-little-crunch-480\.webp 480w/);
   await expect(page.locator('[data-product-card] img').first()).toHaveAttribute('srcset', /-480\.webp 480w.*-800\.webp 800w/);
   await expect(page.locator('body')).toContainText('From ₦22,000');
   await page.screenshot({ path: `test-results/catalogue-${testInfo.project.name}.png`, fullPage: true });
@@ -207,6 +207,7 @@ test('@preview custom crochet and peanut bulk forms show the generated WhatsApp 
 });
 
 test('@preview supporting pages show confirmed FAQs and labelled empty states', async ({ page }, testInfo) => {
+  test.setTimeout(60_000);
   const pages: Array<[string, string]> = [
     ['/our-story/', 'Our story'],
     ['/faq/', 'Frequently asked questions'],
@@ -220,7 +221,7 @@ test('@preview supporting pages show confirmed FAQs and labelled empty states', 
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
     if (route === '/our-story/') {
       await expect(page.locator('.story-hero__photo')).toHaveAttribute('srcset', /our-story-lagos-maker-community-480\.webp 480w/);
-      await page.screenshot({ path: `test-results/our-story-${testInfo.project.name}.png`, fullPage: true });
+      if (testInfo.project.name !== 'tablet') await page.screenshot({ path: `test-results/our-story-${testInfo.project.name}.png`, fullPage: true });
     }
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

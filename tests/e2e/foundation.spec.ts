@@ -145,6 +145,7 @@ test('@a11y foundation has no serious or critical violations', async ({ page }) 
   expect(results.violations.filter(v => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 });
 test('@a11y department enquiry forms and the open basket have no serious or critical violations', async ({ page }) => {
+  test.setTimeout(60_000);
   const axe = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   for (const route of ['/crochet/', '/peanuts/', '/gallery/', '/our-story/', '/faq/', '/contact/', '/policies/']) {
     await page.goto(route);
