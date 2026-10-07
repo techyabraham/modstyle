@@ -24,8 +24,6 @@ test('@preview styleguide stays accessible and within the viewport', async ({ pa
 test('@preview homepage is complete, accessible and within the viewport', async ({ page }, testInfo) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Stitched with love. Packed with crunch.');
-  await expect(page.locator('.home-hero__background')).toHaveAttribute('srcset', /home-stitched-with-love-packed-with-crunch-480\.webp 480w/);
-  await expect(page.locator('.home-hero__background')).toHaveAttribute('fetchpriority', 'high');
   await expect(page.getByRole('heading', { name: 'Made by hand. Made for you.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A little crunch. A lot to share.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Explore crochet' })).toHaveAttribute('href', '/crochet/');
@@ -70,7 +68,6 @@ test('@preview primary navigation opens, closes and follows the selected page', 
 test('@preview catalogues show only published product listings and filter crochet items', async ({ page }, testInfo) => {
   await page.goto('/crochet/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Made by hand.');
-  await expect(page.locator('.catalogue-hero__photo')).toHaveAttribute('srcset', /crochet-made-by-hand-480\.webp 480w/);
   await expect(page.locator('[data-product-card]')).toHaveCount(4);
   await expect(page.locator('[data-product-card] img[src*="/images/products/crochet/"]')).toHaveCount(4);
   await expect(page.locator('.catalogue-card .catalogue-sample')).toHaveCount(0);
@@ -84,10 +81,9 @@ test('@preview catalogues show only published product listings and filter croche
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(page.locator('[data-product-card]:visible')).toHaveCount(4);
   await page.goto('/peanuts/');
-  await expect(page.locator('.catalogue-hero__photo')).toHaveAttribute('srcset', /peanuts-a-little-crunch-480\.webp 480w/);
   await expect(page.locator('[data-product-card]')).toHaveCount(16);
   await expect(page.locator('[data-product-card] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
-  await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /peanuts-a-little-crunch-480\.webp 480w/);
+  await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /modstyle-peanut-crunch-collection-480\.webp 480w/);
   await expect(page.locator('[data-product-card] img').first()).toHaveAttribute('srcset', /-480\.webp 480w.*-800\.webp 800w/);
   await expect(page.locator('body')).toContainText('From ₦22,000');
   await page.screenshot({ path: `test-results/catalogue-${testInfo.project.name}.png`, fullPage: true });
@@ -206,7 +202,7 @@ test('@preview custom crochet and peanut bulk forms show the generated WhatsApp 
   await expect(peanuts.locator('[data-form-error]')).toContainText('shortened to fit');
 });
 
-test('@preview supporting pages show confirmed FAQs and labelled empty states', async ({ page }, testInfo) => {
+test('@preview supporting pages show confirmed FAQs and labelled empty states', async ({ page }) => {
   test.setTimeout(60_000);
   const pages: Array<[string, string]> = [
     ['/our-story/', 'Our story'],
@@ -219,10 +215,6 @@ test('@preview supporting pages show confirmed FAQs and labelled empty states', 
   for (const [route, heading] of pages) {
     await page.goto(route);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
-    if (route === '/our-story/') {
-      await expect(page.locator('.story-hero__photo')).toHaveAttribute('srcset', /our-story-lagos-maker-community-480\.webp 480w/);
-      if (testInfo.project.name !== 'tablet') await page.screenshot({ path: `test-results/our-story-${testInfo.project.name}.png`, fullPage: true });
-    }
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();

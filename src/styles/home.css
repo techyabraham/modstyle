@@ -12,26 +12,23 @@
   .home-kicker, .home-faq__index { display: flex; align-items: center; gap: .65rem; color: var(--forest); font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
   .home-kicker__dot { inline-size: .62rem; aspect-ratio: 1; border-radius: 50%; background: var(--magenta); box-shadow: 1.25rem 0 0 var(--orange); margin-inline-end: .8rem; }
   .home-kicker__place { margin-inline-start: .7rem; padding-inline-start: 1.15rem; border-inline-start: 1px solid var(--sand); color: var(--orange); }
-  .home-hero h1 { max-inline-size: 11ch; font-size: clamp(2.65rem, 6.6vw, 6rem); letter-spacing: -.065em; }
+  .home-hero h1 { max-inline-size: 11ch; font-size: clamp(3rem, 6.6vw, 6rem); letter-spacing: -.065em; }
   .home-hero__intro { max-inline-size: 42ch; color: #50544b; font-size: clamp(1.05rem, 1vw + .8rem, 1.25rem); }
   .home-hero__actions { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2rem); flex-wrap: wrap; }
   .home-hero__proof { display: flex; align-items: center; gap: 1rem; margin-block-start: .45rem; color: #5a5d54; font-size: .8rem; }
   .home-hero__proof strong { color: var(--forest-deep); }
   .home-hero__proof-sep { inline-size: .35rem; aspect-ratio: 1; border-radius: 50%; background: var(--orange); }
   .home-hero__art { position: relative; isolation: isolate; min-block-size: clamp(25rem, 44vw, 39rem); display: grid; place-items: center; }
-  .home-hero__background { position: absolute; z-index: -1; inset: 2% 0 6%; display: block; inline-size: 100%; block-size: 92%; border: .5rem solid var(--cream); border-radius: 48% 52% 42% 58% / 46% 48% 52% 54%; background: var(--sand); object-fit: cover; object-position: 64% center; box-shadow: var(--shadow-card); }
-  .home-hero__art::after { content: ''; position: absolute; z-index: 0; inset: 2% 0 6%; border-radius: 48% 52% 42% 58% / 46% 48% 52% 54%; background: linear-gradient(90deg, rgb(255 248 238 / .5), transparent 58%), linear-gradient(0deg, rgb(14 42 29 / .12), transparent 45%); pointer-events: none; }
   .home-hero__art-disc { position: absolute; z-index: -2; inline-size: min(88%, 34rem); aspect-ratio: 1; border-radius: 46% 54% 51% 49% / 53% 43% 57% 47%; background: var(--magenta-soft); transform: rotate(-8deg); }
   .home-hero__art-disc::before { content: ''; position: absolute; inset: 8%; border: 1px solid rgb(165 27 96 / .25); border-radius: 50%; }
   .home-hero__thread { position: absolute; z-index: -1; inline-size: 100%; block-size: 100%; color: var(--magenta); overflow: visible; }
-  .home-hero__art-card { position: absolute; z-index: 1; width: clamp(7.5rem, 13vw, 10.5rem); filter: drop-shadow(0 1.2rem 1.2rem rgb(14 42 29 / .12)); }
+  .home-hero__art-card { position: absolute; width: clamp(9rem, 17vw, 15rem); filter: drop-shadow(0 1.2rem 1.2rem rgb(14 42 29 / .12)); }
   .home-hero__art-card .art-tile { border: .5rem solid var(--cream); box-shadow: 0 .5rem 2rem rgb(14 42 29 / .1); }
   .home-hero__photo { display: block; inline-size: 100%; aspect-ratio: 4 / 5; border: .5rem solid var(--cream); border-radius: var(--radius-card); background: var(--cream); object-fit: cover; box-shadow: 0 .5rem 2rem rgb(14 42 29 / .1); }
   .home-hero__art-card--crochet { inset-inline-start: 3%; inset-block-start: 11%; transform: rotate(-9deg); }
   .home-hero__art-card--peanuts { inset-inline-end: 1%; inset-block-end: 8%; transform: rotate(7deg); }
   .home-hero__art-name { display: block; margin-block-start: .5rem; color: var(--forest-deep); font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; text-align: center; }
   .home-hero__art-label { position: absolute; inset-block-start: 9%; inset-inline-end: 5%; display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; border-radius: var(--radius-pill); background: var(--cream); box-shadow: var(--shadow-card); color: var(--forest); font-size: .72rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; transform: rotate(5deg); }
-  .home-hero__art-label, .home-hero__art-sticker, .home-hero__art-note { z-index: 2; }
   .home-hero__art-label b { color: var(--orange); font-size: 1.1rem; }
   .home-hero__art-sticker { position: absolute; inset-block-start: 33%; inset-inline-end: 14%; display: grid; place-content: center; inline-size: 6.6rem; aspect-ratio: 1; border-radius: 50%; background: var(--orange); color: var(--cream); line-height: 1.1; text-align: center; transform: rotate(10deg); }
   .home-hero__art-sticker span { font-size: .7rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
@@ -122,7 +119,7 @@
 }
 @media (max-width: 60rem) {
   .home-hero { grid-template-columns: minmax(0, 1fr) minmax(20rem, .82fr); gap: 1.2rem; }
-  .home-hero h1 { font-size: clamp(2.5rem, 6vw, 4.8rem); }
+  .home-hero h1 { font-size: clamp(3rem, 6vw, 4.8rem); }
   .home-hero__art { min-block-size: 27rem; }
   .home-ordering__inner { grid-template-columns: 1fr; gap: 2.5rem; }
   .home-ordering__heading { max-inline-size: 43rem; }
@@ -130,13 +127,12 @@
   .home-faq { grid-template-columns: 1fr; gap: 2rem; }
 }
 @media (max-width: 42rem) {
-  .home-hero { grid-template-columns: 1fr; gap: .75rem; padding-block: clamp(2rem, 8vw, 3rem) 2rem; }
-  .home-hero h1 { max-inline-size: 11ch; font-size: clamp(2.15rem, 11.5vw, 3.5rem); }
+  .home-hero { grid-template-columns: 1fr; gap: .75rem; padding-block: 3rem 2.5rem; }
+  .home-hero h1 { max-inline-size: 10ch; font-size: clamp(3rem, 13vw, 4.4rem); }
   .home-hero__intro { max-inline-size: 34ch; }
   .home-hero__proof { align-items: start; gap: .65rem; font-size: .69rem; }
-  .home-hero__art { min-block-size: 0; aspect-ratio: 1.42; margin-inline: -1rem; }
-  .home-hero__background { object-position: 70% center; }
-  .home-hero__art-card { width: clamp(5.8rem, 25vw, 8.25rem); }
+  .home-hero__art { min-block-size: min(96vw, 25rem); margin-inline: -1rem; }
+  .home-hero__art-card { width: clamp(8rem, 37vw, 11rem); }
   .home-hero__art-card--crochet { inset-inline-start: 8%; inset-block-start: 8%; }
   .home-hero__art-card--peanuts { inset-inline-end: 6%; inset-block-end: 3%; }
   .home-hero__art-sticker { inset-block-start: 30%; inset-inline-end: 16%; inline-size: 5rem; }

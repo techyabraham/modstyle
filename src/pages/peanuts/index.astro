@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import QuickEnquiryForm from '../../components/QuickEnquiryForm.astro';
-import ResponsiveHeroImage from '../../components/ResponsiveHeroImage.astro';
+import ResponsiveProductImage from '../../components/ResponsiveProductImage.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import ComplianceChips from '../../components/ComplianceChips.astro';
 import { site } from '../../config/site';
@@ -22,7 +22,7 @@ const bulkEnquiry = buildWhatsAppLink(site.contact.whatsapp, `Hello ${site.brand
   <section class="catalogue-hero catalogue-hero--peanuts">
     <div class="page-wrap catalogue-hero__inner">
       <div class="catalogue-hero__copy"><a class="catalogue-back" href="/">← Back to home</a><p class="catalogue-eyebrow">Department 02 · Peanuts</p><h1>A little crunch.<br />A lot to share.</h1><p>Buying in bulk? Tell us how much you need and where it’s going. We’ll confirm the details and quote in chat.</p><div class="catalogue-hero__facts"><span><strong>{formatNaira(pricing.minimumPerDepartment)}</strong> minimum per department</span><span>Bulk requests are quote-based</span></div></div>
-      <div class="catalogue-hero__visual"><ResponsiveHeroImage image="peanuts-a-little-crunch" alt="Three people share a bowl of crunchy peanuts outdoors." sizes="(max-width: 42rem) calc(100vw - 2rem), (max-width: 70rem) 45vw, 36rem" class="catalogue-hero__photo catalogue-hero__photo--peanuts" /><span class="catalogue-hero__visual-note">Bulk buying</span></div>
+      <div class="catalogue-hero__visual"><ResponsiveProductImage src="/images/products/peanuts/modstyle-peanut-crunch-collection.webp" alt="A collection of Modstyle peanut products in several package styles." sizes="(max-width: 42rem) 88vw, 40vw" loading="eager" fetchpriority="high" class="catalogue-hero__photo" /><span class="catalogue-hero__visual-note">Bulk buying</span></div>
     </div>
   </section>
   <section class="peanuts-order page-wrap" aria-labelledby="peanuts-order-title">
