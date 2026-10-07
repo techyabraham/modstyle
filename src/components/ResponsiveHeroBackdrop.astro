@@ -1,0 +1,27 @@
+---
+interface Props {
+  image: string;
+  sizes?: string;
+  class?: string;
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { image, sizes = '100vw', class: className, fetchpriority = 'auto' } = Astro.props;
+const base = `/images/brand/heroes/${image}`;
+const srcset = [480, 800, 1200, 1672]
+  .map(width => `${base}-${width}.webp ${width}w`)
+  .join(', ');
+---
+<img
+  src={`${base}-1200.webp`}
+  srcset={srcset}
+  sizes={sizes}
+  alt=""
+  aria-hidden="true"
+  width="1672"
+  height="941"
+  class:list={['hero-backdrop', className]}
+  loading="eager"
+  decoding="async"
+  fetchpriority={fetchpriority}
+/>

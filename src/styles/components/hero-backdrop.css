@@ -1,0 +1,12 @@
+@layer components {
+  .hero-backdrop {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+}

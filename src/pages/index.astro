@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ResponsiveProductImage from '../components/ResponsiveProductImage.astro';
+import ResponsiveHeroBackdrop from '../components/ResponsiveHeroBackdrop.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StitchDivider from '../components/StitchDivider.astro';
 import Sticker from '../components/Sticker.astro';
@@ -31,7 +32,9 @@ const homeFaqs = [
 ];
 ---
 <BaseLayout title={`${site.brand.name} | Crochet & Peanuts in Lagos`} description="Custom and ready crochet pieces, plus peanuts for bulk buying. Based in Lagos, Nigeria. Enquire on WhatsApp.">
-  <section class="home-hero page-wrap" aria-labelledby="home-title">
+  <section class="home-hero" aria-labelledby="home-title">
+    <ResponsiveHeroBackdrop image="home-stitched-with-love-packed-with-crunch" sizes="100vw" fetchpriority="high" class="home-hero__backdrop" />
+    <div class="home-hero__inner page-wrap">
     <div class="home-hero__copy">
       <p class="home-kicker"><span class="home-kicker__dot" aria-hidden="true"></span> Two sides of Modstyle <span class="home-kicker__place">Lagos, Nigeria</span></p>
       <h1 id="home-title">{site.brand.headline}</h1>
@@ -57,6 +60,7 @@ const homeFaqs = [
       <div class="home-hero__art-card home-hero__art-card--peanuts"><ResponsiveProductImage src="/images/products/peanuts/golden-peanut-crunch-pouch.webp" alt="A clear upright pouch of golden-brown crunchy peanuts." sizes="(max-width: 42rem) 37vw, 15rem" fetchpriority="low" class="home-hero__photo home-hero__photo--peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
       <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
       <span class="home-hero__art-note">Crochet · Peanuts</span>
+    </div>
     </div>
   </section>
 
