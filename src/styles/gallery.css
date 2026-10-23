@@ -16,6 +16,7 @@
   .gallery-tile:nth-child(3n + 2) .art-tile { aspect-ratio: 1.15; }
   .gallery-tile__caption { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .8rem 1rem; font-size: .88rem; font-weight: 700; }
   .gallery-lightbox { inline-size: min(92vw, 50rem); }
+  .gallery-lightbox .catalogue-lightbox__bar h2 { min-inline-size: 0; }
   @media (max-width: 600px) {
     .gallery-toolbar { align-items: start; flex-direction: column; }
     .gallery-grid { columns: 2 9rem; column-gap: .65rem; }

@@ -57,17 +57,18 @@ const homeFaqs = [
       </svg>
       <div class="home-hero__art-label home-hero__art-label--top"><span>Made with care</span><b aria-hidden="true">✳</b></div>
       <div class="home-hero__art-card home-hero__art-card--crochet"><ResponsiveProductImage src="/images/products/crochet/pink-purple-crochet-tank-top.webp" alt="A pink and deep-purple striped crochet tank top." sizes="(max-width: 42rem) 37vw, 15rem" loading="eager" fetchpriority="low" class="home-hero__photo" /><span class="home-hero__art-name">Crochet</span></div>
-      <div class="home-hero__art-card home-hero__art-card--peanuts"><ResponsiveProductImage src="/images/products/peanuts/golden-peanut-crunch-pouch.webp" alt="A clear upright pouch of golden-brown crunchy peanuts." sizes="(max-width: 42rem) 37vw, 15rem" fetchpriority="low" class="home-hero__photo home-hero__photo--peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
+      <div class="home-hero__art-card home-hero__art-card--peanuts"><ResponsiveProductImage src="/images/products/peanuts/golden-peanut-crunch-pouch.webp" alt="A clear upright pouch of golden-brown crunchy peanuts." sizes="(max-width: 42rem) 37vw, 15rem" loading="eager" fetchpriority="low" class="home-hero__photo home-hero__photo--peanuts" /><span class="home-hero__art-name">Peanuts</span></div>
       <div class="home-hero__art-sticker"><span>Made in</span><strong>Lagos</strong><span aria-hidden="true">✳</span></div>
       <span class="home-hero__art-note">Crochet · Peanuts</span>
     </div>
     </div>
   </section>
 
-  <div class="home-ribbon" aria-hidden="true">
-    <div class="home-ribbon__track" aria-hidden="true">
+  <div class="home-ribbon" data-home-ribbon>
+    <div class="home-ribbon__window" aria-hidden="true"><div class="home-ribbon__track">
       {Array.from({ length: 4 }, () => <span>Made in Lagos <i>✳</i> Crochet <i>✳</i> Peanuts for bulk <i>✳</i> Enquire on WhatsApp <i>✳</i></span>)}
-    </div>
+    </div></div>
+    <button class="home-ribbon__toggle" type="button" aria-label="Pause moving banner" aria-pressed="false" data-ribbon-toggle>Pause <span aria-hidden="true">Ⅱ</span></button>
   </div>
 
   <section class="home-departments page-wrap" id="departments" aria-labelledby="departments-title">
@@ -145,3 +146,14 @@ const homeFaqs = [
     <span class="home-last-call__note">Modstyle Crunch And Cream · Lagos</span>
   </section>
 </BaseLayout>
+<script>
+  const ribbon = document.querySelector<HTMLElement>('[data-home-ribbon]');
+  const ribbonToggle = ribbon?.querySelector<HTMLButtonElement>('[data-ribbon-toggle]');
+  ribbonToggle?.addEventListener('click', () => {
+    const paused = ribbon?.dataset.paused !== 'true';
+    if (ribbon) ribbon.dataset.paused = String(paused);
+    ribbonToggle.setAttribute('aria-pressed', String(paused));
+    ribbonToggle.setAttribute('aria-label', paused ? 'Play moving banner' : 'Pause moving banner');
+    ribbonToggle.firstChild!.textContent = paused ? 'Play ' : 'Pause ';
+  });
+</script>

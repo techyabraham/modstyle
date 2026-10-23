@@ -13,11 +13,13 @@
     --radius-pill: 999px;
     --page-max: 80rem;
     --gutter: clamp(1rem, 4vw, 2.5rem);
+    --section-space: clamp(3rem, 7vw, 6rem);
+    --card-space: clamp(1rem, 2.2vw, 1.5rem);
     --motion-fast: 160ms;
     --motion-std: 280ms;
     --ease: cubic-bezier(.2, .7, .2, 1);
     --font-body: 'Inter', 'Inter Fallback', Arial, sans-serif;
     --font-display: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
-    --shadow-card: 0 1.1rem 2.5rem rgb(14 42 29 / .10);
+    --shadow-card: 0 .7rem 1.8rem rgb(14 42 29 / .08);
   }
 }

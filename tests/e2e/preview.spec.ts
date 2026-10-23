@@ -9,6 +9,15 @@ async function revealHomeSections(page: import('@playwright/test').Page) {
     await section.evaluate(element => { (element as HTMLElement).style.contentVisibility = 'visible'; });
   }
 }
+async function loadPageImages(page: import('@playwright/test').Page) {
+  const images = page.locator('img');
+  for (let index = 0; index < await images.count(); index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).complete && (element as HTMLImageElement).naturalWidth > 0)).toBe(true);
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+}
 test('@preview styleguide stays accessible and within the viewport', async ({ page }, testInfo) => {
   await page.goto('/_styleguide/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Tactile maker');
@@ -35,17 +44,27 @@ test('@preview homepage is complete, accessible and within the viewport', async 
   await expect(page.getByRole('link', { name: 'View the gallery' })).toHaveAttribute('href', '/gallery/');
   await expect(page.getByRole('link', { name: 'Start an enquiry' })).toHaveAttribute('href', /^https:\/\/wa\.me\//);
   await expect(page.locator('.home-faq__item')).toHaveCount(4);
+  const ribbonToggle = page.locator('[data-ribbon-toggle]');
+  await expect(ribbonToggle).toBeVisible();
+  await expect(ribbonToggle).toHaveAccessibleName('Pause moving banner');
+  await ribbonToggle.click();
+  await expect(ribbonToggle).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => page.locator('.home-ribbon__track').evaluate(element => getComputedStyle(element).animationPlayState)).toBe('paused');
+  await ribbonToggle.click();
+  await expect(ribbonToggle).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('.home-hero__art-card--peanuts img')).toHaveAttribute('srcset', /golden-peanut-crunch-pouch-480\.webp 480w/);
   await expect(page.locator('.department-card--peanuts img')).toHaveAttribute('srcset', /peanut-crunch-assortment-800\.webp 800w/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations.filter(violation => violation.impact === 'serious' || violation.impact === 'critical')).toEqual([]);
   await revealHomeSections(page);
+  await page.locator('.home-hero').screenshot({ path: `test-results/after-home-hero-${testInfo.project.name}.png` });
+  await page.locator('.home-departments').screenshot({ path: `test-results/after-departments-${testInfo.project.name}.png` });
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await page.screenshot({ path: `test-results/homepage-${testInfo.project.name}.png`, fullPage: true });
 });
 
-test('@preview primary navigation opens, closes and follows the selected page', async ({ page }) => {
+test('@preview primary navigation opens, closes and follows the selected page', async ({ page }, testInfo) => {
   await page.goto('/');
   const menu = page.locator('[data-menu-toggle]');
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
@@ -56,6 +75,10 @@ test('@preview primary navigation opens, closes and follows the selected page', 
     await expect(menu).toHaveAttribute('aria-expanded', 'true');
     await expect(navigation.getByRole('link', { name: 'Peanuts', exact: true })).toBeVisible();
     await expect(navigation.getByRole('link', { name: 'Home', exact: true })).toBeFocused();
+    const navBox = await navigation.boundingBox();
+    const heroBox = await page.locator('.home-hero').boundingBox();
+    expect(navBox && heroBox && heroBox.y >= navBox.y + navBox.height).toBe(true);
+    if (testInfo.project.name === 'mobile') await page.screenshot({ path: 'test-results/after-mobile-navigation.png', fullPage: true });
     await page.keyboard.press('Escape');
     await expect(menu).toHaveAttribute('aria-expanded', 'false');
     await expect(menu).toBeFocused();
@@ -75,6 +98,8 @@ test('@preview catalogues show only published product listings and filter croche
   await expect(page.locator('.catalogue-hero__backdrop')).toHaveAttribute('srcset', /crochet-made-by-hand-480\.webp 480w/);
   await expect(page.locator('.catalogue-hero__photo')).toHaveAttribute('src', '/images/products/crochet/burgundy-cream-crochet-set.webp');
   await expect(page.locator('[data-product-card]')).toHaveCount(4);
+  await expect(page.locator('[data-product-card] .catalogue-card__details').first()).toHaveAttribute('href', /\/products\//);
+  await expect(page.locator('[data-product-card]').first().getByRole('link', { name: /Enquire/ })).toHaveAttribute('href', /^https:\/\/wa\.me\//);
   await expect(page.locator('[data-product-card] img[src*="/images/products/crochet/"]')).toHaveCount(4);
   await expect(page.locator('.catalogue-card .catalogue-sample')).toHaveCount(0);
   await expect(page.locator('body')).not.toContainText('Sample content');
@@ -94,13 +119,25 @@ test('@preview catalogues show only published product listings and filter croche
   await expect(page.locator('.catalogue-hero__visual img')).toHaveAttribute('srcset', /modstyle-peanut-crunch-collection-480\.webp 480w/);
   await expect(page.locator('[data-product-card] img').first()).toHaveAttribute('srcset', /-480\.webp 480w.*-800\.webp 800w/);
   await expect(page.locator('body')).toContainText('From ₦22,000');
+  if (testInfo.project.name === 'mobile') {
+    await expect.poll(() => page.locator('.catalogue-grid').evaluate(element => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length)).toBe(2);
+    const cardActionsOverflow = await page.locator('[data-product-card]').evaluateAll(cards => cards.some(card => {
+      const cardRight = card.getBoundingClientRect().right;
+      return [...card.querySelectorAll('.catalogue-card__actions a')].some(link => link.getBoundingClientRect().right > cardRight + 1);
+    }));
+    expect(cardActionsOverflow).toBe(false);
+  }
+  await loadPageImages(page);
   await page.screenshot({ path: `test-results/catalogue-${testInfo.project.name}.png`, fullPage: true });
 });
 
-test('@preview product page and gallery lightboxes support keyboard close and focus restore', async ({ page }) => {
+test('@preview product page and gallery lightboxes support keyboard close and focus restore', async ({ page }, testInfo) => {
   await page.goto('/products/burgundy-cream-crochet-set/');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Burgundy & Cream Crochet Set');
   await expect(page.getByText('From ₦42,000')).toBeVisible();
+  await loadPageImages(page);
+  await page.screenshot({ path: `test-results/after-product-${testInfo.project.name}.png`, fullPage: true });
   const productTrigger = page.getByRole('button', { name: 'Open larger view of Burgundy & Cream Crochet Set' });
   await productTrigger.click();
   await expect(page.locator('[data-product-lightbox]')).toBeVisible();
@@ -123,6 +160,15 @@ test('@preview product page and gallery lightboxes support keyboard close and fo
   await expect(page.locator('[data-gallery-item] img[src*="/images/products/peanuts/"]')).toHaveCount(16);
   await expect(page.locator('[data-gallery-item] .catalogue-sample')).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gallery');
+  await expect(page.locator('[data-gallery-item]').nth(0)).toHaveAttribute('data-department', 'crochet');
+  await expect(page.locator('[data-gallery-item]').nth(1)).toHaveAttribute('data-department', 'peanuts');
+  await loadPageImages(page);
+  await page.screenshot({ path: `test-results/after-gallery-${testInfo.project.name}.png`, fullPage: true });
+  await page.locator('[data-gallery-item]').first().click();
+  const relatedProduct = page.locator('[data-lightbox-product-link]');
+  await expect(relatedProduct).toBeVisible();
+  await expect(relatedProduct).toHaveAttribute('href', '/products/burgundy-cream-crochet-set/');
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Peanuts', exact: true }).click();
   await expect(page.locator('[data-gallery-item]:visible')).toHaveCount(16);
   const galleryTrigger = page.locator('[data-gallery-item]:visible').first();

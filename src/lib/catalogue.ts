@@ -19,10 +19,21 @@ export function visibleProducts(entries: ProductEntry[], mode: SiteMode, departm
 }
 
 export function visibleGallery(entries: GalleryEntry[], mode: SiteMode): GalleryEntry[] {
-  return entries
+  const visible = entries
     .filter(entry => !entry.data.sample)
-    .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.image.alt] }, mode))
-    .sort((left, right) => left.data.slug.localeCompare(right.data.slug));
+    .filter(entry => isPublishable({ ...entry.data, required: [entry.data.slug, entry.data.image.alt] }, mode));
+  const byDepartment = {
+    crochet: visible.filter(entry => entry.data.department === 'crochet').sort((left, right) => left.data.slug.localeCompare(right.data.slug)),
+    peanuts: visible.filter(entry => entry.data.department === 'peanuts').sort((left, right) => left.data.slug.localeCompare(right.data.slug)),
+  };
+  const ordered: GalleryEntry[] = [];
+  for (let index = 0; index < Math.max(byDepartment.crochet.length, byDepartment.peanuts.length); index += 1) {
+    const crochetEntry = byDepartment.crochet[index];
+    const peanutsEntry = byDepartment.peanuts[index];
+    if (crochetEntry) ordered.push(crochetEntry);
+    if (peanutsEntry) ordered.push(peanutsEntry);
+  }
+  return ordered;
 }
 
 export function visibleFaqs(entries: FaqEntry[], mode: SiteMode): FaqEntry[] {
