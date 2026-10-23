@@ -1,0 +1,93 @@
+@layer components {
+  html.has-motion [data-reveal] {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 520ms var(--ease),
+      transform 620ms var(--ease);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  html.has-motion [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .button:active,
+  .catalogue-card__details:active,
+  .catalogue-card__enquire:active,
+  .gallery-filters button:active {
+    transform: scale(.97);
+  }
+
+  .primary-nav__link,
+  .text-link,
+  .catalogue-card__details,
+  .gallery-filters button {
+    transition:
+      color var(--motion-fast) var(--ease),
+      background-color var(--motion-fast) var(--ease),
+      border-color var(--motion-fast) var(--ease),
+      transform var(--motion-fast) var(--ease);
+  }
+
+  .gallery-tile {
+    transition:
+      transform var(--motion-fast) var(--ease),
+      box-shadow var(--motion-fast) var(--ease);
+  }
+
+  .gallery-tile > img {
+    transition: transform 420ms var(--ease);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .gallery-tile:hover,
+    .gallery-tile:focus-visible {
+      transform: translateY(-.2rem);
+      box-shadow: 0 .8rem 1.8rem rgb(14 42 29 / .14);
+    }
+
+    .gallery-tile:hover > img,
+    .gallery-tile:focus-visible > img {
+      transform: scale(1.035);
+    }
+
+    .home-hero__art-card--crochet,
+    .home-hero__art-card--peanuts {
+      transition: transform 360ms var(--ease);
+    }
+
+    .home-hero__art-card--crochet:hover {
+      transform: rotate(-6deg) translateY(-.35rem);
+    }
+
+    .home-hero__art-card--peanuts:hover {
+      transform: rotate(4deg) translateY(-.35rem);
+    }
+
+    .department-card__photo {
+      transition: transform 360ms var(--ease);
+    }
+
+    .department-card--crochet:hover .department-card__photo {
+      transform: rotate(-5deg) scale(1.035);
+    }
+
+    .department-card--peanuts:hover .department-card__photo {
+      transform: rotate(5deg) scale(1.035);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-motion [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .gallery-tile > img {
+    transition: none;
+  }
+}

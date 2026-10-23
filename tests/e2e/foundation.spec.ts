@@ -132,6 +132,16 @@ test('reduced-motion preference disables continuous movement and page scrolling 
   await page.goto('/');
   expect(await page.locator('.home-ribbon__track').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
+  await expect(page.locator('html')).not.toHaveClass(/has-motion/);
+});
+test('scroll reveals animate into view without hiding content when motion is enabled', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveClass(/has-motion/);
+  const departmentCard = page.locator('.department-card').first();
+  await departmentCard.scrollIntoViewIfNeeded();
+  await expect(departmentCard).toHaveClass(/is-visible/);
+  await expect.poll(() => departmentCard.evaluate(element => getComputedStyle(element).opacity)).toBe('1');
 });
 test('@a11y foundation has no serious or critical violations', async ({ page }) => {
   await page.goto('/');

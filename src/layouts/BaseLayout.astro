@@ -14,6 +14,7 @@ import '../styles/components/cards.css';
 import '../styles/components/graphic.css';
 import '../styles/components/shell.css';
 import '../styles/components/hero-backdrop.css';
+import '../styles/motion.css';
 interface Props { title: string; description: string; jsonLd?: unknown | unknown[] }
 const { title, description, jsonLd } = Astro.props;
 const mode = parseMode(import.meta.env.PUBLIC_SITE_MODE);
@@ -102,6 +103,43 @@ const primaryLinks = [
         window.matchMedia('(min-width: 68.001rem)').addEventListener('change', event => {
           if (event.matches) setMenuOpen(false);
         });
+      }
+
+      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!motionPreference.matches && 'IntersectionObserver' in window) {
+        const revealSelectors = [
+          '.home-hero__copy', '.home-hero__art', '.home-section-intro',
+          '.catalogue-hero__copy', '.catalogue-hero__visual', '.catalogue-section__heading',
+          '.story-hero__inner', '.story-founder', '.department-grid > .department-card',
+          '.ordering-steps > .ordering-step', '.catalogue-grid > .catalogue-card',
+          '.gallery-grid > .gallery-tile', '.surface-card', '.custom-piece__art', '.custom-piece__copy',
+        ];
+        const revealTargets = [...new Set(revealSelectors.flatMap(selector => Array.from(document.querySelectorAll<HTMLElement>(selector))))];
+        const staggerSelectors = ['.department-grid', '.ordering-steps', '.catalogue-grid', '.gallery-grid'];
+        for (const selector of staggerSelectors) {
+          document.querySelectorAll<HTMLElement>(selector).forEach(group => {
+            Array.from(group.children).forEach((child, index) => {
+              if (child instanceof HTMLElement && revealTargets.includes(child)) {
+                child.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 65}ms`);
+              }
+            });
+          });
+        }
+
+        revealTargets.forEach(target => target.dataset.reveal = '');
+        if (revealTargets.length) {
+          document.documentElement.classList.add('has-motion');
+          const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (!(entry.target instanceof HTMLElement)) return;
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          revealTargets.forEach(target => revealObserver.observe(target));
+        }
       }
     </script>
     {analyticsId && <script is:inline defer data-domain={analyticsId} src="https://plausible.io/js/script.js"></script>}
